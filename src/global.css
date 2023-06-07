@@ -1,0 +1,33 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+}
+body {
+  font-family: 'Roboto', sans-serif;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+.center-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 0.6rem;
+}
+
+button {
+  font: inherit;
+}
+
+.flex-center{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
