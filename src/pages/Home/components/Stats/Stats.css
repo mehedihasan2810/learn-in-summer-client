@@ -1,0 +1,23 @@
+.stat-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin: 80px 0;
+}
+
+.stat-container .item {
+  background: #0771ea1e;
+  padding: 2rem;
+  border-radius: 4px;
+  border-left: 5px solid #126ed7c9;
+}
+
+.stat-container h5{
+    font-size: 2rem;
+    color: #126ed7c9;
+    margin-bottom: 0.6rem;
+}
+
+.stat-container p{
+    color: #000000a4;
+}
