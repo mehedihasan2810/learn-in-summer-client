@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
-  margin: 80px 0;
+  margin-top: 80px;
 }
 
 .stat-container .item {
@@ -12,12 +12,15 @@
   border-left: 5px solid #126ed7c9;
 }
 
-.stat-container h5{
-    font-size: 2rem;
-    color: #126ed7c9;
-    margin-bottom: 0.6rem;
+.stat-container h5 {
+  font-size: 2rem;
+  color: #126ed7c9;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.stat-container p{
-    color: #000000a4;
+.stat-container p {
+  color: #000000a4;
 }
