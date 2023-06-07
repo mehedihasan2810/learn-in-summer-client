@@ -8,7 +8,7 @@ import "./Slider.css";
 import { Autoplay, Pagination, Navigation } from "swiper";
 const Slider = () => {
   return (
-    <div className="slider-container">
+    <section className="slider-container">
       <Swiper
         spaceBetween={30}
         centeredSlides={true}
@@ -66,7 +66,7 @@ const Slider = () => {
           </div>
         </SwiperSlide>
       </Swiper>
-    </div>
+    </section>
   );
 };
 
