@@ -12,6 +12,7 @@ const Home = () => {
       <PopularCourses/>
       <PopularInstructors/>
       <Testimonials/>
+      {/* <Test/> */}
     </div>
   )
 }
