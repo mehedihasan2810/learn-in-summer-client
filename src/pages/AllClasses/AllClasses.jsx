@@ -1,36 +1,12 @@
-import { useRef, useState } from "react";
-import { FaRegClock, FaGraduationCap } from "react-icons/fa";
-import "./PopularCourses.css";
-
-const tabs = ["Popular", "Trending", "New", "Rated"];
-
-const PopularCourses = () => {
-  const [activeTab, setActiveTab] = useState("Popular");
-  const underRef = useRef(null);
-
-  const handleTab = (e, index, tab) => {
-    underRef.current.style.left = `calc(calc(100% / 4) * ${index})`;
-    setActiveTab(tab);
-  };
-
+import { FaGraduationCap, FaRegClock } from "react-icons/fa";
+import "./AllClasses.css";
+const AllClasses = () => {
   return (
     <div className="center-container">
-      <section className="popular-classes-container">
-        <h2 className="section-title">Popular Classes</h2>
-        <div className="tab-container">
-          {tabs.map((tab, index) => (
-            <button
-              className={activeTab === tab ? "active" : ""}
-              key={index}
-              onClick={(e) => handleTab(e, index, tab)}
-            >
-              {tab} Classes
-            </button>
-          ))}
+      <div className="all-classes-container">
+        <h2 className="section-title">All Classes</h2>
 
-          <span ref={underRef} className="under"></span>
-        </div>
-        <div className="card-container">
+        <div className="all-classes">
           {Array.from({ length: 8 }).map((_, index) => (
             <div key={index} className="card">
               <img
@@ -38,8 +14,8 @@ const PopularCourses = () => {
                 alt=""
               />
               <div className="price-category">
-              <span className="category">Drum</span>
-              <span>$70.22</span>
+                <span className="category">Drum</span>
+                <span>$70.22</span>
               </div>
               <h4>Basics of smashing drum so that ur neighbour cant sleep</h4>
               <h6>Mr Mehedi Hasan</h6>
@@ -60,9 +36,9 @@ const PopularCourses = () => {
             </div>
           ))}
         </div>
-      </section>
+      </div>
     </div>
   );
 };
 
-export default PopularCourses;
+export default AllClasses;

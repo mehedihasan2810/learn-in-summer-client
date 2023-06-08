@@ -63,3 +63,33 @@ button {
 .swiper-button-next::after {
   font-size: 30px;
 }
+
+.btn-primary,
+.btn-secondary {
+  background: transparent;
+  border: 0;
+  padding: 0.8rem 1.4rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 300ms;
+}
+
+.btn-primary {
+  background: #126ed7c9;
+  color: #fff;
+}
+
+.btn-secondary {
+  border: 1px solid #126ed7c9;
+}
+
+.btn-primary:hover {
+  background: #0e63c5e6;
+  transform: scale(0.98);
+}
+
+.btn-secondary:hover {
+  border: 1px solid #0e63c5e6;
+  color: #126ed7;
+  transform: scale(0.98);
+}

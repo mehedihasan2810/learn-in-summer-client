@@ -62,16 +62,34 @@
   object-fit: cover;
 }
 
-.popular-classes-container .category {
+.popular-classes-container .price-category {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popular-classes-container .price-category span {
   color: #747c82;
   margin: 8px 0;
   font-size: 16px;
 }
 
+.popular-classes-container .price-category span:last-child {
+  color: #000;
+  font-weight: bold;
+}
+
 .popular-classes-container .card h4 {
   color: #465159;
-  margin-bottom: 1.5rem;
+  margin-bottom: 8px;
   font-size: 1.1rem;
+}
+
+.popular-classes-container .card h6 {
+  color: #747c82;
+  margin-bottom: 1.3rem;
+  font-size: 0.9rem;
+  font-weight: normal;
 }
 
 .popular-classes-container .card .hrs-learners {
@@ -92,34 +110,4 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
-}
-
-.btn-primary,
-.btn-secondary {
-  background: transparent;
-  border: 0;
-  padding: 0.8rem 1.4rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 300ms;
-}
-
-.btn-primary {
-  background: #126ed7c9;
-  color: #fff;
-}
-
-.btn-secondary {
-  border: 1px solid #126ed7c9;
-}
-
-.btn-primary:hover {
-  background: #0e63c5e6;
-  transform: scale(0.98);
-}
-
-.btn-secondary:hover {
-  border: 1px solid #0e63c5e6;
-  color: #126ed7;
-  transform: scale(0.98);
 }
