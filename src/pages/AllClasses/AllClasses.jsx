@@ -31,7 +31,7 @@ const AllClasses = () => {
               </div>
               <div className="btns">
                 <button className="btn-secondary">More Info</button>
-                <button className="btn-primary">Start Learning</button>
+                <button className="btn-primary">Select</button>
               </div>
             </div>
           ))}

@@ -1,85 +1,72 @@
-.all-classes-container{
-    margin-top: 120px;
+.all-classes-container {
+  margin: 40px 0 120px 0;
 }
 
-  
-  /* .popular-classes-container h2 {
-    text-align: center;
-    font-size: 2.3rem;
-    margin-bottom: 3rem;
-    font-weight: 900;
-  } */
-  
+.all-classes-container .section-title {
+  text-align: start;
+  margin-bottom: 20px;
+}
 
-  
-  
-  
-  
- 
-  
-   .all-classes-container .all-classes {
-    margin-top: 0.5rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
-  }
-  
-  .all-classes-container .card img {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover;
-  }
-  
-  .all-classes-container .price-category{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .all-classes-container .price-category span {
-    color: #747c82;
-    margin: 8px 0;
-    font-size: 16px;
-  }
-  
-  .all-classes-container .price-category span:last-child{
-    color: #000;
-    font-weight: bold;
-  }
-  
-  .all-classes-container .card h4 {
-    color: #465159;
-    margin-bottom: 8px;
-    font-size: 1.1rem;
-  }
-  
-  .all-classes-container .card h6 {
-    color: #747c82;
-    margin-bottom: 1.3rem;
-    font-size: 0.9rem;
-    font-weight: normal;
-  }
-  
-  .all-classes-container .card .hrs-learners {
-    color: #747c82;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
-  
-  .hrs-learners p {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-  }
-  
-  .all-classes-container .card .btns {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
-  
- 
-  
+.all-classes-container .all-classes {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.all-classes-container .card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.all-classes-container .price-category {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.all-classes-container .price-category span {
+  color: #747c82;
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.all-classes-container .price-category span:last-child {
+  color: #000;
+  font-weight: bold;
+}
+
+.all-classes-container .card h4 {
+  color: #465159;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+.all-classes-container .card h6 {
+  color: #747c82;
+  margin-bottom: 1.3rem;
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+
+.all-classes-container .card .hrs-learners {
+  color: #747c82;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.hrs-learners p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.all-classes-container .card .btns {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}

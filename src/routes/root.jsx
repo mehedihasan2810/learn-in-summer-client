@@ -5,6 +5,7 @@ import RootLayout from "../layouts/RootLayout";
 import Home from "../pages/Home/Home";
 import Instructors from "../pages/Instructors/Instructors";
 import AllClasses from "../pages/AllClasses/AllClasses";
+import DashboardLayout from "../layouts/DashboardLayout";
 
   export const router = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ import AllClasses from "../pages/AllClasses/AllClasses";
           path: '/all-classes',
           element: <AllClasses/>
         },
-      ]
+      ],
     },
+    {
+      path: "dashboard",
+      element: <DashboardLayout/>
+    }
   ]);
