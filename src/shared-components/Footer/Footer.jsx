@@ -3,15 +3,15 @@ import logo from '/assets/logo2-removebg-preview.png'
 import "./Footer.css";
 const Footer = () => {
   return (
+      <footer className="footer">
     <div data-aos="fade-up" className="center-container">
-      <div className="footer">
         <div className="top">
           <div className="item">
-            <h1>Categories</h1>
-            <span>Truck Toys</span>
-            <span>Ferrari Toys</span>
-            <span>Volvo Toys</span>
-            <span>BMW Toys</span>
+            <h1>Classes</h1>
+            <span>Piano Lesson</span>
+            <span>Guiter Lesson</span>
+            <span>Violin Lesson</span>
+            <span>Drum Lesson</span>
             <span>Best Rated</span>
           </div>
           <div className="item">
@@ -52,7 +52,7 @@ const Footer = () => {
         <div className="bottom">
           <div className="left">
           <img src={logo} alt="" />
-            <span className="logo">FunCarFactory</span>
+            <span className="logo">LearnInSummer</span>
             <span className="copyright">
               Copyright 2023. All Rights Reserved
             </span>
@@ -61,8 +61,8 @@ const Footer = () => {
         <img src="./images/payment-gateway.png" alt="payment gateway" />
       </div> */}
         </div>
-      </div>
     </div>
+      </footer>
   );
 };
 

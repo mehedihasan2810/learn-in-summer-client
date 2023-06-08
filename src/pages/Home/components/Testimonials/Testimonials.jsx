@@ -11,7 +11,7 @@ import { Autoplay, Pagination, Navigation } from "swiper";
 const Testimonials = () => {
   return (
     <div className="center-container">
-      <div className="testimonials">
+      <section className="testimonials">
         <h2 className="section-title">Testimonials</h2>
         <Swiper
           spaceBetween={30}
@@ -120,7 +120,7 @@ const Testimonials = () => {
             </div>
           </SwiperSlide>
         </Swiper>
-      </div>
+      </section>
     </div>
   );
 };
