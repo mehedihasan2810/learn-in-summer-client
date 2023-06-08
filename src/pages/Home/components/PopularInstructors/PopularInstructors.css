@@ -5,8 +5,8 @@
 } */
 
 .instructor-card {
-  max-width: 300px;
-  height: 450px;
+  max-width: 320px;
+  height: 470px;
   position: relative;
   overflow: hidden;
 }
@@ -52,6 +52,14 @@
   color: #747c82;
   font-size: 15px;
 }
+
+.instructor-card .body .email{
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
 
 .instructor-card:hover img {
   transform: scale(1.1);
