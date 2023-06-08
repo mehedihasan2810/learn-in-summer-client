@@ -17,7 +17,7 @@ const handleTab = (e, index, tab) => {
   return (
     <div className="center-container">
       <section className="popular-classes-container">
-        <h2>Popular Classes</h2>
+        <h2 className="section-title">Popular Classes</h2>
         <div className="tab-container">
           {tabs.map((tab, index) => (
             <button 

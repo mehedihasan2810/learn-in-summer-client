@@ -1,0 +1,75 @@
+/*  {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+} */
+
+.instructor-card {
+  max-width: 300px;
+  height: 450px;
+  position: relative;
+  overflow: hidden;
+}
+
+.instructor-card img {
+  height: auto;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  transition: all 300ms ease-out;
+}
+
+.instructor-card .body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to top, #000000, #00000000);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  padding: 2rem 1rem;
+  color: #fff;
+}
+
+.instructor-card .body h3 {
+  font-family: "EB Garamond", serif;
+  font-weight: 900;
+  font-size: 3.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  width: min-content;
+}
+
+.instructor-card .body p {
+  text-align: center;
+}
+
+.instructor-card .body span {
+  margin-top: 1rem;
+  color: #747c82;
+  font-size: 15px;
+}
+
+.instructor-card:hover img {
+  transform: scale(1.1);
+}
+
+.instructor-card .btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  margin-top: 1rem;
+  text-transform: uppercase;
+  transition: all 300ms;
+  cursor: pointer;
+}
+
+.instructor-card .btn:hover {
+  background: #fff;
+  color: #000;
+}

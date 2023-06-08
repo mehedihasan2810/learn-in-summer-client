@@ -2,12 +2,12 @@
   margin: 120px 0;
 }
 
-.popular-classes-container h2 {
+/* .popular-classes-container h2 {
   text-align: center;
   font-size: 2.3rem;
   margin-bottom: 3rem;
   font-weight: 900;
-}
+} */
 
 .popular-classes-container .tab-container {
   display: flex;
@@ -79,6 +79,13 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
+}
+
+.hrs-learners p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .popular-classes-container .card .btns {

@@ -10,7 +10,7 @@ ul {
   list-style: none;
 }
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 a {
   text-decoration: none;
@@ -26,8 +26,40 @@ button {
   font: inherit;
 }
 
-.flex-center{
+.flex-center {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  font-weight: 900;
+  color: #0b2441;
+}
+
+.swiper-button-prev {
+  width: 50px !important;
+  height: 50px !important;
+  background: #0b2441;
+  border-radius: 50%;
+  color: #fff !important;
+}
+
+.swiper-button-prev::after {
+  font-size: 30px;
+}
+
+.swiper-button-next {
+  width: 50px !important;
+  height: 50px !important;
+  background: #0b2441;
+  border-radius: 50%;
+  color: #fff !important;
+}
+
+.swiper-button-next::after {
+  font-size: 30px;
 }
