@@ -7,23 +7,46 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "./MyClasses.css";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, ButtonGroup } from "@mui/material";
 import moment from "moment/moment";
 import { Link } from "react-router-dom";
+import { Toast } from "../../../../routes/root";
 
 export default function MyClasses() {
   const [axiosSecure] = useAxiosSecure();
+  const queryClient = useQueryClient();
 
   const {
     isLoading,
     error,
     data: myClasses = [],
-    refetch,
   } = useQuery(["myClasses"], async () => {
     const res = await axiosSecure.get("/allClasses");
     return res.data;
   });
+
+  const mutation = useMutation({
+    mutationFn: async (id) => {
+      const res = await axiosSecure.delete(`/deleteClass/${id}`);
+      return res;
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["myClasses"] });
+    },
+  });
+
+  const handleDeleteClass = (id) => {
+    console.log(id);
+
+    mutation.mutate(id);
+
+    Toast.fire({
+      icon: "success",
+      title: "Deleted successfully",
+    });
+  };
 
   if (isLoading) return "Loading...";
 
@@ -82,7 +105,12 @@ export default function MyClasses() {
                         Update
                       </Link>
                     </Button>
-                    <Button color="error">Delete</Button>
+                    <Button
+                      onClick={() => handleDeleteClass(classes._id)}
+                      color="error"
+                    >
+                      Delete
+                    </Button>
                   </ButtonGroup>
                 </TableCell>
                 <TableCell align="left">

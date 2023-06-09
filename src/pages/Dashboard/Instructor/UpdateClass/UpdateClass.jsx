@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router-dom";
+import { Toast } from "../../../../routes/root";
 
 const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 
@@ -40,7 +41,6 @@ const UpdateClass = () => {
     },
   });
 
-  console.log(mutation);
 
   const handleUpdateClass = async (e) => {
     e.preventDefault();
@@ -71,14 +71,17 @@ const UpdateClass = () => {
     setIsApiLoading(false);
 
     navigate("/dashboard/my-classes");
+
+    Toast.fire({
+        icon: "success",
+        title: "Updated successfully",
+      });
   };
 
   if (isLoading) return "Loading...";
 
   if (error) return "An error has occurred: " + error.message;
 
-  //   console.log(myClass);
-  //   console.log(myClass.class_name);
 
   return (
     <div className="center-container">

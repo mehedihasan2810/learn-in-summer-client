@@ -1,7 +1,7 @@
 import { CircularProgress, TextField } from "@mui/material";
 import "./AddClass.css";
 import { useState } from "react";
-import Swal from "sweetalert2";
+import { Toast } from "../../../../routes/root";
 const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 
 const AddClass = () => {
@@ -49,21 +49,14 @@ const AddClass = () => {
       console.log(result);
       setIsApiLoading(false);
 
-      // show succes modal
-      Swal.fire({
-        position: "bottom",
+      Toast.fire({
         icon: "success",
-        title: "Succesfully Added",
-        showConfirmButton: false,
-        timer: 1500,
+        title: "Added successfully",
       });
     } catch (error) {
-      Swal.fire({
-        position: "bottom",
+      Toast.fire({
         icon: "error",
-        title: "Error Ocurred! Try Again",
-        showConfirmButton: false,
-        timer: 2000,
+        title: "Error ocurred! Try again",
       });
       setIsApiLoading(false);
       // console.log(error);
