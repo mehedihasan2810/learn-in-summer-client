@@ -10,6 +10,7 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { Button, ButtonGroup } from "@mui/material";
 import moment from "moment/moment";
+import { Link } from "react-router-dom";
 
 export default function MyClasses() {
   const [axiosSecure] = useAxiosSecure();
@@ -74,7 +75,13 @@ export default function MyClasses() {
                     size="small"
                     aria-label="Disabled elevation buttons"
                   >
-                    <Button>Update</Button>
+                    <Button>
+                      <Link
+                        to={`/dashboard/my-classes/update-class/${classes._id}`}
+                      >
+                        Update
+                      </Link>
+                    </Button>
                     <Button color="error">Delete</Button>
                   </ButtonGroup>
                 </TableCell>
