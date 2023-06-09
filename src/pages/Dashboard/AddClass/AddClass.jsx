@@ -1,11 +1,71 @@
-import { TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import "./AddClass.css";
+import { useState } from "react";
+import Swal from "sweetalert2";
+const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
+
 const AddClass = () => {
-  const handleAddClass = (e) => {
+  const [isValid, setIsValid] = useState(true);
+  const [isApiLoading, setIsApiLoading] = useState(false);
+  const img_hosting_url = `https://api.imgbb.com/1/upload?expiration=600&key=${imgbbApiKey}`;
+
+  const handleAddClass = async (e) => {
     e.preventDefault();
-    const form_data = new FormData(e.target);
-    const data = Object.fromEntries(form_data);
-    console.log(data);
+
+    try {
+      setIsApiLoading(true);
+
+      const form_data = new FormData(e.target);
+      const classInfo = Object.fromEntries(form_data);
+
+      const imgFormData = new FormData();
+      imgFormData.append("image", classInfo.image);
+
+      const imgUploadRes = await fetch(img_hosting_url, {
+        method: "POST",
+        body: imgFormData,
+      });
+      const imgUploadResult = await imgUploadRes.json();
+
+      const finalClassInfo = {
+        ...classInfo,
+        image: imgUploadResult.data.display_url,
+        enrolled: 0,
+        feedback: null,
+        date: new Date(),
+        status: "pending",
+      };
+
+      const res = await fetch("http://localhost:4000/addClass", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(finalClassInfo),
+      });
+      const result = await res.json();
+      console.log(result);
+      setIsApiLoading(false);
+
+      // show succes modal
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Succesfully Added",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Error Ocurred! Try Again",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      setIsApiLoading(false);
+      // console.log(error);
+    }
   };
 
   return (
@@ -17,14 +77,24 @@ const AddClass = () => {
             <div className="control">
               <TextField
                 id="outlined-basic"
-                label="Class Name"
+                label="Class Name(drum, piano)"
                 variant="outlined"
                 name="class_name"
+                required
               />
             </div>
             <div className="control">
-              <input type="file" name="image" />
+              <TextField
+                id="outlined-basic"
+                label="Class Title"
+                variant="outlined"
+                name="title"
+                required
+              />
             </div>
+            {/* <div className="control">
+              <input type="file" name="image" required />
+            </div> */}
           </div>
           <div className="row">
             <div className="control">
@@ -33,38 +103,81 @@ const AddClass = () => {
                 label="Instructor Name"
                 variant="outlined"
                 name="instructor_name"
+                required
               />
             </div>
             <div className="control">
               <TextField
+                type="email"
                 id="outlined-basic"
                 label="Email"
                 variant="outlined"
                 name="email"
+                required
               />
             </div>
           </div>
           <div className="row">
             <div className="control">
               <TextField
+                type="number"
                 id="outlined-basic"
                 label="Available Seats"
                 variant="outlined"
                 name="available_seats"
+                required
               />
             </div>
             <div className="control">
               <TextField
+                type="number"
                 id="outlined-basic"
-                label="Price"
+                label="Price($)"
                 variant="outlined"
                 name="price"
+                required
               />
             </div>
           </div>
 
-          <button className="btn-primary" type="submit">
-            Add The Class
+          <div className="row">
+            <div className="control">
+              <TextField
+                onChange={(e) => {
+                  const pattern = /^\d\d?:\d\d?$/;
+                  if (pattern.test(e.target.value)) {
+                    setIsValid(true);
+                  } else {
+                    setIsValid(false);
+                  }
+                }}
+                error={!isValid}
+                helperText={!isValid ? "00:00 or 0:0" : ""}
+                id="outlined-basic"
+                label="Class Duration(hrs:mins)"
+                variant="outlined"
+                name="duration"
+              />
+            </div>
+            <div className="control">
+              <input type="file" name="image" required />
+            </div>
+          </div>
+
+          <button
+            style={{
+              backgroundColor: isApiLoading ? "rgba(14, 99, 197, 0.5)" : "",
+            }}
+            disabled={isApiLoading}
+            className="btn-primary"
+            type="submit"
+          >
+            {/* Add The Class */}
+            {isApiLoading ? (
+              <CircularProgress size={30} sx={{ color: "#fff" }} />
+            ) : (
+              "Add The Class"
+            )}
           </button>
         </form>
       </div>

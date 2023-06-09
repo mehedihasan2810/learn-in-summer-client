@@ -27,6 +27,11 @@
   margin-bottom: 1rem;
 }
 
+.add-class-container .btn-primary {
+  width: 170px;
+  height: 55px;
+}
+
 input[type="file"] {
   outline: none;
   padding: 4px;
