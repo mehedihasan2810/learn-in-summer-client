@@ -7,7 +7,7 @@ const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 const AddClass = () => {
   const [isValid, setIsValid] = useState(true);
   const [isApiLoading, setIsApiLoading] = useState(false);
-  const img_hosting_url = `https://api.imgbb.com/1/upload?expiration=600&key=${imgbbApiKey}`;
+  const img_hosting_url = `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`;
 
   const handleAddClass = async (e) => {
     e.preventDefault();
@@ -29,7 +29,9 @@ const AddClass = () => {
 
       const finalClassInfo = {
         ...classInfo,
-        image: imgUploadResult.data.display_url,
+        image: imgUploadResult.success
+          ? imgUploadResult.data.display_url
+          : "https://i.ibb.co/yfYWFVK/logo2.jpg",
         enrolled: 0,
         feedback: null,
         date: new Date(),
@@ -49,7 +51,7 @@ const AddClass = () => {
 
       // show succes modal
       Swal.fire({
-        position: "top-end",
+        position: "bottom",
         icon: "success",
         title: "Succesfully Added",
         showConfirmButton: false,
@@ -57,7 +59,7 @@ const AddClass = () => {
       });
     } catch (error) {
       Swal.fire({
-        position: "top-end",
+        position: "bottom",
         icon: "error",
         title: "Error Ocurred! Try Again",
         showConfirmButton: false,

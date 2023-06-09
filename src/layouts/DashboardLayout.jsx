@@ -223,9 +223,8 @@ export default function DashboardLayout(props) {
         }}
       >
         <Toolbar />
-       
-         <Outlet/>
-       
+
+        <Outlet />
       </Box>
     </Box>
   );
