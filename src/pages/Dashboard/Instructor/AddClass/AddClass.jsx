@@ -2,12 +2,28 @@ import { CircularProgress, TextField } from "@mui/material";
 import "./AddClass.css";
 import { useState } from "react";
 import { Toast } from "../../../../routes/root";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 
 const AddClass = () => {
   const [isValid, setIsValid] = useState(true);
   const [isApiLoading, setIsApiLoading] = useState(false);
   const img_hosting_url = `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`;
+  const [axiosSecure] = useAxiosSecure();
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (newData) => {
+      const res = await axiosSecure.post(`/addClass`, newData);
+      return res;
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["myClasses"] });
+    },
+  });
 
   const handleAddClass = async (e) => {
     e.preventDefault();
@@ -38,15 +54,8 @@ const AddClass = () => {
         status: "pending",
       };
 
-      const res = await fetch("http://localhost:4000/addClass", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(finalClassInfo),
-      });
-      const result = await res.json();
-      console.log(result);
+      mutation.mutate(finalClassInfo);
+
       setIsApiLoading(false);
 
       Toast.fire({

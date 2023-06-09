@@ -8,6 +8,10 @@ import UpdateClass from "../pages/Dashboard/Instructor/UpdateClass/UpdateClass";
 import AddClass from "../pages/Dashboard/Instructor/AddClass/AddClass";
 import MyClasses from "../pages/Dashboard/Instructor/MyClasses/MyClasses";
 import Swal from "sweetalert2";
+import SelectedClasses from "../pages/Dashboard/Student/SelectedClasses/SelectedClasses";
+import EnrolledClasses from "../pages/Dashboard/Student/EnrolledClasses/EnrolledClasses";
+import SignIn from "../pages/SignIn/SignIn";
+import SignUp from "../pages/SignUp/SignUp";
 
 
 export const Toast = Swal.mixin({
@@ -41,6 +45,14 @@ export const router = createBrowserRouter([
         path: "/all-classes",
         element: <AllClasses />,
       },
+      {
+        path: "/signin",
+        element: <SignIn />,
+      },
+      {
+        path: "/signup",
+        element: <SignUp/>,
+      },
     ],
   },
   {
@@ -58,6 +70,14 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/my-classes/update-class/:id",
         element: <UpdateClass />,
+      },
+      {
+        path: "/dashboard/selected-classes",
+        element: <SelectedClasses />,
+      },
+      {
+        path: "/dashboard/enrolled-classes",
+        element: <EnrolledClasses />,
       },
     ],
   },

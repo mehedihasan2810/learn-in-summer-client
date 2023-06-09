@@ -42,19 +42,19 @@ export default function DashboardLayout(props) {
     setMobileOpen(!mobileOpen);
   };
 
-  let user = "instructor";
+  let user = "student";
   let navItem;
 
   if (user === "student") {
     navItem = [
       {
         text: "My Selected Classes",
-        path: "my-selected-classes",
+        path: "selected-classes",
         icon: <CheckBoxIcon />,
       },
       {
         text: "My Enrolled Classes",
-        path: "my-enrolled-classes",
+        path: "enrolled-classes",
         icon: <PaymentIcon />,
       },
     ];

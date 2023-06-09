@@ -2,13 +2,6 @@
   margin: 120px 0;
 }
 
-/* .popular-classes-container h2 {
-  text-align: center;
-  font-size: 2.3rem;
-  margin-bottom: 3rem;
-  font-weight: 900;
-} */
-
 .popular-classes-container .tab-container {
   display: flex;
   border-bottom: 5px solid #126ed722;
