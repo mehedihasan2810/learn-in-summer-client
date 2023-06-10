@@ -61,7 +61,7 @@ const SignIn = () => {
         // *show toast
         Toast.fire({
           icon: "error",
-          title: "Error Ocurred! Try Again",
+          title: `${error.message} Try Again`,
         });
         setIsAuthLoading(false);
       });
@@ -82,7 +82,7 @@ const SignIn = () => {
         console.log(console.log(error));
         Toast.fire({
           icon: "error",
-          title: "Error Ocurred! Try Again",
+          title: `${error.message} Try Again`,
         });
       });
   };

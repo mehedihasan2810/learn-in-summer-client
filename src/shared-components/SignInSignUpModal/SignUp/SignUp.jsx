@@ -16,6 +16,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { Toast } from "../../../routes/root";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
@@ -28,11 +30,8 @@ const SignUp = () => {
     updateUserProfile,
   } = useAuthContext();
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+  const [axiosSecure] = useAxiosSecure();
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -40,6 +39,17 @@ const SignUp = () => {
     reset,
     formState: { errors },
   } = useForm();
+
+  const mutation = useMutation({
+    mutationFn: async (newData) => {
+      const res = await axiosSecure.post(`/addUser`, newData);
+      return res;
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["manageUsers"] });
+    },
+  });
 
   const onSubmit = (data) => {
     const { name, email, password, photoUrl } = data;
@@ -52,13 +62,27 @@ const SignUp = () => {
 
         // * update user profile
         updateUserProfile(createdUser, name, photoUrl)
-          .then(() => {})
+          .then(() => {
+
+            const userInfo = {
+              name: createdUser.displayName,
+              email: createdUser.email,
+              role: "student",
+              photoUrl: createdUser.photoURL,
+              date: new Date(),
+            };
+
+            console.log(userInfo);
+
+            mutation.mutate(userInfo);
+
+          })
           .catch((error) => {
             console.log(error);
             // *show toast
             Toast.fire({
               icon: "error",
-              title: "Error Ocurred! Try Again",
+              title: `${error.message} Try Again`,
             });
 
             setIsAuthLoading(false);
@@ -70,7 +94,7 @@ const SignUp = () => {
           title: "Succesfully Signed Up",
         });
 
-        reset();
+        // reset();
         setIsAuthLoading(false);
 
         // *redirect user
@@ -82,7 +106,7 @@ const SignUp = () => {
         // *show toast
         Toast.fire({
           icon: "error",
-          title: "Error Ocurred! Try Again",
+          title: `${error.message} Try Again`,
         });
 
         setIsAuthLoading(false);
@@ -104,9 +128,15 @@ const SignUp = () => {
         console.log(console.log(error));
         Toast.fire({
           icon: "error",
-          title: "Error Ocurred! Try Again",
+          title: `${error.message} Try Again`,
         });
       });
+  };
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
 
   return (
