@@ -14,28 +14,99 @@ import "./SignUp.css";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuthContext } from "../../../hooks/useAuthContext";
+import { Toast } from "../../../routes/root";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
 
   const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
-    // reset();
-  };
-
-  console.log(errors);
+    signUp,
+    isAuthLoading,
+    setIsAuthLoading,
+    googleSignIn,
+    updateUserProfile,
+  } = useAuthContext();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    const { name, email, password, photoUrl } = data;
+
+    setIsAuthLoading(true);
+    signUp(email, password)
+      .then((userCredential) => {
+        const createdUser = userCredential.user;
+        console.log(createdUser);
+
+        // * update user profile
+        updateUserProfile(createdUser, name, photoUrl)
+          .then(() => {})
+          .catch((error) => {
+            console.log(error);
+            // *show toast
+            Toast.fire({
+              icon: "error",
+              title: "Error Ocurred! Try Again",
+            });
+
+            setIsAuthLoading(false);
+          });
+
+        // *show toast
+        Toast.fire({
+          icon: "success",
+          title: "Succesfully Signed Up",
+        });
+
+        reset();
+        setIsAuthLoading(false);
+
+        // *redirect user
+        // const from = location.state?.from?.pathname || "/";
+        // navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        console.log(error);
+        // *show toast
+        Toast.fire({
+          icon: "error",
+          title: "Error Ocurred! Try Again",
+        });
+
+        setIsAuthLoading(false);
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then((userCredential) => {
+        const loggedUser = userCredential.user;
+        console.log(loggedUser);
+
+        Toast.fire({
+          icon: "success",
+          title: "Succesfully Signed In",
+        });
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+        Toast.fire({
+          icon: "error",
+          title: "Error Ocurred! Try Again",
+        });
+      });
   };
 
   return (
@@ -172,14 +243,12 @@ const SignUp = () => {
         style={{
           width: "100%",
         }}
-        onClick={() => {
-          console.log("Google button clicked");
-        }}
+        onClick={handleGoogleSignIn}
       />
 
       <LoadingButton
         type="submit"
-        //   loading
+        loading={isAuthLoading}
         variant="contained"
         size="large"
         sx={{

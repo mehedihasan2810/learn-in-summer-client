@@ -16,11 +16,22 @@ const gooleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
   const [isSignInSignUpModalOpen, setIsSignInSignUpModalOpen] = useState(false);
 
   const toggleSignInSignUpModal = () => {
     setIsSignInSignUpModalOpen(!isSignInSignUpModalOpen);
+  };
+
+  const signUp = (email, password) => {
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
+
+  const updateUserProfile = (user, name, url) => {
+    return updateProfile(user, {
+      displayName: name,
+      photoURL: url,
+    });
   };
 
   const googleSignIn = () => {
@@ -49,6 +60,10 @@ const AuthProvider = ({ children }) => {
         currentUser,
         isSignInSignUpModalOpen,
         toggleSignInSignUpModal,
+        isAuthLoading,
+        setIsAuthLoading,
+        signUp,
+        updateUserProfile,
         googleSignIn,
         logOut
       }}
