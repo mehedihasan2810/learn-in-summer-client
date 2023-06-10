@@ -14,9 +14,12 @@ import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import "./SignIn.css";
+import { useAuthContext } from "../../../hooks/useAuthContext";
+import { Toast } from "../../../routes/root";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { googleSignIn } = useAuthContext();
 
   const {
     register,
@@ -36,6 +39,26 @@ const SignIn = () => {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then((userCredential) => {
+        const loggedUser = userCredential.user;
+        console.log(loggedUser);
+
+        Toast.fire({
+          icon: "success",
+          title: "Succesfully Signed In",
+        });
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+        Toast.fire({
+          icon: "error",
+          title: "Error Ocurred! Try Again",
+        });
+      });
   };
 
   return (
@@ -107,9 +130,7 @@ const SignIn = () => {
         style={{
           width: "100%",
         }}
-        onClick={() => {
-          console.log("Google button clicked");
-        }}
+        onClick={handleGoogleSignIn}
       />
 
       <LoadingButton

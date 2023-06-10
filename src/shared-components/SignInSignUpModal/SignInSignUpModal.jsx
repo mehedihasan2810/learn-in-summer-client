@@ -4,11 +4,11 @@ import SignIn from "./SignIn/SignIn";
 import SignUp from "./SignUp/SignUp";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const tabs = ["Sign In", "Sign Up"];
 
 function SignInSignUpModal() {
-  const [open, setOpen] = useState(true);
   const [currentTab, setCurrentTab] = useState(0);
 
   const underRef = useRef(null);
@@ -18,9 +18,7 @@ function SignInSignUpModal() {
     setCurrentTab(index);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const { toggleSignInSignUpModal } = useAuthContext();
 
   return (
     <div className="modal-container">
@@ -40,10 +38,14 @@ function SignInSignUpModal() {
         </div>
         {currentTab === 0 && <SignIn />}
         {currentTab === 1 && <SignUp />}
-        {/* <button onClick={handleClose}>Close</button> */}
 
         <div className="close-container">
-          <IconButton color="primary" size="large" aria-label="close the modal">
+          <IconButton
+            onClick={toggleSignInSignUpModal}
+            color="primary"
+            size="large"
+            aria-label="close the modal"
+          >
             <CloseIcon />
           </IconButton>
         </div>
