@@ -34,6 +34,10 @@ const AuthProvider = ({ children }) => {
     });
   };
 
+  const signIn = (email, password) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+
   const googleSignIn = () => {
     return signInWithRedirect(auth, gooleProvider);
   };
@@ -64,6 +68,7 @@ const AuthProvider = ({ children }) => {
         setIsAuthLoading,
         signUp,
         updateUserProfile,
+        signIn,
         googleSignIn,
         logOut
       }}

@@ -13,32 +13,58 @@ import GoogleButton from "react-google-button";
 import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
-import "./SignIn.css";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { Toast } from "../../../routes/root";
+import "./SignIn.css";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { googleSignIn } = useAuthContext();
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
-    // reset();
-  };
-
-  console.log(errors);
+  const { googleSignIn, signIn, setIsAuthLoading, isAuthLoading } =
+    useAuthContext();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    const { email, password } = data;
+
+    setIsAuthLoading(true);
+    signIn(email, password)
+      .then((userCredential) => {
+        const loggedUser = userCredential.user;
+        console.log(loggedUser);
+
+        // *show toast
+        Toast.fire({
+          icon: "success",
+          title: "Succesfully Signed In",
+        });
+
+        reset();
+        setIsAuthLoading(false);
+
+        // const from = location.state?.from?.pathname || "/";
+        // navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        console.log(error);
+        // *show toast
+        Toast.fire({
+          icon: "error",
+          title: "Error Ocurred! Try Again",
+        });
+        setIsAuthLoading(false);
+      });
   };
 
   const handleGoogleSignIn = () => {
@@ -134,6 +160,7 @@ const SignIn = () => {
       />
 
       <LoadingButton
+        loading={isAuthLoading}
         type="submit"
         variant="contained"
         size="large"
