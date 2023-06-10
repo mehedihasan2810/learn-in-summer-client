@@ -1,6 +1,7 @@
 import {
   Divider,
   FormControl,
+  FormHelperText,
   IconButton,
   Input,
   InputAdornment,
@@ -12,8 +13,24 @@ import GoogleButton from "react-google-button";
 import "./SignUp.css";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
+    // reset();
+  };
+
+  console.log(errors);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -22,37 +39,60 @@ const SignUp = () => {
   };
 
   return (
-    <form className="signup-form">
+    <form onSubmit={handleSubmit(onSubmit)} className="signup-form">
       <div className="control">
         <TextField
+          {...register("name", { required: "This field is required" })}
           sx={{
             width: "100%",
           }}
-          id="name" 
-          name="name"
+          id="name"
           label="Name"
           variant="standard"
+          error={errors.name}
+          helperText={errors.name?.message}
         />
       </div>
       <div className="control">
         <TextField
-          type="email"
+          {...register("email", {
+            required: "This field is required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Invalid email address",
+            },
+          })}
           sx={{
             width: "100%",
           }}
-          id="email" 
-          name="email"
+          id="email"
           label="Email"
           variant="standard"
+          error={errors.email}
+          helperText={errors.email?.message}
         />
       </div>
       <div className="control">
-        <FormControl sx={{ width: "100%" }} variant="standard">
+        <FormControl
+          error={errors.password}
+          sx={{ width: "100%" }}
+          variant="standard"
+        >
           <InputLabel htmlFor="password">Password</InputLabel>
           <Input
+            {...register("password", {
+              required: "This field is required",
+              onChange: (e) => {
+                setPassword(e.target.value);
+              },
+              pattern: {
+                value: /^(?=.*[A-Z])(?=.*[\W_]).{6,}$/,
+                message:
+                  "password have to be atleast six characters, one capital letter and one special character",
+              },
+            })}
             id="password"
             type={showPassword ? "text" : "password"}
-            name="password"
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -65,15 +105,30 @@ const SignUp = () => {
               </InputAdornment>
             }
           />
+          {errors.password && (
+            <FormHelperText>{errors.password?.message}</FormHelperText>
+          )}
         </FormControl>
       </div>
       <div className="control">
-        <FormControl sx={{ width: "100%" }} variant="standard">
+        <FormControl
+          error={errors.confirmPassword}
+          sx={{ width: "100%" }}
+          variant="standard"
+        >
           <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
           <Input
+            {...register("confirmPassword", {
+              required: "This field is required",
+              validate: (value) => {
+                if (value !== password) {
+                  return "Passwords do not match";
+                }
+                return null;
+              },
+            })}
             id="confirmPassword"
             type={showPassword ? "text" : "password"}
-            name="confirmPassword"
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -86,17 +141,22 @@ const SignUp = () => {
               </InputAdornment>
             }
           />
+          {errors.confirmPassword && (
+            <FormHelperText>{errors.confirmPassword?.message}</FormHelperText>
+          )}
         </FormControl>
       </div>
       <div className="control">
         <TextField
+          {...register("photoUrl", { required: "This field is required" })}
           sx={{
             width: "100%",
           }}
-          id="photoUrl" 
-          name="photoUrl"
+          id="photoUrl"
           label="Photo Url"
           variant="standard"
+          error={errors.photoUrl}
+          helperText={errors.photoUrl?.message}
         />
       </div>
 
@@ -118,6 +178,7 @@ const SignUp = () => {
       />
 
       <LoadingButton
+        type="submit"
         //   loading
         variant="contained"
         size="large"

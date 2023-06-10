@@ -6,14 +6,31 @@ import {
   InputAdornment,
   InputLabel,
   TextField,
+  FormHelperText,
 } from "@mui/material";
-import "./SignIn.css";
+import { useForm } from "react-hook-form";
 import GoogleButton from "react-google-button";
 import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
+import "./SignIn.css";
+
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
+    // reset();
+  };
+
+  console.log(errors);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -22,25 +39,44 @@ const SignIn = () => {
   };
 
   return (
-    <form className="signin-form">
+    <form onSubmit={handleSubmit(onSubmit)} className="signin-form">
       <div className="control">
         <TextField
+          {...register("email", {
+            required: "This field is required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Invalid email address",
+            },
+          })}
           sx={{
             width: "100%",
-          }} 
-          name="email"
+          }}
+          error={errors.email}
           id="email"
           label="Email"
           variant="standard"
+          helperText={errors.email?.message}
         />
       </div>
       <div className="control">
-        <FormControl sx={{ width: "100%" }} variant="standard">
+        <FormControl
+          error={errors.password}
+          sx={{ width: "100%" }}
+          variant="standard"
+        >
           <InputLabel htmlFor="password">Password</InputLabel>
           <Input
             id="password"
+            {...register("password", {
+              required: "This field is required",
+              pattern: {
+                value: /^(?=.*[A-Z])(?=.*[\W_]).{6,}$/,
+                message:
+                  "password have to be atleast six characters, one capital letter and one special character",
+              },
+            })}
             type={showPassword ? "text" : "password"}
-            name="password"
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -53,9 +89,10 @@ const SignIn = () => {
               </InputAdornment>
             }
           />
+          {errors.password && (
+            <FormHelperText>{errors.password?.message}</FormHelperText>
+          )}
         </FormControl>
-
-       
       </div>
 
       <Divider
@@ -76,7 +113,7 @@ const SignIn = () => {
       />
 
       <LoadingButton
-        //   loading
+        type="submit"
         variant="contained"
         size="large"
         sx={{
