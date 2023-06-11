@@ -16,11 +16,15 @@ import { useState } from "react";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { Toast } from "../../../routes/root";
 import "./SignIn.css";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { googleSignIn, signIn, setIsAuthLoading, isAuthLoading } =
     useAuthContext();
+  const [axiosSecure] = useAxiosSecure();
+  const queryClient = useQueryClient();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -67,11 +71,34 @@ const SignIn = () => {
       });
   };
 
+  const mutation = useMutation({
+    mutationFn: async (newData) => {
+      const res = await axiosSecure.post(`/addUser`, newData);
+      return res;
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["manageUsers"] });
+    },
+  });
+
   const handleGoogleSignIn = () => {
     googleSignIn()
       .then((userCredential) => {
         const loggedUser = userCredential.user;
         console.log(loggedUser);
+
+        const userInfo = {
+          name: loggedUser.displayName,
+          email: loggedUser.email,
+          role: "student",
+          photoUrl: loggedUser.photoURL,
+          date: Date.now(),
+        };
+
+        console.log(userInfo);
+
+        mutation.mutate(userInfo);
 
         Toast.fire({
           icon: "success",
@@ -167,7 +194,7 @@ const SignIn = () => {
         sx={{
           width: "100%",
           mt: "1.2rem",
-          p: "0.8rem 0"
+          p: "0.8rem 0",
         }}
       >
         Sign In

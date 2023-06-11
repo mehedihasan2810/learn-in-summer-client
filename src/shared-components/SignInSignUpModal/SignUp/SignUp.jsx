@@ -63,19 +63,17 @@ const SignUp = () => {
         // * update user profile
         updateUserProfile(createdUser, name, photoUrl)
           .then(() => {
-
             const userInfo = {
               name: createdUser.displayName,
               email: createdUser.email,
               role: "student",
               photoUrl: createdUser.photoURL,
-              date: new Date(),
+              date: Date.now(),
             };
 
             console.log(userInfo);
 
             mutation.mutate(userInfo);
-
           })
           .catch((error) => {
             console.log(error);
@@ -118,6 +116,18 @@ const SignUp = () => {
       .then((userCredential) => {
         const loggedUser = userCredential.user;
         console.log(loggedUser);
+
+        const userInfo = {
+          name: loggedUser.displayName,
+          email: loggedUser.email,
+          role: "student",
+          photoUrl: loggedUser.photoURL,
+          date: Date.now(),
+        };
+
+        console.log(userInfo);
+
+        mutation.mutate(userInfo);
 
         Toast.fire({
           icon: "success",
@@ -284,7 +294,7 @@ const SignUp = () => {
         sx={{
           width: "100%",
           mt: "1.2rem",
-          p: "0.8rem 0"
+          p: "0.8rem 0",
         }}
       >
         Sign Up

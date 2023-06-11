@@ -15,11 +15,11 @@ const EnrolledClasses = () => {
     error,
     data: selectedClasses = [],
   } = useQuery({
-    queryKey: ["mySelectedClasses", currentUser?.email],
+    queryKey: ["enrolledClasses", currentUser?.email],
     enabled: !isAuthLoading,
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/getSelectedClass?email=${currentUser?.email}`
+        `/getEnrolledClasses?email=${currentUser?.email}`
       );
       return res.data;
     },
@@ -69,7 +69,13 @@ const EnrolledClasses = () => {
                 Enrolled
               </Button>
 
-              <Button variant="outlined" size="large">
+              <Button
+                sx={{
+                  width: "max-content",
+                }}
+                variant="outlined"
+                size="large"
+              >
                 Start Class
               </Button>
             </div>

@@ -26,16 +26,20 @@ const Payment = () => {
     },
   });
 
-  console.log(singleClass);
+  //   console.log(singleClass);
 
   if (isLoading) return <h2>Loading...</h2>;
   if (error) return <h2>Error Ocurred {error.message}</h2>;
 
   return (
-    <div>
+    <div className="payment-container">
       <h2>Payment</h2>
       <Elements stripe={stripePromise}>
-        <CheckoutForm price={singleClass?.price} />
+        <CheckoutForm
+          price={singleClass?.price}
+          classId={singleClass?._id}
+          instructor_email={singleClass?.email}
+        />
       </Elements>
     </div>
   );

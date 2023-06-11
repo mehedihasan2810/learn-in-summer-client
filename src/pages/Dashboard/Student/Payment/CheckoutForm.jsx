@@ -5,17 +5,28 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 
-const CheckoutForm = ({ price }) => {
+const CheckoutForm = ({ price, classId, instructor_email }) => {
+  console.log(price);
   const [cardError, setCardError] = useState("");
-  const [clientSecret, setClientSecret] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [transactionId, setTransactionId] = useState("");
   const stripe = useStripe();
   const elements = useElements();
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
-  const {currentUser} = useAuthContext();
+  const { currentUser } = useAuthContext();
 
-
-
+  const { mutate } = useMutation({
+    mutationFn: async (paymentInfo) => {
+      const res = await axiosSecure.post(`/payments`, paymentInfo);
+      return res;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["mySelectedClasses"],
+      });
+    },
+  });
 
   const mutation = useMutation({
     mutationFn: async (price) => {
@@ -31,15 +42,9 @@ const CheckoutForm = ({ price }) => {
 
   useEffect(() => {
     mutation.mutate(price);
-    console.log(mutation.data);
-
-    // setClientSecret(mutation.data.clientSecret);
   }, []);
 
-
-
-
-
+  console.log(mutation.data?.data?.clientSecret);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -62,45 +67,60 @@ const CheckoutForm = ({ price }) => {
       console.log("[error]", error);
       setCardError(error.message);
     } else {
-      console.log("[PaymentMethod]", paymentMethod);
+      //   console.log("[PaymentMethod]", paymentMethod);
       setCardError("");
     }
 
+    setProcessing(true);
 
-
-
-
-    const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(
-       clientSecret,
-        {
-          payment_method: {
-            card: card,
-            billing_details: {
-              name: currentUser?.display_name || 'unknown',
-              email: currentUser?.email || 'anonymous'
-            },
+    const { paymentIntent, error: confirmError } =
+      await stripe.confirmCardPayment(mutation.data?.data?.clientSecret, {
+        payment_method: {
+          card: card,
+          billing_details: {
+            name: currentUser?.display_name || "unknown",
+            email: currentUser?.email || "anonymous",
           },
         },
-      );
+      });
 
+    if (confirmError) {
+      console.log(confirmError);
+      setCardError(confirmError?.message);
+    } else {
+      setProcessing(false);
+      console.log(paymentIntent);
+      setCardError("");
+    }
 
-      if(confirmError){
-        console.log(confirmError)
-      }
+    if (paymentIntent.status === "succeeded") {
+      setTransactionId(paymentIntent.id);
 
-      console.log(paymentIntent)
+      //   saving payment information to the server
+      const paymentInfo = {
+        student_email: currentUser?.email,
+        instructor_email: instructor_email,
+        transactionId: paymentIntent.id,
+        price,
+        classId,
+        status: "service pending",
+        date: Date.now(),
+      };
 
+      mutate(paymentInfo);
 
-
-
+      //   axiosSecure.post("/payments", paymentInfo).then((res) => {
+      //     console.log(res.data);
+      //     if (res.data.insertedId) {
+      //       // succesfully saved payment info
+      //     }
+      //   });
+    }
   };
-
-
-  
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form className="payment-form" onSubmit={handleSubmit}>
         <CardElement
           options={{
             style: {
@@ -120,7 +140,7 @@ const CheckoutForm = ({ price }) => {
         <Button
           variant="contained"
           type="submit"
-          disabled={!stripe || !clientSecret}
+          disabled={!stripe || !mutation.data?.data?.clientSecret || processing}
         >
           Pay
         </Button>
@@ -131,6 +151,7 @@ const CheckoutForm = ({ price }) => {
           {cardError} - <strong>Try Again!</strong>
         </Alert>
       )}
+      {transactionId && <p>your transactionId {transactionId}</p>}
     </>
   );
 };
