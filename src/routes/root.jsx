@@ -12,18 +12,8 @@ import SelectedClasses from "../pages/Dashboard/Student/SelectedClasses/Selected
 import EnrolledClasses from "../pages/Dashboard/Student/EnrolledClasses/EnrolledClasses";
 import SignInSignUpModal from "../shared-components/SignInSignUpModal/SignInSignUpModal";
 import Payment from "../pages/Dashboard/Student/Payment/Payment";
-
-export const Toast = Swal.mixin({
-  toast: true,
-  position: "bottom",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
+import ManageClasses from "../pages/Dashboard/Admin/ManageClasses/ManageClasses";
+import ManageUsers from "../pages/Dashboard/Admin/ManageUsers/ManageUsers";
 
 export const router = createBrowserRouter([
   {
@@ -80,6 +70,26 @@ export const router = createBrowserRouter([
         path: "/dashboard/selected-classes/payment/:id",
         element: <Payment />,
       },
+      {
+        path: "/dashboard/manage-classes",
+        element: <ManageClasses />,
+      },
+      {
+        path: "/dashboard/manage-users",
+        element: <ManageUsers />,
+      },
     ],
   },
 ]);
+
+export const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});

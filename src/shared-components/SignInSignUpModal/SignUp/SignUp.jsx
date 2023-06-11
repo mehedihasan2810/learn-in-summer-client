@@ -16,8 +16,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { Toast } from "../../../routes/root";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
@@ -30,26 +28,12 @@ const SignUp = () => {
     updateUserProfile,
   } = useAuthContext();
 
-  const [axiosSecure] = useAxiosSecure();
-  const queryClient = useQueryClient();
-
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-
-  const mutation = useMutation({
-    mutationFn: async (newData) => {
-      const res = await axiosSecure.post(`/addUser`, newData);
-      return res;
-    },
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["manageUsers"] });
-    },
-  });
 
   const onSubmit = (data) => {
     const { name, email, password, photoUrl } = data;
@@ -62,19 +46,7 @@ const SignUp = () => {
 
         // * update user profile
         updateUserProfile(createdUser, name, photoUrl)
-          .then(() => {
-            const userInfo = {
-              name: createdUser.displayName,
-              email: createdUser.email,
-              role: "student",
-              photoUrl: createdUser.photoURL,
-              date: Date.now(),
-            };
-
-            console.log(userInfo);
-
-            mutation.mutate(userInfo);
-          })
+          .then(() => {})
           .catch((error) => {
             console.log(error);
             // *show toast
@@ -116,18 +88,6 @@ const SignUp = () => {
       .then((userCredential) => {
         const loggedUser = userCredential.user;
         console.log(loggedUser);
-
-        const userInfo = {
-          name: loggedUser.displayName,
-          email: loggedUser.email,
-          role: "student",
-          photoUrl: loggedUser.photoURL,
-          date: Date.now(),
-        };
-
-        console.log(userInfo);
-
-        mutation.mutate(userInfo);
 
         Toast.fire({
           icon: "success",

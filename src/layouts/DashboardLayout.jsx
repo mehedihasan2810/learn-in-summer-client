@@ -23,6 +23,9 @@ import { Link, Outlet } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import UpcomingIcon from "@mui/icons-material/Upcoming";
 import SchoolIcon from "@mui/icons-material/School";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const drawerWidth = 240;
 
@@ -42,7 +45,31 @@ export default function DashboardLayout(props) {
     setMobileOpen(!mobileOpen);
   };
 
-  let user = "student";
+  // const [axiosSecure] = useAxiosSecure();
+  // const { currentUser, isAuthLoading, toggleSignInSignUpModal } =
+  //   useAuthContext();
+
+  // const { data } = useQuery({
+  //   queryKey: ["user", currentUser?.email],
+  //   enabled: !isAuthLoading,
+  //   queryFn: async () => {
+  //     const res = await axiosSecure.get(`/getUser?email=${currentUser?.email}`);
+  //     return res.data;
+  //   },
+  // });
+
+  // console.log(data);
+
+  const { user_data } = useAuthContext();
+  console.log(user_data);
+  let user;
+
+  if (!user_data) {
+    user = "student";
+  } else {
+    user = user_data?.role;
+  }
+
   let navItem;
 
   if (user === "student") {
@@ -115,12 +142,14 @@ export default function DashboardLayout(props) {
     <div>
       <Toolbar>
         <Typography variant="h6" noWrap component="div">
-          User
+          {user_data?.name}
+          <p style={{ fontSize: "14px" }}>{user_data?.email}</p>
+          <p style={{ fontSize: "12px" }}>{user_data?.role}</p>
         </Typography>
       </Toolbar>
       <Divider />
       <List>
-        {navItem.map((item, index) => (
+        {navItem?.map((item, index) => (
           <Link key={index} to={`/dashboard/${item.path}`}>
             <ListItem disablePadding>
               <ListItemButton>
