@@ -16,7 +16,7 @@ const gooleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [isAuthLoading, setIsAuthLoading] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isSignInSignUpModalOpen, setIsSignInSignUpModalOpen] = useState(false);
 
   const toggleSignInSignUpModal = () => {

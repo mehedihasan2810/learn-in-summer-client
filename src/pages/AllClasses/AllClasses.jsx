@@ -6,7 +6,8 @@ import { Button } from "@mui/material";
 import { useAuthContext } from "../../hooks/useAuthContext";
 const AllClasses = () => {
   const [axiosSecure] = useAxiosSecure();
-  const { currentUser, toggleSignInSignUpModal } = useAuthContext();
+  const { currentUser, isAuthLoading, toggleSignInSignUpModal } =
+    useAuthContext();
   const queryClient = useQueryClient();
 
   const {
@@ -18,15 +19,16 @@ const AllClasses = () => {
     return res.data;
   });
 
-  const { data: SelectedClassIds = [] } = useQuery(
-    ["SelectedClassIds", currentUser?.email],
-    async () => {
+  const { data: SelectedClassIds = [] } = useQuery({
+    queryKey: ["SelectedClassIds", currentUser?.email],
+    enabled: !isAuthLoading,
+    queryFn: async () => {
       const res = await axiosSecure.get(
         `/getSelectedClassIds?email=${currentUser?.email}`
       );
       return res.data;
-    }
-  );
+    },
+  });
   console.log(SelectedClassIds?.selectedClassIds);
 
   const mutation = useMutation({

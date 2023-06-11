@@ -11,21 +11,19 @@ import Swal from "sweetalert2";
 import SelectedClasses from "../pages/Dashboard/Student/SelectedClasses/SelectedClasses";
 import EnrolledClasses from "../pages/Dashboard/Student/EnrolledClasses/EnrolledClasses";
 import SignInSignUpModal from "../shared-components/SignInSignUpModal/SignInSignUpModal";
-
+import Payment from "../pages/Dashboard/Student/Payment/Payment";
 
 export const Toast = Swal.mixin({
   toast: true,
-  position: 'bottom',
+  position: "bottom",
   showConfirmButton: false,
   timer: 3000,
   timerProgressBar: true,
   didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
-  }
-})
-
-
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +75,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/enrolled-classes",
         element: <EnrolledClasses />,
+      },
+      {
+        path: "/dashboard/selected-classes/payment/:id",
+        element: <Payment />,
       },
     ],
   },

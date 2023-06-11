@@ -284,6 +284,7 @@ const SignUp = () => {
         sx={{
           width: "100%",
           mt: "1.2rem",
+          p: "0.8rem 0"
         }}
       >
         Sign Up

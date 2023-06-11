@@ -4,22 +4,28 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import moment from "moment";
+import { Link } from "react-router-dom";
+import { DeleteOutline } from "@mui/icons-material";
 
 const SelectedClasses = () => {
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
 
-  const { currentUser } = useAuthContext();
+  const { currentUser, isAuthLoading } = useAuthContext();
 
   const {
     isLoading,
     error,
     data: selectedClasses = [],
-  } = useQuery(["mySelectedClasses", currentUser?.email], async () => {
-    const res = await axiosSecure.get(
-      `/getSelectedClass?email=${currentUser?.email}`
-    );
-    return res.data;
+  } = useQuery({
+    queryKey: ["mySelectedClasses", currentUser?.email],
+    enabled: !isAuthLoading,
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/getSelectedClass?email=${currentUser?.email}`
+      );
+      return res.data;
+    },
   });
 
   console.log(selectedClasses);
@@ -75,11 +81,21 @@ const SelectedClasses = () => {
             </div>
 
             <div className="btns-container">
-              <Button variant="contained">Pay</Button>
+              <Link to={`/dashboard/selected-classes/payment/${classes._id}`}>
+                <Button
+                  sx={{
+                    width: "100%",
+                  }}
+                  variant="contained"
+                >
+                  Enroll
+                </Button>
+              </Link>
               <Button
                 onClick={() => handleDelete(classes._id)}
                 color="error"
                 variant="outlined"
+                startIcon={<DeleteOutline />}
               >
                 Remove
               </Button>

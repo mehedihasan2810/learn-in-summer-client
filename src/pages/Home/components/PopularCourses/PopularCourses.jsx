@@ -12,7 +12,8 @@ const PopularCourses = () => {
   const [activeTab, setActiveTab] = useState("Popular");
   const underRef = useRef(null);
   const [axiosSecure] = useAxiosSecure();
-  const { currentUser, toggleSignInSignUpModal } = useAuthContext();
+  const { currentUser, isAuthLoading, toggleSignInSignUpModal } =
+    useAuthContext();
   const queryClient = useQueryClient();
 
   const handleTab = (e, index, tab) => {
@@ -31,15 +32,16 @@ const PopularCourses = () => {
 
   console.log(allClasses);
 
-  const { data: SelectedClassIds = [] } = useQuery(
-    ["SelectedClassIds", currentUser?.email],
-    async () => {
+  const { data: SelectedClassIds = [] } = useQuery({
+    queryKey: ["SelectedClassIds", currentUser?.email],
+    enabled: !isAuthLoading,
+    queryFn: async () => {
       const res = await axiosSecure.get(
         `/getSelectedClassIds?email=${currentUser?.email}`
       );
       return res.data;
-    }
-  );
+    },
+  });
   console.log(SelectedClassIds?.selectedClassIds);
 
   const mutation = useMutation({
