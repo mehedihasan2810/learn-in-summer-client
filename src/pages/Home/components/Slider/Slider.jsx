@@ -1,11 +1,12 @@
 import { Swiper, SwiperSlide } from "swiper/react";
+import img from '/assets/drum.webp'
 
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "./Slider.css";
 
-import { Autoplay, Pagination, Navigation } from "swiper";
+import { Autoplay, Pagination, Navigation } from "swiper"
 const Slider = () => {
   return (
     <section className="slider-container">
@@ -25,13 +26,16 @@ const Slider = () => {
       >
         <SwiperSlide className="swiper">
           {" "}
-          <img
+          <img 
+          onError={(e) => {
+             e.target.src = img
+          }}
             src="https://images.unsplash.com/photo-1611898979774-e202e8e9ffbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
             alt=""
           />
           <div className="content">
             <h1>
-              Here you will be able to learn playing guiter the badass way possible.
+              Learn Piano Like Bohemian Rapsody
             </h1>
             <p>
               This one is one of our top rated course. You can check what our previous
@@ -42,7 +46,10 @@ const Slider = () => {
 
         <SwiperSlide className="swiper">
           {" "}
-          <img
+          <img 
+           onError={(e) => {
+            e.target.src = img
+         }}
             src="https://images.pexels.com/photos/920992/pexels-photo-920992.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
             alt=""
           />
@@ -56,7 +63,10 @@ const Slider = () => {
         </SwiperSlide>
         <SwiperSlide className="swiper">
           {" "}
-          <img
+          <img 
+           onError={(e) => {
+            e.target.src = img
+         }}
             src="https://images.pexels.com/photos/15864961/pexels-photo-15864961/free-photo-of-man-playing-on-synthesizer-on-stage-in-dark.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
             alt=""
           />

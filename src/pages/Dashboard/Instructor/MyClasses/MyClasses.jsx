@@ -12,10 +12,14 @@ import { Button, ButtonGroup } from "@mui/material";
 import moment from "moment/moment";
 import { Link } from "react-router-dom";
 import { Toast } from "../../../../routes/root";
+import { useAuthContext } from "../../../../hooks/useAuthContext";
 
 export default function MyClasses() {
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
+  const {addDashBoardTitle} = useAuthContext();
+
+  addDashBoardTitle('My Classes')
 
   const {
     isLoading,

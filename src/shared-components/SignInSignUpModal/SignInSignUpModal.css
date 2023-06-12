@@ -1,4 +1,8 @@
 .modal-container {
+  display: none;
+}
+
+.modal-container.modal-open {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +17,7 @@
 
 .form-container {
   background-color: #fff;
-  padding:2rem 3rem;
+  padding: 2rem 3rem;
   border-radius: 4px;
   width: 450px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);

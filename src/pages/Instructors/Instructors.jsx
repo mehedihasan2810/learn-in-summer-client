@@ -1,7 +1,8 @@
 import { FaGraduationCap, FaEnvelope } from "react-icons/fa";
 import "./Instructors.css";
+import { useTitlePerPage } from "../../hooks/useTitlePerPage";
 const Instructors = () => {
-  console.log(Array.from({ length: 10 }));
+  useTitlePerPage('Instructors')
   return (
     <div className="center-container">
       <div className="instructors-container">

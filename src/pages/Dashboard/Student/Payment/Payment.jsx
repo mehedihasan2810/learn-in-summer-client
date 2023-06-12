@@ -5,6 +5,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { useAuthContext } from "../../../../hooks/useAuthContext";
 
 const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_GATEWAY_PK);
 
@@ -12,6 +13,9 @@ const Payment = () => {
   const params = useParams();
   const [axiosSecure] = useAxiosSecure();
   console.log(params.id);
+  const { addDashBoardTitle } = useAuthContext();
+
+  addDashBoardTitle("Payment");
 
   const {
     isLoading,
@@ -33,7 +37,6 @@ const Payment = () => {
 
   return (
     <div className="payment-container">
-      <h2>Payment</h2>
       <Elements stripe={stripePromise}>
         <CheckoutForm
           price={singleClass?.price}

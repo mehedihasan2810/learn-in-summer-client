@@ -34,7 +34,7 @@ const PopularCourses = () => {
 
   const { data: SelectedClassIds = [] } = useQuery({
     queryKey: ["SelectedClassIds", currentUser?.email],
-    enabled: !isAuthLoading,
+    enabled: Boolean(currentUser),
     queryFn: async () => {
       const res = await axiosSecure.get(
         `/getSelectedClassIds?email=${currentUser?.email}`
@@ -70,6 +70,7 @@ const PopularCourses = () => {
     <div className="center-container">
       <section className="popular-classes-container">
         <h2 className="section-title">Popular Classes</h2>
+        <div className="tab-overflow">
         <div className="tab-container">
           {tabs.map((tab, index) => (
             <button
@@ -82,6 +83,7 @@ const PopularCourses = () => {
           ))}
 
           <span ref={underRef} className="under"></span>
+        </div>
         </div>
         <div className="card-container">
           {error && <h2>Error ocurred {error.message}</h2>}

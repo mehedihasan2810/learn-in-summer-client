@@ -19,9 +19,17 @@ const gooleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [dashboardTitle, setDashboardTitle] = useState("");
   const [isSignInSignUpModalOpen, setIsSignInSignUpModalOpen] = useState(false);
+  // const [isProfileUpdateCompleted, setIsProfileUpdateCompleted] =
+  //   useState(false);
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
+
+  const completeProfileUpdate = () => {
+    // setIsProfileUpdateCompleted()
+    console.log('from func', currentUser)
+  }
 
   const toggleSignInSignUpModal = () => {
     setIsSignInSignUpModalOpen(!isSignInSignUpModalOpen);
@@ -50,13 +58,13 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  // const [axiosSecure] = useAxiosSecure();
-  // const { currentUser, isAuthLoading, toggleSignInSignUpModal } =
-  //   useAuthContext();
+  const addDashBoardTitle = (title) => {
+    setDashboardTitle(title);
+  };
 
   const { data: user_data } = useQuery({
     queryKey: ["user", currentUser?.email],
-    enabled: !isAuthLoading,
+    enabled: Boolean(currentUser),
     queryFn: async () => {
       const res = await axiosSecure.get(`/getUser?email=${currentUser?.email}`);
       return res.data;
@@ -80,20 +88,22 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsAuthLoading(false);
 
-      const userInfo = {
-        name: user.displayName,
-        email: user.email,
-        role: "student",
-        photoUrl: user.photoURL,
-        date: Date.now(),
-      };
-
       // console.log(userInfo);
+      console.log(user)
 
-      if (user.photoURL) {
+      if (user) {
+        const userInfo = {
+          name: user.displayName,
+          email: user.email,
+          role: "student",
+          photoUrl: user.photoURL,
+          date: Date.now(),
+        };
+
+        console.log('mutateeeeeeeee')
         mutation.mutate(userInfo);
-        setCurrentUser(user);
       }
+      setCurrentUser(user);
     });
 
     return () => {
@@ -115,6 +125,10 @@ const AuthProvider = ({ children }) => {
         googleSignIn,
         logOut,
         user_data,
+        addDashBoardTitle,
+        dashboardTitle,
+        completeProfileUpdate,
+        role: "admin",
       }}
     >
       {children}

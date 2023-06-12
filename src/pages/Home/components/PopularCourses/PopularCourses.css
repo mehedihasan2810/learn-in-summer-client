@@ -4,6 +4,7 @@
 
 .popular-classes-container .tab-container {
   display: flex;
+  flex-wrap: nowrap;
   border-bottom: 5px solid #126ed722;
   margin: 0 auto;
   position: relative;
@@ -103,4 +104,14 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
+}
+
+@media (max-width: 776px) {
+  .popular-classes-container .tab-overflow {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .popular-classes-container .tab-container {
+    width: 650px;
+  }
 }

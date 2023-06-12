@@ -4,11 +4,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { Button } from "@mui/material";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useTitlePerPage } from "../../hooks/useTitlePerPage";
 const AllClasses = () => {
   const [axiosSecure] = useAxiosSecure();
   const { currentUser, isAuthLoading, toggleSignInSignUpModal } =
     useAuthContext();
   const queryClient = useQueryClient();
+
+  useTitlePerPage('AllClasses')
 
   const {
     isLoading,
@@ -21,7 +24,7 @@ const AllClasses = () => {
 
   const { data: SelectedClassIds = [] } = useQuery({
     queryKey: ["SelectedClassIds", currentUser?.email],
-    enabled: !isAuthLoading,
+    enabled: Boolean(currentUser),
     queryFn: async () => {
       const res = await axiosSecure.get(
         `/getSelectedClassIds?email=${currentUser?.email}`

@@ -11,7 +11,9 @@ const SelectedClasses = () => {
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
 
-  const { currentUser, isAuthLoading } = useAuthContext();
+  const { currentUser, addDashBoardTitle } = useAuthContext();
+
+  addDashBoardTitle("My Selected Class");
 
   const {
     isLoading,
@@ -19,7 +21,7 @@ const SelectedClasses = () => {
     data: selectedClasses = [],
   } = useQuery({
     queryKey: ["mySelectedClasses", currentUser?.email],
-    enabled: !isAuthLoading,
+    enabled: Boolean(currentUser),
     queryFn: async () => {
       const res = await axiosSecure.get(
         `/getSelectedClass?email=${currentUser?.email}`

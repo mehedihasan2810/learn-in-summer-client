@@ -26,6 +26,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useTitlePerPage } from "../hooks/useTitlePerPage";
 
 const drawerWidth = 240;
 
@@ -45,6 +46,8 @@ export default function DashboardLayout(props) {
     setMobileOpen(!mobileOpen);
   };
 
+  useTitlePerPage("Dashboard");
+
   // const [axiosSecure] = useAxiosSecure();
   // const { currentUser, isAuthLoading, toggleSignInSignUpModal } =
   //   useAuthContext();
@@ -60,7 +63,7 @@ export default function DashboardLayout(props) {
 
   // console.log(data);
 
-  const { user_data } = useAuthContext();
+  const { user_data, dashboardTitle } = useAuthContext();
   console.log(user_data);
   let user;
 
@@ -82,6 +85,11 @@ export default function DashboardLayout(props) {
       {
         text: "My Enrolled Classes",
         path: "enrolled-classes",
+        icon: <PaymentIcon />,
+      },
+      {
+        text: "Payment Details",
+        path: "payment-details",
         icon: <PaymentIcon />,
       },
     ];
@@ -122,13 +130,13 @@ export default function DashboardLayout(props) {
       icon: <HomeIcon />,
     },
     {
-      text: "Popular Classes",
-      path: "#",
+      text: "All Classes",
+      path: "/all-classes",
       icon: <LibraryAddCheckIcon />,
     },
     {
-      text: "All Classes",
-      path: "#",
+      text: "Instructors",
+      path: "/instructors",
       icon: <SchoolIcon />,
     },
     {
@@ -201,7 +209,7 @@ export default function DashboardLayout(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+            {dashboardTitle}
           </Typography>
         </Toolbar>
       </AppBar>

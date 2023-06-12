@@ -4,6 +4,7 @@ import { useState } from "react";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router-dom";
 import { Toast } from "../../../../routes/root";
+import { useAuthContext } from "../../../../hooks/useAuthContext";
 
 const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 
@@ -12,6 +13,8 @@ const UpdateClass = () => {
   const [isApiLoading, setIsApiLoading] = useState(false);
 
   const navigate = useNavigate();
+  const {addDashBoardTitle} = useAuthContext()
+  addDashBoardTitle('Update Class')
 
   const img_hosting_url = `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`;
 

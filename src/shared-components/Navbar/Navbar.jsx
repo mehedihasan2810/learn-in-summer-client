@@ -4,31 +4,37 @@ import "./Navbar.css";
 import { Button } from "@mui/material";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { Toast } from "../../routes/root";
+import { useState } from "react";
+import img from "/assets/drum.webp";
 const Navbar = () => {
-  const { toggleSignInSignUpModal, currentUser, logOut } = useAuthContext();
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const { toggleSignInSignUpModal, currentUser, logOut, user_data } =
+    useAuthContext();
   console.log(currentUser);
 
   const handleSignOut = () => {
     logOut()
-    .then(() => {
-
-      // *show toast
-      if (currentUser) {
+      .then(() => {
+        // *show toast
+        if (currentUser) {
+          Toast.fire({
+            icon: "success",
+            title: "Succesfully Signed Out",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
         Toast.fire({
-          icon: "success",
-          title: "Succesfully Signed Out",
+          icon: "error",
+          title: "Error ocurred! Try Again",
         });
-      }
-
-    })
-    .catch((error) => {
-      console.log(error)
-      Toast.fire({
-        icon: "error",
-        title: "Error ocurred! Try Again",
       });
-    });
-  }
+  };
+
+  const handleToggleNav = () => {
+    setIsNavOpen(!isNavOpen);
+  };
   return (
     <header>
       <div className="center-container flex-center">
@@ -38,7 +44,7 @@ const Navbar = () => {
             <h4>LearnInSummer</h4>
           </Link>
         </div>
-        <nav>
+        <nav className={isNavOpen ? "toggle-nav" : ""}>
           <ul className="flex-center">
             <li>
               <NavLink
@@ -74,7 +80,13 @@ const Navbar = () => {
               <>
                 <li>
                   <NavLink
-                    to="/dashboard"
+                    to={`/dashboard/${
+                      user_data.role === "admin"
+                        ? "manage-classes"
+                        : user_data.role === "instructor"
+                        ? "my-classes"
+                        : "selected-classes"
+                    }`}
                     className={({ isActive, isPending }) =>
                       isPending ? "pending" : isActive ? "active" : ""
                     }
@@ -83,14 +95,17 @@ const Navbar = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink
-                    to="/"
-                    className={({ isActive, isPending }) =>
-                      isPending ? "pending" : isActive ? "active" : ""
-                    }
-                  >
-                    Profile
-                  </NavLink>
+                  <img
+                    title="anonymous"
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                    src={img}
+                    alt=""
+                  />
                 </li>
                 <li>
                   <Button
@@ -119,6 +134,13 @@ const Navbar = () => {
             )}
           </ul>
         </nav>
+
+        <img
+          onClick={handleToggleNav}
+          className="hamburger-menu"
+          src=""
+          alt="toggle"
+        />
       </div>
     </header>
   );

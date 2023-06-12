@@ -18,10 +18,16 @@ function SignInSignUpModal() {
     setCurrentTab(index);
   };
 
-  const { toggleSignInSignUpModal } = useAuthContext();
+  const { toggleSignInSignUpModal, isSignInSignUpModalOpen } = useAuthContext();
 
   return (
-    <div className="modal-container">
+    <div
+      className={
+        isSignInSignUpModalOpen
+          ? "modal-container modal-open"
+          : "modal-container"
+      }
+    >
       <div className="form-container">
         <div className="tab-container">
           {tabs.map((tab, index) => (

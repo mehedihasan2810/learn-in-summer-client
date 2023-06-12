@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Toast } from "../../../../routes/root";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { useAuthContext } from "../../../../hooks/useAuthContext";
 const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 
 const AddClass = () => {
@@ -13,6 +14,9 @@ const AddClass = () => {
   const [axiosSecure] = useAxiosSecure();
 
   const queryClient = useQueryClient();
+
+  const { addDashBoardTitle } = useAuthContext();
+  addDashBoardTitle("Add Class");
 
   const mutation = useMutation({
     mutationFn: async (newData) => {
@@ -45,6 +49,8 @@ const AddClass = () => {
 
       const finalClassInfo = {
         ...classInfo,
+        price: +classInfo.price,
+        available_seats: +classInfo.available_seats,
         image: imgUploadResult.success
           ? imgUploadResult.data.display_url
           : "https://i.ibb.co/yfYWFVK/logo2.jpg",

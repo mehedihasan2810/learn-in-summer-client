@@ -1,7 +1,7 @@
+import SignInSignUpModal from "../shared-components/SignInSignUpModal/SignInSignUpModal";
 import Navbar from "../shared-components/Navbar/Navbar";
 import { Outlet } from "react-router-dom";
 import Footer from "../shared-components/Footer/Footer";
-import SignInSignUpModal from "../shared-components/SignInSignUpModal/SignInSignUpModal";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useEffect } from "react";
 
@@ -22,7 +22,7 @@ const RootLayout = () => {
         <Outlet />
       </main>
       <Footer />
-      {isSignInSignUpModalOpen && <SignInSignUpModal />}
+      <SignInSignUpModal />
     </>
   );
 };

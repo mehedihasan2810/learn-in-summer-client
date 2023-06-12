@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-
+import img from "/assets/drum.webp";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -30,6 +30,9 @@ const Testimonials = () => {
           <SwiperSlide className="swiper">
             <div className="testimonial">
               <img
+                onError={(e) => {
+                  e.target.src = img;
+                }}
                 src="https://images.unsplash.com/photo-1593698054590-a5b3a19565a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
                 alt=""
               />
@@ -53,6 +56,9 @@ const Testimonials = () => {
           <SwiperSlide className="swiper">
             <div className="testimonial">
               <img
+                onError={(e) => {
+                  e.target.src = img;
+                }}
                 src="https://images.unsplash.com/photo-1554785015-34fc48ac73e5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=735&q=80"
                 alt=""
               />
@@ -76,6 +82,9 @@ const Testimonials = () => {
           <SwiperSlide className="swiper">
             <div className="testimonial">
               <img
+                onError={(e) => {
+                  e.target.src = img;
+                }}
                 src="https://images.unsplash.com/photo-1631739714671-0de24b57d810?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=758&q=80"
                 alt=""
               />
@@ -98,7 +107,10 @@ const Testimonials = () => {
           </SwiperSlide>
           <SwiperSlide className="swiper">
             <div className="testimonial">
-              <img
+              <img 
+               onError={(e) => {
+                e.target.src = img
+             }}
                 src="https://images.unsplash.com/photo-1535740560992-3a223ab7ef78?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
                 alt=""
               />

@@ -41,9 +41,32 @@
 }
 
 .testimonial img {
-  height: 100%;
-  max-width: 100%;
+  height: auto;
+  max-width: 320px;
   object-fit: cover;
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
+}
+
+@media (max-width: 768px) {
+  .testimonial .quote {
+    padding: 2rem;
+  }
+  .testimonial img {
+    max-width: 220px;
+  }
+}
+
+@media (max-width: 576px) {
+  .testimonial {
+    height: auto;
+    flex-direction: column;
+    border-radius: 1rem;
+  }
+  .testimonial img {
+    min-width: 100%;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-left-radius: 0;
+  }
 }

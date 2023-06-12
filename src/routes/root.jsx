@@ -1,9 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../layouts/RootLayout";
+import DashboardLayout from "../layouts/DashboardLayout";
+import InstructorRoute from "./InstructorRoute";
+import AdminRoute from "./AdminRoute";
+import PrivateRoute from "./PrivateRoute";
 import Home from "../pages/Home/Home";
 import Instructors from "../pages/Instructors/Instructors";
 import AllClasses from "../pages/AllClasses/AllClasses";
-import DashboardLayout from "../layouts/DashboardLayout";
 import UpdateClass from "../pages/Dashboard/Instructor/UpdateClass/UpdateClass";
 import AddClass from "../pages/Dashboard/Instructor/AddClass/AddClass";
 import MyClasses from "../pages/Dashboard/Instructor/MyClasses/MyClasses";
@@ -14,11 +17,14 @@ import SignInSignUpModal from "../shared-components/SignInSignUpModal/SignInSign
 import Payment from "../pages/Dashboard/Student/Payment/Payment";
 import ManageClasses from "../pages/Dashboard/Admin/ManageClasses/ManageClasses";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers/ManageUsers";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import PaymentDetails from "../pages/Dashboard/Student/PaymentDetails/PaymentDetails";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -44,39 +50,83 @@ export const router = createBrowserRouter([
   },
   {
     path: "dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
     children: [
       {
         path: "/dashboard/add-class",
-        element: <AddClass />,
+        element: (
+          <InstructorRoute>
+            <AddClass />
+          </InstructorRoute>
+        ),
       },
       {
         path: "/dashboard/my-classes",
-        element: <MyClasses />,
+        element: (
+          <InstructorRoute>
+            <MyClasses />
+          </InstructorRoute>
+        ),
       },
       {
         path: "/dashboard/my-classes/update-class/:id",
-        element: <UpdateClass />,
+        element: (
+          <InstructorRoute>
+            <UpdateClass />
+          </InstructorRoute>
+        ),
       },
       {
         path: "/dashboard/selected-classes",
-        element: <SelectedClasses />,
+        element: (
+          <PrivateRoute>
+            <SelectedClasses />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/enrolled-classes",
-        element: <EnrolledClasses />,
+        element: (
+          <PrivateRoute>
+            <EnrolledClasses />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/selected-classes/payment/:id",
-        element: <Payment />,
+        element: (
+          <PrivateRoute>
+            <Payment />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/payment-details",
+        element: (
+          <PrivateRoute>
+            <PaymentDetails />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/manage-classes",
-        element: <ManageClasses />,
+        element: (
+          <AdminRoute>
+            <ManageClasses />
+          </AdminRoute>
+        ),
       },
       {
         path: "/dashboard/manage-users",
-        element: <ManageUsers />,
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
       },
     ],
   },

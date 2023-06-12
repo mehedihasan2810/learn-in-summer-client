@@ -8,7 +8,9 @@ import moment from "moment";
 const EnrolledClasses = () => {
   const [axiosSecure] = useAxiosSecure();
 
-  const { currentUser, isAuthLoading } = useAuthContext();
+  const { currentUser, addDashBoardTitle } = useAuthContext();
+
+  addDashBoardTitle('My Enrolled Classes')
 
   const {
     isLoading,
@@ -16,7 +18,7 @@ const EnrolledClasses = () => {
     data: selectedClasses = [],
   } = useQuery({
     queryKey: ["enrolledClasses", currentUser?.email],
-    enabled: !isAuthLoading,
+    enabled: Boolean(currentUser),
     queryFn: async () => {
       const res = await axiosSecure.get(
         `/getEnrolledClasses?email=${currentUser?.email}`
@@ -31,7 +33,7 @@ const EnrolledClasses = () => {
   return (
     <div className="selected-container">
       <p className="selected-length">
-        {selectedClasses.length} classes You have selected so far
+        {selectedClasses.length} classes You have enrolled so far
       </p>
 
       {selectedClasses.map((classes, index) => (

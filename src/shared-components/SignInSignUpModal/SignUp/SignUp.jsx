@@ -16,9 +16,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { Toast } from "../../../routes/root";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
+
+  const [axiosSecure] = useAxiosSecure();
+  const queryClient = useQueryClient();
 
   const {
     signUp,
@@ -26,7 +31,24 @@ const SignUp = () => {
     setIsAuthLoading,
     googleSignIn,
     updateUserProfile,
+    completeProfileUpdate,
+    currentUser
   } = useAuthContext();
+
+
+
+  const mutation = useMutation({
+    mutationFn: async (newData) => {
+      const res = await axiosSecure.post(`/addUser`, newData);
+      return res;
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["manageUsers"] });
+    },
+  });
+
+
 
   const {
     register,
@@ -38,6 +60,9 @@ const SignUp = () => {
   const onSubmit = (data) => {
     const { name, email, password, photoUrl } = data;
 
+
+   
+
     setIsAuthLoading(true);
     signUp(email, password)
       .then((userCredential) => {
@@ -46,7 +71,10 @@ const SignUp = () => {
 
         // * update user profile
         updateUserProfile(createdUser, name, photoUrl)
-          .then(() => {})
+          .then(() => {
+            console.log('profile updated ', currentUser)
+            completeProfileUpdate()
+          })
           .catch((error) => {
             console.log(error);
             // *show toast
@@ -57,6 +85,22 @@ const SignUp = () => {
 
             setIsAuthLoading(false);
           });
+
+
+
+
+            const userInfo = {
+              name: name,
+              email: email,
+              role: "student",
+              photoUrl: photoUrl,
+              date: Date.now(),
+            };
+      
+            console.log('mutateeeeeeeee')
+            mutation.mutate(userInfo);
+
+
 
         // *show toast
         Toast.fire({
