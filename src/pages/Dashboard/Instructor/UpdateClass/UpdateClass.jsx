@@ -1,6 +1,6 @@
 import { CircularProgress, TextField } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
@@ -14,7 +14,7 @@ const UpdateClass = () => {
 
   const navigate = useNavigate();
   const { addDashBoardTitle } = useAuthContext();
-  addDashBoardTitle("Update Class");
+  
 
   const img_hosting_url = `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`;
 
@@ -79,6 +79,10 @@ const UpdateClass = () => {
       title: "Updated successfully",
     });
   };
+
+  useEffect(() => {
+    addDashBoardTitle("Update Class");
+  }, [])
 
   if (isLoading) return "Loading...";
 

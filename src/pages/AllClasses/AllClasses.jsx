@@ -2,16 +2,16 @@ import { FaGraduationCap, FaRegClock } from "react-icons/fa";
 import "./AllClasses.css";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { Button } from "@mui/material";
+import { Box, Button, Skeleton } from "@mui/material";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useTitlePerPage } from "../../hooks/useTitlePerPage";
+import { motion } from "framer-motion";
 const AllClasses = () => {
   const [axiosSecure] = useAxiosSecure();
-  const { currentUser, isAuthLoading, toggleSignInSignUpModal } =
-    useAuthContext();
+  const { currentUser, toggleSignInSignUpModal, user_data } = useAuthContext();
   const queryClient = useQueryClient();
 
-  useTitlePerPage('AllClasses')
+  useTitlePerPage("AllClasses");
 
   const {
     isLoading,
@@ -58,56 +58,80 @@ const AllClasses = () => {
 
   return (
     <div className="center-container">
-      <div className="all-classes-container">
-        <h2 className="section-title">All Classes</h2>
+      <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+        <div className="all-classes-container">
+          <h2 className="section-title">All Classes</h2>
 
-        <div className="all-classes">
-          {error && <h2>Error ocurred {error.message}</h2>}
-          {isLoading ? (
-            <h2>Loading...</h2>
-          ) : (
-            allClasses.map((classes) => (
-              <div key={classes._id} className="card">
-                <img src={classes.image} alt="" />
-                <div className="price-category">
-                  <span className="category">{classes.class_name}</span>
-                  <span>${classes.price}</span>
-                </div>
-                <h4>{classes.title}</h4>
-                <h6>{classes.instructor_name}</h6>
-                <div className="hrs-learners">
-                  <p>
-                    {" "}
-                    <FaRegClock /> {classes.duration} hrs
-                  </p>
-                  <p>
-                    {" "}
-                    <FaGraduationCap /> {classes.available_seats} seats
-                    available
-                  </p>
-                </div>
-                <div className="btns">
-                  <Button variant="outlined" size="large">
-                    More Info
-                  </Button>
-                  <Button
-                    disabled={SelectedClassIds?.selectedClassIds?.includes(
-                      classes._id
-                    )}
-                    onClick={() => handleSelectClass(classes._id)}
-                    variant="contained"
-                    size="large"
+          <div className="all-classes">
+            {error && <h2>Error ocurred {error.message}</h2>}
+            {isLoading ? (
+              <Box sx={{ width: 210, marginRight: 0.5 }}>
+                <Skeleton variant="rectangular" width={300} height={200} />
+                <Skeleton />
+                <Skeleton width="60%" />
+              </Box>
+            ) : (
+              allClasses.map((classes) => {
+                if (classes.status !== "approved") {
+                  return;
+                }
+
+                return (
+                  <div
+                    key={classes._id}
+                    className={
+                      classes.available_seats == 0 ? "card no-seats" : "card"
+                    }
                   >
-                    {SelectedClassIds?.selectedClassIds?.includes(classes._id)
-                      ? "Selected"
-                      : "Select"}
-                  </Button>
-                </div>
-              </div>
-            ))
-          )}
+                    <img src={classes.image} alt="" />
+                    <div className="price-category">
+                      <span className="category">{classes.class_name}</span>
+                      <span>${classes.price}</span>
+                    </div>
+                    <h4>{classes.title}</h4>
+                    <h6>{classes.instructor_name}</h6>
+                    <div className="hrs-learners">
+                      <p>
+                        {" "}
+                        <FaRegClock /> {classes.duration} hrs
+                      </p>
+                      <p>
+                        {" "}
+                        <FaGraduationCap /> {classes.available_seats} seats
+                        available
+                      </p>
+                    </div>
+                    <div className="btns">
+                      <Button variant="outlined" size="large">
+                        More Info
+                      </Button>
+                      <Button
+                        disabled={
+                          SelectedClassIds?.selectedClassIds?.includes(
+                            classes._id
+                          ) ||
+                          classes.available_seats == 0 ||
+                          user_data?.role === "admin" ||
+                          user_data?.role === "instructor"
+                        }
+                        onClick={() => handleSelectClass(classes._id)}
+                        variant="contained"
+                        size="large"
+                      >
+                        {SelectedClassIds?.selectedClassIds?.includes(
+                          classes._id
+                        )
+                          ? "Selected"
+                          : "Select"}
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

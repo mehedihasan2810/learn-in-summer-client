@@ -14,13 +14,12 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import { Toast } from "../../../../Toast/Toast";
 import Swal from "sweetalert2";
+import { useEffect } from "react";
 
 export default function MyClasses() {
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
   const { addDashBoardTitle, user_data } = useAuthContext();
-
-  addDashBoardTitle("My Classes");
 
   const {
     isLoading,
@@ -54,6 +53,10 @@ export default function MyClasses() {
       title: "Deleted successfully",
     });
   };
+
+  useEffect(() => {
+    addDashBoardTitle("My Classes");
+  }, []);
 
   if (isLoading) {
     return Array.from({ length: 4 }).map((_, index) => (

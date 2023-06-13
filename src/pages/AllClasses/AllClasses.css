@@ -2,8 +2,6 @@
   margin: 40px 0 120px 0;
 }
 
-
-
 .all-classes-container .section-title {
   text-align: start;
   margin-bottom: 20px;
@@ -12,8 +10,12 @@
 .all-classes-container .all-classes {
   margin-top: 0.5rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 320px));
   gap: 1rem;
+}
+
+.all-classes-container .card.no-seats{
+    background: rgba(241, 6, 6, 0.168);
 }
 
 .all-classes-container .card img {

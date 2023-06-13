@@ -21,21 +21,19 @@ import { Toast } from "../../../Toast/Toast";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
+  const [isSignUpLoading, setIsSignUpLoading] = useState(false);
 
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
 
   const {
     signUp,
-    isAuthLoading,
-    setIsAuthLoading,
     googleSignIn,
     updateUserProfile,
     completeProfileUpdate,
-    currentUser
+    currentUser,
+    toggleSignInSignUpModal,
   } = useAuthContext();
-
-
 
   const mutation = useMutation({
     mutationFn: async (newData) => {
@@ -48,8 +46,6 @@ const SignUp = () => {
     },
   });
 
-
-
   const {
     register,
     handleSubmit,
@@ -60,10 +56,7 @@ const SignUp = () => {
   const onSubmit = (data) => {
     const { name, email, password, photoUrl } = data;
 
-
-   
-
-    setIsAuthLoading(true);
+    setIsSignUpLoading(true);
     signUp(email, password)
       .then((userCredential) => {
         const createdUser = userCredential.user;
@@ -72,8 +65,8 @@ const SignUp = () => {
         // * update user profile
         updateUserProfile(createdUser, name, photoUrl)
           .then(() => {
-            console.log('profile updated ', currentUser)
-            completeProfileUpdate()
+            console.log("profile updated ", currentUser);
+            completeProfileUpdate();
           })
           .catch((error) => {
             console.log(error);
@@ -83,24 +76,19 @@ const SignUp = () => {
               title: `${error.message} Try Again`,
             });
 
-            setIsAuthLoading(false);
+            setIsSignUpLoading(false);
           });
 
+        const userInfo = {
+          name: name,
+          email: email,
+          role: "student",
+          photoUrl: photoUrl,
+          date: Date.now(),
+        };
 
-
-
-            const userInfo = {
-              name: name,
-              email: email,
-              role: "student",
-              photoUrl: photoUrl,
-              date: Date.now(),
-            };
-      
-            console.log('mutateeeeeeeee')
-            mutation.mutate(userInfo);
-
-
+        console.log("mutateeeeeeeee");
+        mutation.mutate(userInfo);
 
         // *show toast
         Toast.fire({
@@ -109,11 +97,13 @@ const SignUp = () => {
         });
 
         // reset();
-        setIsAuthLoading(false);
+        setIsSignUpLoading(false);
 
         // *redirect user
         // const from = location.state?.from?.pathname || "/";
         // navigate(from, { replace: true });
+        reset();
+        toggleSignInSignUpModal();
       })
       .catch((error) => {
         console.log(error);
@@ -123,7 +113,7 @@ const SignUp = () => {
           title: `${error.message} Try Again`,
         });
 
-        setIsAuthLoading(false);
+        setIsSignUpLoading(false);
       });
   };
 
@@ -292,7 +282,7 @@ const SignUp = () => {
 
       <LoadingButton
         type="submit"
-        loading={isAuthLoading}
+        loading={isSignUpLoading}
         variant="contained"
         size="large"
         sx={{

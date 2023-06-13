@@ -11,6 +11,7 @@ import {
 import { auth } from "../configs/firebase/firebase";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 export const AuthContext = createContext();
 
@@ -28,8 +29,8 @@ const AuthProvider = ({ children }) => {
 
   const completeProfileUpdate = () => {
     // setIsProfileUpdateCompleted()
-    console.log('from func', currentUser)
-  }
+    console.log("from func", currentUser);
+  };
 
   const toggleSignInSignUpModal = () => {
     setIsSignInSignUpModalOpen(!isSignInSignUpModalOpen);
@@ -73,6 +74,17 @@ const AuthProvider = ({ children }) => {
 
   console.log(user_data);
 
+  // const { data: user_data, isLoading: isUserLoading } = useQuery({
+  //   queryKey: ["user", currentUser?.email],
+  //   enabled: Boolean(currentUser),
+  //   queryFn: async () => {
+  //     const res = await fetch(`http://localhost:4000/getUser?email=${currentUser?.email}`);
+  //     return res.json();
+  //   },
+  // });
+
+  // console.log(user_data);
+
   const mutation = useMutation({
     mutationFn: async (newData) => {
       const res = await axiosSecure.post(`/addUser`, newData);
@@ -84,12 +96,29 @@ const AuthProvider = ({ children }) => {
     },
   });
 
+  // const mutation = useMutation({
+  //   mutationFn: async (newData) => {
+  //     const res = await fetch(`http://localhost:4000/addUser`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(newData),
+  //     });
+  //     return res.json();
+  //   },
+  //   onSuccess: () => {
+  //     // Invalidate and refetch
+  //     queryClient.invalidateQueries({ queryKey: ["manageUsers"] });
+  //   },
+  // });
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsAuthLoading(false);
+      setCurrentUser(user);
 
       // console.log(userInfo);
-      console.log(user)
+      console.log(user);
 
       if (user) {
         const userInfo = {
@@ -100,10 +129,24 @@ const AuthProvider = ({ children }) => {
           date: Date.now(),
         };
 
-        console.log('mutateeeeeeeee')
+        console.log("mutateeeeeeeee");
         mutation.mutate(userInfo);
       }
-      setCurrentUser(user);
+
+      // get and set token
+      if (user) {
+        axios
+          .post("http://localhost:4000/jwt", {
+            email: user.email,
+          })
+          .then((data) => {
+            console.log(data.data.token);
+            localStorage.setItem("access-token", data.data.token);
+            setIsAuthLoading(false);
+          });
+      } else {
+        localStorage.removeItem("access-token");
+      }
     });
 
     return () => {

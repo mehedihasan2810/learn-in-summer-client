@@ -1,39 +1,44 @@
-import axios from 'axios';
-import { useEffect } from 'react'
+import axios from "axios";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "./useAuthContext";
+import useLogOut from "./useLogOut";
 
 const axiosSecure = axios.create({
-    baseURL: 'http://localhost:4000', 
-  });
+  baseURL: "http://localhost:4000",
+});
 
 const useAxiosSecure = () => {
- 
+  // const navigate = useNavigate();
+  // const { toggleSignInSignUpModal } = useAuthContext();
+  const logOut = useLogOut();
 
-    useEffect(() => {
-        axiosSecure.interceptors.request.use((config) => {
-            // const token = localStorage.getItem('access-token');
-            // if (token) {
-            //   config.headers.Authorization = `Bearer ${token}`;
-            // }
-            return config;
-          });
+  useEffect(() => {
+    axiosSecure.interceptors.request.use((config) => {
+      const token = localStorage.getItem("access-token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    });
 
+    axiosSecure.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (
+          error.response &&
+          (error.response.status === 401 || error.response.status === 403)
+        ) {
+          await logOut();
+          // toggleSignInSignUpModal()
+          // navigate("/");
+        }
+        return Promise.reject(error);
+      }
+    );
+  }, []);
 
+  return [axiosSecure];
+};
 
-          axiosSecure.interceptors.response.use(
-            (response) => response,
-            async (error) => {
-            //   if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-            //     await logOut();
-            //     navigate('/login');
-            //   }
-              return Promise.reject(error);
-            }
-          );
-
-
-    })
-
-    return [axiosSecure];
-}
-
-export default useAxiosSecure
+export default useAxiosSecure;

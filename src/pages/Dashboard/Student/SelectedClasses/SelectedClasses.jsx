@@ -6,14 +6,13 @@ import { useAuthContext } from "../../../../hooks/useAuthContext";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { DeleteOutline } from "@mui/icons-material";
+import { useEffect } from "react";
 
 const SelectedClasses = () => {
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
 
   const { currentUser, addDashBoardTitle } = useAuthContext();
-
-  addDashBoardTitle("My Selected Class");
 
   const {
     isLoading,
@@ -50,6 +49,10 @@ const SelectedClasses = () => {
   const handleDelete = (id) => {
     mutation.mutate(id);
   };
+
+  useEffect(() => {
+    addDashBoardTitle("My Selected Class");
+  }, []);
 
   if (isLoading) {
     return <Skeleton width={1200} height={100} variant="text" />;

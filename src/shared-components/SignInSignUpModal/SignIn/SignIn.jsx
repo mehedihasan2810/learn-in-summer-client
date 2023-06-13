@@ -19,8 +19,12 @@ import { Toast } from "../../../Toast/Toast";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { googleSignIn, signIn, setIsAuthLoading, isAuthLoading } =
-    useAuthContext();
+  const [isSignInLoading, setIsSignInLoading] = useState(false);
+  const {
+    googleSignIn,
+    signIn,
+    toggleSignInSignUpModal,
+  } = useAuthContext();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -38,7 +42,7 @@ const SignIn = () => {
   const onSubmit = (data) => {
     const { email, password } = data;
 
-    setIsAuthLoading(true);
+    setIsSignInLoading(true);
     signIn(email, password)
       .then((userCredential) => {
         const loggedUser = userCredential.user;
@@ -51,10 +55,11 @@ const SignIn = () => {
         });
 
         reset();
-        setIsAuthLoading(false);
+        setIsSignInLoading(false);
 
         // const from = location.state?.from?.pathname || "/";
         // navigate(from, { replace: true });
+        toggleSignInSignUpModal();
       })
       .catch((error) => {
         console.log(error);
@@ -63,7 +68,7 @@ const SignIn = () => {
           icon: "error",
           title: `${error.message} Try Again`,
         });
-        setIsAuthLoading(false);
+        setIsSignInLoading(false);
       });
   };
 
@@ -160,7 +165,7 @@ const SignIn = () => {
       />
 
       <LoadingButton
-        loading={isAuthLoading}
+        loading={isSignInLoading}
         type="submit"
         variant="contained"
         size="large"

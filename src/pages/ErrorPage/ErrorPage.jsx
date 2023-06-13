@@ -9,7 +9,7 @@ const ErrorPage = () => {
       <div>
         <h2>404!</h2>
         <img
-          src="https://cdn.pixabay.com/photo/2021/01/30/21/26/magnifying-5965372_960_720.jpg"
+          src="https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80"
           alt="Not Found Image"
         />
 

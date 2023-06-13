@@ -4,13 +4,14 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import moment from "moment";
+import { useEffect } from "react";
 
 const EnrolledClasses = () => {
   const [axiosSecure] = useAxiosSecure();
 
   const { currentUser, addDashBoardTitle } = useAuthContext();
 
-  addDashBoardTitle("My Enrolled Classes");
+  
 
   const {
     isLoading,
@@ -26,6 +27,11 @@ const EnrolledClasses = () => {
       return res.data;
     },
   });
+
+useEffect(() => {
+  addDashBoardTitle("My Enrolled Classes");
+}, [])
+
 
   if (isLoading) {
     return <Skeleton width={1200} height={100} variant="text" />;

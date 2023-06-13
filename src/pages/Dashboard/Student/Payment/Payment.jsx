@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
+import { useEffect } from "react";
 
 const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_GATEWAY_PK);
 
@@ -15,7 +16,7 @@ const Payment = () => {
   console.log(params.id);
   const { addDashBoardTitle } = useAuthContext();
 
-  addDashBoardTitle("Payment");
+  
 
   const {
     isLoading,
@@ -29,6 +30,10 @@ const Payment = () => {
       return res.data;
     },
   });
+
+  useEffect(() => {
+    addDashBoardTitle("Payment");
+  }, [])
 
   //   console.log(singleClass);
 

@@ -45,8 +45,12 @@
 .popular-classes-container .card-container {
   margin-top: 0.5rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 320px));
   gap: 1rem;
+}
+
+.popular-classes-container .card.no-seats {
+  background: rgba(241, 6, 6, 0.168);
 }
 
 .popular-classes-container .card img {
@@ -106,7 +110,7 @@
   margin-bottom: 1rem;
 }
 
-@media (max-width: 776px) {
+@media (max-width: 768px) {
   .popular-classes-container .tab-overflow {
     width: 100%;
     overflow-x: auto;

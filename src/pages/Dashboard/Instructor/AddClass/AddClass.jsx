@@ -1,6 +1,6 @@
 import { CircularProgress, TextField } from "@mui/material";
 import "./AddClass.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
@@ -16,7 +16,7 @@ const AddClass = () => {
   const queryClient = useQueryClient();
 
   const { user_data, addDashBoardTitle } = useAuthContext();
-  addDashBoardTitle("Add Class");
+  
 
   const mutation = useMutation({
     mutationFn: async (newData) => {
@@ -77,6 +77,10 @@ const AddClass = () => {
       // console.log(error);
     }
   };
+
+  useEffect(() => {
+    addDashBoardTitle("Add Class");
+  }, [])
 
   return (
     <div className="center-container">

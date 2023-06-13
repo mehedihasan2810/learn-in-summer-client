@@ -2,6 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { motion } from "framer-motion";
 
 import "./Testimonials.css";
 
@@ -10,6 +11,7 @@ import { Autoplay, Pagination, Navigation } from "swiper";
 const Testimonials = () => {
   return (
     <div className="center-container">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
       <section className="testimonials">
         <h2 className="section-title">Testimonials</h2>
         <Swiper
@@ -120,6 +122,7 @@ const Testimonials = () => {
           </SwiperSlide>
         </Swiper>
       </section>
+      </motion.div>
     </div>
   );
 };
