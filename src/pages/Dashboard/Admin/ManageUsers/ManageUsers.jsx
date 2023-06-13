@@ -7,16 +7,18 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "./ManageUsers.css";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import moment from "moment/moment";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
+import { useEffect, useState } from "react";
+import { Toast } from "../../../../Toast/Toast";
 
 const ManageUsers = () => {
+  const [RoleBtnId, setRoleBtnId] = useState("");
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
   const { currentUser, addDashBoardTitle } = useAuthContext();
-  addDashBoardTitle("Manage Users");
 
   const {
     data: users,
@@ -33,29 +35,63 @@ const ManageUsers = () => {
 
   console.log(users);
 
-  const mutation = useMutation({
-    mutationFn: async (id) => {
-      const res = await axiosSecure.delete(`/deleteClass/${id}`);
+  // const makeAdminMutation = useMutation({
+  //   mutationFn: async (id) => {
+  //     const res = await axiosSecure.delete(`/deleteClass/${id}`);
+  //     return res;
+  //   },
+  //   onSuccess: () => {
+  //     // Invalidate and refetch
+  //     queryClient.invalidateQueries({ queryKey: ["myClasses"] });
+  //   },
+  // });
+
+  const updateUserRoleMutation = useMutation({
+    mutationFn: async (data) => {
+      const res = await axiosSecure.put(`/updateUserRole/${data.id}`, {
+        role: data.role,
+      });
       return res;
     },
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["myClasses"] });
+      queryClient.invalidateQueries({ queryKey: ["manageUsers"] });
     },
   });
 
-  const handleDeleteClass = (id) => {
+  const handleMakeAdmin = (id) => {
     console.log(id);
 
-    mutation.mutate(id);
+    updateUserRoleMutation.mutate({ id, role: "admin" });
+    setRoleBtnId(id);
 
     Toast.fire({
       icon: "success",
-      title: "Deleted successfully",
+      title: "Successfully Made This User Admin",
     });
   };
 
-  if (isLoading) return "Loading...";
+  const handleMakeInstructor = (id) => {
+    console.log(id);
+
+    updateUserRoleMutation.mutate({ id, role: "instructor" });
+    setRoleBtnId(id);
+
+    Toast.fire({
+      icon: "success",
+      title: "Successfully Made This User Instructor",
+    });
+  };
+
+  useEffect(() => {
+    addDashBoardTitle("Manage Users");
+  }, []);
+
+  if (isLoading) {
+    return Array.from({ length: 4 }).map((_, index) => (
+      <Skeleton width={1200} height={100} variant="text" key={index} />
+    ));
+  }
 
   if (error) return "An error has occurred: " + error.message;
 
@@ -95,26 +131,44 @@ const ManageUsers = () => {
                 </TableCell>
                 <TableCell align="left">{user.name}</TableCell>
                 <TableCell align="left">{user.email}</TableCell>
-                <TableCell align="left">{user.role}</TableCell>
+                <TableCell align="left">
+                  <Button
+                    color={
+                      user.role === "admin"
+                        ? "secondary"
+                        : user.role === "instructor"
+                        ? "success"
+                        : "primary"
+                    }
+                  >
+                    {currentUser?.email === user.email
+                      ? `${user.role}(You)`
+                      : `${user.role}`}
+                  </Button>
+                </TableCell>
                 <TableCell align="left">
                   {moment(user.date).format("MMMM Do YYYY")}
                 </TableCell>
                 <TableCell align="left">
                   <Button
+                    onClick={() => handleMakeInstructor(user._id)}
                     sx={{
                       width: "max-content",
                     }}
                     variant="outlined"
+                    disabled={RoleBtnId === user._id || currentUser?.email === user.email}
                   >
                     Make Instructor
                   </Button>
                 </TableCell>
                 <TableCell align="left">
                   <Button
+                    onClick={() => handleMakeAdmin(user._id)}
                     sx={{
                       width: "max-content",
                     }}
                     variant="outlined"
+                    disabled={RoleBtnId === user._id || currentUser?.email === user.email}
                   >
                     Make Admin
                   </Button>

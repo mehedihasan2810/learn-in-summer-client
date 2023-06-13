@@ -23,10 +23,9 @@ import { Link, Outlet } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import UpcomingIcon from "@mui/icons-material/Upcoming";
 import SchoolIcon from "@mui/icons-material/School";
-import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useTitlePerPage } from "../hooks/useTitlePerPage";
+import { Button } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -63,15 +62,9 @@ export default function DashboardLayout(props) {
 
   // console.log(data);
 
-  const { user_data, dashboardTitle } = useAuthContext();
+  const { currentUser, user_data, dashboardTitle } = useAuthContext();
   console.log(user_data);
-  let user;
-
-  if (!user_data) {
-    user = "student";
-  } else {
-    user = user_data?.role;
-  }
+  let user = user_data?.role;
 
   let navItem;
 
@@ -152,7 +145,33 @@ export default function DashboardLayout(props) {
         <Typography variant="h6" noWrap component="div">
           {user_data?.name}
           <p style={{ fontSize: "14px" }}>{user_data?.email}</p>
-          <p style={{ fontSize: "12px" }}>{user_data?.role}</p>
+          <p
+            style={{
+              fontSize: "12px",
+              textTransform: "uppercase",
+              color: `${
+                user_data?.role === "admin"
+                  ? "#9c27b0"
+                  : user_data?.role === "#2e7d32"
+                  ? "success"
+                  : "#1976d2"
+              }`,
+            }}
+          >
+            {user_data?.role}
+          </p>
+          {/* <Button 
+          size="small"
+            color={
+              user.role === "admin"
+                ? "secondary"
+                : user.role === "instructor"
+                ? "success"
+                : "primary"
+            }
+          >
+            {user_data?.role}
+          </Button> */}
         </Typography>
       </Toolbar>
       <Divider />

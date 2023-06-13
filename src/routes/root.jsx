@@ -1,7 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
+import Swal from "sweetalert2";
 import RootLayout from "../layouts/RootLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import InstructorRoute from "./InstructorRoute";
+import ManageClasses from "../pages/Dashboard/Admin/ManageClasses/ManageClasses";
 import AdminRoute from "./AdminRoute";
 import PrivateRoute from "./PrivateRoute";
 import Home from "../pages/Home/Home";
@@ -10,12 +12,10 @@ import AllClasses from "../pages/AllClasses/AllClasses";
 import UpdateClass from "../pages/Dashboard/Instructor/UpdateClass/UpdateClass";
 import AddClass from "../pages/Dashboard/Instructor/AddClass/AddClass";
 import MyClasses from "../pages/Dashboard/Instructor/MyClasses/MyClasses";
-import Swal from "sweetalert2";
 import SelectedClasses from "../pages/Dashboard/Student/SelectedClasses/SelectedClasses";
 import EnrolledClasses from "../pages/Dashboard/Student/EnrolledClasses/EnrolledClasses";
 import SignInSignUpModal from "../shared-components/SignInSignUpModal/SignInSignUpModal";
 import Payment from "../pages/Dashboard/Student/Payment/Payment";
-import ManageClasses from "../pages/Dashboard/Admin/ManageClasses/ManageClasses";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers/ManageUsers";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import PaymentDetails from "../pages/Dashboard/Student/PaymentDetails/PaymentDetails";
@@ -132,14 +132,4 @@ export const router = createBrowserRouter([
   },
 ]);
 
-export const Toast = Swal.mixin({
-  toast: true,
-  position: "bottom",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
+

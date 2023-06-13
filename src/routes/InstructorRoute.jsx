@@ -4,9 +4,11 @@ import { useAuthContext } from "../hooks/useAuthContext";
 const InstructorRoute = ({ children }) => {
   const location = useLocation();
 
-  const { currentUser, isAuthLoading, user_data, role } = useAuthContext();
+  const { isAuthLoading, user_data,isUserLoading } = useAuthContext();
 
-  if (isAuthLoading) {
+  if (isAuthLoading || isUserLoading) {
+
+  
     return (
       <div
         className="loader"
@@ -17,7 +19,7 @@ const InstructorRoute = ({ children }) => {
     );
   }
 
-  if (user_data.role === "instructor") {
+  if (user_data?.role === "instructor") {
     return children;
   } else {
     return <Navigate to="/" state={{ from: location }} replace />;

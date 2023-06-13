@@ -1,4 +1,4 @@
-import { Button, Divider } from "@mui/material";
+import { Button, Divider, Skeleton } from "@mui/material";
 import "./SelectedClasses.css";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -51,7 +51,9 @@ const SelectedClasses = () => {
     mutation.mutate(id);
   };
 
-  if (isLoading) return <h2>Loading...</h2>;
+  if (isLoading) {
+    return <Skeleton width={1200} height={100} variant="text" />;
+  }
   if (error) return <h2>Error Ocurred {error.message}</h2>;
 
   return (

@@ -1,10 +1,10 @@
 import { CircularProgress, TextField } from "@mui/material";
 import "./AddClass.css";
 import { useState } from "react";
-import { Toast } from "../../../../routes/root";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
+import { Toast } from "../../../../Toast/Toast";
 const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 
 const AddClass = () => {
@@ -15,7 +15,7 @@ const AddClass = () => {
 
   const queryClient = useQueryClient();
 
-  const { addDashBoardTitle } = useAuthContext();
+  const { user_data, addDashBoardTitle } = useAuthContext();
   addDashBoardTitle("Add Class");
 
   const mutation = useMutation({
@@ -109,21 +109,29 @@ const AddClass = () => {
           <div className="row">
             <div className="control">
               <TextField
+                defaultValue={user_data.name}
                 id="outlined-basic"
                 label="Instructor Name"
                 variant="outlined"
                 name="instructor_name"
                 required
+                InputProps={{
+                  readOnly: true,
+                }}
               />
             </div>
             <div className="control">
               <TextField
+                defaultValue={user_data?.email}
                 type="email"
                 id="outlined-basic"
                 label="Email"
                 variant="outlined"
                 name="email"
                 required
+                InputProps={{
+                  readOnly: true,
+                }}
               />
             </div>
           </div>

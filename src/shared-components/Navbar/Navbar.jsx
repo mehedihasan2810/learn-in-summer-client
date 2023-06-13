@@ -3,9 +3,9 @@ import logo from "/assets/logo2-removebg-preview.png";
 import "./Navbar.css";
 import { Button } from "@mui/material";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { Toast } from "../../routes/root";
 import { useState } from "react";
 import img from "/assets/drum.webp";
+import { Toast } from "../../Toast/Toast";
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { toggleSignInSignUpModal, currentUser, logOut, user_data } =
@@ -81,9 +81,9 @@ const Navbar = () => {
                 <li>
                   <NavLink
                     to={`/dashboard/${
-                      user_data.role === "admin"
+                      user_data?.role === "admin"
                         ? "manage-classes"
-                        : user_data.role === "instructor"
+                        : user_data?.role === "instructor"
                         ? "my-classes"
                         : "selected-classes"
                     }`}

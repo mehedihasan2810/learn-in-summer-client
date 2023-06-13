@@ -14,8 +14,8 @@ import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { useAuthContext } from "../../../hooks/useAuthContext";
-import { Toast } from "../../../routes/root";
 import "./SignIn.css";
+import { Toast } from "../../../Toast/Toast";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);

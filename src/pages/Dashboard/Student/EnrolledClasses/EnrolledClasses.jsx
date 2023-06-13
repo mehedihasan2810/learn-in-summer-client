@@ -1,4 +1,4 @@
-import { Button, Divider } from "@mui/material";
+import { Button, Divider, Skeleton } from "@mui/material";
 import "./EnrolledClasses.css";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ const EnrolledClasses = () => {
 
   const { currentUser, addDashBoardTitle } = useAuthContext();
 
-  addDashBoardTitle('My Enrolled Classes')
+  addDashBoardTitle("My Enrolled Classes");
 
   const {
     isLoading,
@@ -27,7 +27,9 @@ const EnrolledClasses = () => {
     },
   });
 
-  if (isLoading) return <h2>Loading...</h2>;
+  if (isLoading) {
+    return <Skeleton width={1200} height={100} variant="text" />;
+  }
   if (error) return <h2>Error Ocurred {error.message}</h2>;
 
   return (

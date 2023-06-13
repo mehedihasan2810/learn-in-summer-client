@@ -42,6 +42,8 @@ const Payment = () => {
           price={singleClass?.price}
           classId={singleClass?._id}
           instructor_email={singleClass?.email}
+          class_name={singleClass?.class_name}
+          instructor_name={singleClass?.instructor_name}
         />
       </Elements>
     </div>

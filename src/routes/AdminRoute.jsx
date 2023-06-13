@@ -5,9 +5,10 @@ import { useAuthContext } from "../hooks/useAuthContext";
 const AdminRoute = ({ children }) => {
   const location = useLocation();
 
-  const { currentUser, isAuthLoading, user_data, role } = useAuthContext();
+  const {isAuthLoading, user_data,isUserLoading } = useAuthContext();
 
-  if (isAuthLoading) {
+  if (isAuthLoading || isUserLoading) {
+    console.log('loading')
     return (
       <div
         className="loader"

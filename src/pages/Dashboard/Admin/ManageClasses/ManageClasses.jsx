@@ -5,19 +5,21 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import "./ManageClasses.css";
+import { useAuthContext } from "../../../../hooks/useAuthContext";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import moment from "moment/moment";
-import { Toast } from "../../../../routes/root";
-import { useAuthContext } from "../../../../hooks/useAuthContext";
+import "./ManageClasses.css";
+import { useEffect } from "react";
+import { LoadingButton } from "@mui/lab";
+import Swal from "sweetalert2";
+import { Toast } from "../../../../Toast/Toast";
 
 const ManageClasses = () => {
+  const { addDashBoardTitle } = useAuthContext();
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
-  const { addDashBoardTitle } = useAuthContext();
-  addDashBoardTitle("Manage Classes");
 
   const {
     isLoading,
@@ -28,9 +30,9 @@ const ManageClasses = () => {
     return res.data;
   });
 
-  const mutation = useMutation({
+  const denyMutation = useMutation({
     mutationFn: async (id) => {
-      const res = await axiosSecure.delete(`/deleteClass/${id}`);
+      const res = await axiosSecure.put(`/updateDenyStatus/${id}`);
       return res;
     },
     onSuccess: () => {
@@ -39,18 +41,84 @@ const ManageClasses = () => {
     },
   });
 
-  const handleDeleteClass = (id) => {
-    console.log(id);
-
-    mutation.mutate(id);
-
-    Toast.fire({
-      icon: "success",
-      title: "Deleted successfully",
+  const handleDenyClass = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Deny it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        denyMutation.mutate(id);
+        Swal.fire("Denied!", "The class has been denied.", "success");
+      }
     });
   };
 
-  if (isLoading) return "Loading...";
+  const approveMutation = useMutation({
+    mutationFn: async (id) => {
+      const res = await axiosSecure.put(`/updateApproveStatus/${id}`);
+      return res;
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["myClasses"] });
+    },
+  });
+
+  const handleApproveClass = (id) => {
+    approveMutation.mutate(id);
+    Toast.fire({
+      icon: "success",
+      title: "Approved successfully",
+    });
+  };
+
+  const feedbackMutation = useMutation({
+    mutationFn: async (data) => {
+      console.log(data.id, data.message);
+      const res = await axiosSecure.put(`/updateFeedback/${data.id}`, {
+        message: data.message,
+      });
+      return res;
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["myClasses"] });
+    },
+  });
+
+  const handleUpdateFeedback = async (id) => {
+    const { value: message } = await Swal.fire({
+      input: "textarea",
+      inputLabel: "Feedback",
+      confirmButtonText: "Send",
+      inputPlaceholder: "Type your feedback here...",
+      inputAttributes: {
+        "aria-label": "Type your feedback here",
+      },
+      showCancelButton: true,
+    });
+
+    if (message) {
+      feedbackMutation.mutate({ id, message });
+      Swal.fire(message);
+    }
+
+    // feedbackMutation.mutate(id, message)
+  };
+
+  useEffect(() => {
+    addDashBoardTitle("Manage Classes");
+  }, []);
+
+  if (isLoading) {
+    return Array.from({ length: 4 }).map((_, index) => (
+      <Skeleton width={1200} height={100} variant="text" key={index} />
+    ));
+  }
 
   if (error) return "An error has occurred: " + error.message;
 
@@ -87,33 +155,62 @@ const ManageClasses = () => {
                 <TableCell align="left">{classes.email}</TableCell>
                 <TableCell align="left">{classes.available_seats}</TableCell>
                 <TableCell align="left">${classes.price}</TableCell>
-                <TableCell align="left">{classes.status}</TableCell>
+                <TableCell align="left">
+                  <Button
+                    color={
+                      classes.status === "approved"
+                        ? "success"
+                        : classes.status === "denied"
+                        ? "error"
+                        : "primary"
+                    }
+                  >
+                    {classes.status}
+                  </Button>
+                </TableCell>
                 <TableCell align="left">
                   {moment(classes.date).format("MMMM Do YYYY")}
                 </TableCell>
                 <TableCell align="left">
-                  <Button variant="outlined">Approve</Button>
+                  <LoadingButton
+                    onClick={() => handleApproveClass(classes._id)}
+                    variant="outlined"
+                    loading={approveMutation.isLoading}
+                    loadingIndicator="Loading…"
+                    disabled={
+                      classes.status === "denied" ||
+                      classes.status === "approved"
+                    }
+                  >
+                    Approve
+                  </LoadingButton>
                 </TableCell>
                 <TableCell align="left">
-                  <Button variant="outlined" color="error">
+                  <LoadingButton
+                    onClick={() => handleDenyClass(classes._id)}
+                    variant="outlined"
+                    loading={denyMutation.isLoading}
+                    loadingIndicator="Loading…"
+                    disabled={
+                      classes.status === "denied" ||
+                      classes.status === "approved"
+                    }
+                    color="error"
+                  >
                     Deny
-                  </Button>
+                  </LoadingButton>
                 </TableCell>
                 <TableCell align="left">
-                  <Button
+                  <LoadingButton
+                    onClick={() => handleUpdateFeedback(classes._id)}
                     sx={{
                       width: "max-content",
                     }}
                     variant="outlined"
                   >
                     Send Feedback
-                  </Button>
+                  </LoadingButton>
                 </TableCell>
-                {/* <TableCell align="left">
-                  <Button variant="outlined" size="small">
-                    See Feedback
-                  </Button>
-                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>

@@ -62,7 +62,7 @@ const AuthProvider = ({ children }) => {
     setDashboardTitle(title);
   };
 
-  const { data: user_data } = useQuery({
+  const { data: user_data, isLoading: isUserLoading } = useQuery({
     queryKey: ["user", currentUser?.email],
     enabled: Boolean(currentUser),
     queryFn: async () => {
@@ -125,6 +125,7 @@ const AuthProvider = ({ children }) => {
         googleSignIn,
         logOut,
         user_data,
+        isUserLoading,
         addDashBoardTitle,
         dashboardTitle,
         completeProfileUpdate,

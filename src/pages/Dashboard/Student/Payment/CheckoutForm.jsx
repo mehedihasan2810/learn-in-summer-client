@@ -4,9 +4,15 @@ import { useEffect, useState } from "react";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
 
-const CheckoutForm = ({ price, classId, instructor_email }) => {
-  console.log(price);
+const CheckoutForm = ({
+  price,
+  classId,
+  instructor_email,
+  class_name,
+  instructor_name,
+}) => {
   const [cardError, setCardError] = useState("");
   const [processing, setProcessing] = useState(false);
   const [transactionId, setTransactionId] = useState("");
@@ -15,6 +21,7 @@ const CheckoutForm = ({ price, classId, instructor_email }) => {
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
   const { currentUser } = useAuthContext();
+  const navigate = useNavigate();
 
   const { mutate } = useMutation({
     mutationFn: async (paymentInfo) => {
@@ -23,7 +30,7 @@ const CheckoutForm = ({ price, classId, instructor_email }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["mySelectedClasses"],
+        queryKey: ["mySelectedClasses", "payment"],
       });
     },
   });
@@ -98,8 +105,11 @@ const CheckoutForm = ({ price, classId, instructor_email }) => {
 
       //   saving payment information to the server
       const paymentInfo = {
+        class_name,
+        instructor_name,
+        instructor_email,
+        student_name: currentUser?.displayName,
         student_email: currentUser?.email,
-        instructor_email: instructor_email,
         transactionId: paymentIntent.id,
         price,
         classId,
@@ -108,13 +118,7 @@ const CheckoutForm = ({ price, classId, instructor_email }) => {
       };
 
       mutate(paymentInfo);
-
-      //   axiosSecure.post("/payments", paymentInfo).then((res) => {
-      //     console.log(res.data);
-      //     if (res.data.insertedId) {
-      //       // succesfully saved payment info
-      //     }
-      //   });
+      navigate('/dashboard/payment-details')
     }
   };
 

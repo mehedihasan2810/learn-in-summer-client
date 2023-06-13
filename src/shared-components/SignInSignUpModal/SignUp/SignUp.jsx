@@ -15,9 +15,9 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../../../hooks/useAuthContext";
-import { Toast } from "../../../routes/root";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { Toast } from "../../../Toast/Toast";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");

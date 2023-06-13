@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router-dom";
-import { Toast } from "../../../../routes/root";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
+import { Toast } from "../../../../Toast/Toast";
 
 const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 
@@ -13,8 +13,8 @@ const UpdateClass = () => {
   const [isApiLoading, setIsApiLoading] = useState(false);
 
   const navigate = useNavigate();
-  const {addDashBoardTitle} = useAuthContext()
-  addDashBoardTitle('Update Class')
+  const { addDashBoardTitle } = useAuthContext();
+  addDashBoardTitle("Update Class");
 
   const img_hosting_url = `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`;
 
@@ -43,7 +43,6 @@ const UpdateClass = () => {
       queryClient.invalidateQueries({ queryKey: ["myClasses"] });
     },
   });
-
 
   const handleUpdateClass = async (e) => {
     e.preventDefault();
@@ -76,15 +75,14 @@ const UpdateClass = () => {
     navigate("/dashboard/my-classes");
 
     Toast.fire({
-        icon: "success",
-        title: "Updated successfully",
-      });
+      icon: "success",
+      title: "Updated successfully",
+    });
   };
 
   if (isLoading) return "Loading...";
 
   if (error) return "An error has occurred: " + error.message;
-
 
   return (
     <div className="center-container">
