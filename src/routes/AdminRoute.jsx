@@ -8,7 +8,6 @@ const AdminRoute = ({ children }) => {
   const {isAuthLoading, user_data,isUserLoading } = useAuthContext();
 
   if (isAuthLoading || isUserLoading) {
-    console.log('loading')
     return (
       <div
         className="loader"

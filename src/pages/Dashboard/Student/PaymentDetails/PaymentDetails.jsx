@@ -19,7 +19,6 @@ const PaymentDetails = () => {
 
   const { data: paymentDetails, isLoading: isPaymentLoading } = useQuery({
     queryKey: ["payment", user_data?.email],
-    // enabled: Boolean(currentUser),
     queryFn: async () => {
       const res = await axiosSecure.get(
         `/getPaymentDetails?email=${user_data?.email}`
@@ -28,7 +27,6 @@ const PaymentDetails = () => {
     },
   });
 
-  console.log(paymentDetails);
 
   useEffect(() => {
     addDashBoardTitle("Payment Details");

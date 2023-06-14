@@ -29,7 +29,6 @@ const SelectedClasses = () => {
     },
   });
 
-  console.log(selectedClasses);
 
   const mutation = useMutation({
     mutationFn: async (id) => {

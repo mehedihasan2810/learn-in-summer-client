@@ -44,7 +44,6 @@ export default function MyClasses() {
   });
 
   const handleDeleteClass = (id) => {
-    console.log(id);
 
     mutation.mutate(id);
 

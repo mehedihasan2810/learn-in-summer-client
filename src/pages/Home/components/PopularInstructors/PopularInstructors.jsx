@@ -18,12 +18,8 @@ const PopularInstructors = () => {
 
     const handleChange2 = (event) => {
       if (event.matches) {
-        // Media query matches (viewport width <= 768px)
-        console.log("Viewport width is less than or equal to 768px");
         setPerView(2);
       } else {
-        // Media query doesn't match (viewport width > 768px)
-        console.log("Viewport width is greater than 768px");
         setPerView(4);
       }
     };

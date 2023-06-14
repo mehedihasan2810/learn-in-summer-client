@@ -51,7 +51,6 @@ const CheckoutForm = ({
     mutation.mutate(price);
   }, []);
 
-  console.log(mutation.data?.data?.clientSecret);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -71,10 +70,8 @@ const CheckoutForm = ({
     });
 
     if (error) {
-      console.log("[error]", error);
       setCardError(error.message);
     } else {
-      //   console.log("[PaymentMethod]", paymentMethod);
       setCardError("");
     }
 
@@ -92,11 +89,9 @@ const CheckoutForm = ({
       });
 
     if (confirmError) {
-      console.log(confirmError);
       setCardError(confirmError?.message);
     } else {
       setProcessing(false);
-      console.log(paymentIntent);
       setCardError("");
     }
 

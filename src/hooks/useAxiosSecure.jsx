@@ -1,11 +1,9 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "./useAuthContext";
 import useLogOut from "./useLogOut";
 
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: "https://learn-in-summer-server.vercel.app",
 });
 
 const useAxiosSecure = () => {

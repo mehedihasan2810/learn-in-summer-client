@@ -78,7 +78,6 @@ const ManageClasses = () => {
 
   const feedbackMutation = useMutation({
     mutationFn: async (data) => {
-      console.log(data.id, data.message);
       const res = await axiosSecure.put(`/updateFeedback/${data.id}`, {
         message: data.message,
       });

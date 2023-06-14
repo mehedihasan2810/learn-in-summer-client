@@ -14,14 +14,13 @@ const Instructors = () => {
 
   const { data: users, isLoading } = useQuery({
     queryKey: ["manageUsers"],
-    enabled: Boolean(currentUser),
+    // enabled: Boolean(currentUser),
     queryFn: async () => {
       const res = await axiosSecure.get(`/getUsers`);
       return res.data;
     },
   });
 
-  console.log(users);
 
   if (isLoading) {
     return (

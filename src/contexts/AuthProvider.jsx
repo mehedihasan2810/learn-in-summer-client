@@ -22,14 +22,10 @@ const AuthProvider = ({ children }) => {
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [dashboardTitle, setDashboardTitle] = useState("");
   const [isSignInSignUpModalOpen, setIsSignInSignUpModalOpen] = useState(false);
-  // const [isProfileUpdateCompleted, setIsProfileUpdateCompleted] =
-  //   useState(false);
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
 
   const completeProfileUpdate = () => {
-    // setIsProfileUpdateCompleted()
-    console.log("from func", currentUser);
   };
 
   const toggleSignInSignUpModal = () => {
@@ -72,18 +68,9 @@ const AuthProvider = ({ children }) => {
     },
   });
 
-  console.log(user_data);
 
-  // const { data: user_data, isLoading: isUserLoading } = useQuery({
-  //   queryKey: ["user", currentUser?.email],
-  //   enabled: Boolean(currentUser),
-  //   queryFn: async () => {
-  //     const res = await fetch(`http://localhost:4000/getUser?email=${currentUser?.email}`);
-  //     return res.json();
-  //   },
-  // });
+  
 
-  // console.log(user_data);
 
   const mutation = useMutation({
     mutationFn: async (newData) => {
@@ -91,34 +78,16 @@ const AuthProvider = ({ children }) => {
       return res;
     },
     onSuccess: () => {
-      // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["manageUsers"] });
     },
   });
 
-  // const mutation = useMutation({
-  //   mutationFn: async (newData) => {
-  //     const res = await fetch(`http://localhost:4000/addUser`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(newData),
-  //     });
-  //     return res.json();
-  //   },
-  //   onSuccess: () => {
-  //     // Invalidate and refetch
-  //     queryClient.invalidateQueries({ queryKey: ["manageUsers"] });
-  //   },
-  // });
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
 
-      // console.log(userInfo);
-      console.log(user);
 
       if (user) {
         const userInfo = {
@@ -129,18 +98,15 @@ const AuthProvider = ({ children }) => {
           date: Date.now(),
         };
 
-        console.log("mutateeeeeeeee");
         mutation.mutate(userInfo);
       }
 
-      // get and set token
       if (user) {
         axios
-          .post("http://localhost:4000/jwt", {
+          .post("https://learn-in-summer-server.vercel.app/jwt", {
             email: user.email,
           })
           .then((data) => {
-            console.log(data.data.token);
             localStorage.setItem("access-token", data.data.token);
             setIsAuthLoading(false);
           });

@@ -74,7 +74,6 @@ const AddClass = () => {
         title: "Error ocurred! Try again",
       });
       setIsApiLoading(false);
-      // console.log(error);
     }
   };
 
@@ -106,9 +105,7 @@ const AddClass = () => {
                 required
               />
             </div>
-            {/* <div className="control">
-              <input type="file" name="image" required />
-            </div> */}
+           
           </div>
           <div className="row">
             <div className="control">
@@ -194,7 +191,6 @@ const AddClass = () => {
             className="btn-primary"
             type="submit"
           >
-            {/* Add The Class */}
             {isApiLoading ? (
               <CircularProgress size={30} sx={{ color: "#fff" }} />
             ) : (

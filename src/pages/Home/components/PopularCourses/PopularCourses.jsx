@@ -30,7 +30,6 @@ const PopularCourses = () => {
     return res.data;
   });
 
-  console.log(allClasses);
 
   const { data: SelectedClassIds = [] } = useQuery({
     queryKey: ["SelectedClassIds", currentUser?.email],
@@ -42,7 +41,6 @@ const PopularCourses = () => {
       return res.data;
     },
   });
-  console.log(SelectedClassIds?.selectedClassIds);
 
   const mutation = useMutation({
     mutationFn: async (id) => {

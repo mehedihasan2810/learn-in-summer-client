@@ -60,16 +60,13 @@ const SignUp = () => {
     signUp(email, password)
       .then((userCredential) => {
         const createdUser = userCredential.user;
-        console.log(createdUser);
 
         // * update user profile
         updateUserProfile(createdUser, name, photoUrl)
           .then(() => {
-            console.log("profile updated ", currentUser);
             completeProfileUpdate();
           })
           .catch((error) => {
-            console.log(error);
             // *show toast
             Toast.fire({
               icon: "error",
@@ -87,7 +84,6 @@ const SignUp = () => {
           date: Date.now(),
         };
 
-        console.log("mutateeeeeeeee");
         mutation.mutate(userInfo);
 
         // *show toast
@@ -106,7 +102,6 @@ const SignUp = () => {
         toggleSignInSignUpModal();
       })
       .catch((error) => {
-        console.log(error);
         // *show toast
         Toast.fire({
           icon: "error",
@@ -121,7 +116,6 @@ const SignUp = () => {
     googleSignIn()
       .then((userCredential) => {
         const loggedUser = userCredential.user;
-        console.log(loggedUser);
 
         Toast.fire({
           icon: "success",
@@ -129,7 +123,6 @@ const SignUp = () => {
         });
       })
       .catch((error) => {
-        console.log(console.log(error));
         Toast.fire({
           icon: "error",
           title: `${error.message} Try Again`,

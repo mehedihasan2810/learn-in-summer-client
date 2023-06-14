@@ -33,18 +33,8 @@ const ManageUsers = () => {
     },
   });
 
-  console.log(users);
 
-  // const makeAdminMutation = useMutation({
-  //   mutationFn: async (id) => {
-  //     const res = await axiosSecure.delete(`/deleteClass/${id}`);
-  //     return res;
-  //   },
-  //   onSuccess: () => {
-  //     // Invalidate and refetch
-  //     queryClient.invalidateQueries({ queryKey: ["myClasses"] });
-  //   },
-  // });
+ 
 
   const updateUserRoleMutation = useMutation({
     mutationFn: async (data) => {
@@ -60,7 +50,6 @@ const ManageUsers = () => {
   });
 
   const handleMakeAdmin = (id) => {
-    console.log(id);
 
     updateUserRoleMutation.mutate({ id, role: "admin" });
     setRoleBtnId(id);
@@ -72,7 +61,6 @@ const ManageUsers = () => {
   };
 
   const handleMakeInstructor = (id) => {
-    console.log(id);
 
     updateUserRoleMutation.mutate({ id, role: "instructor" });
     setRoleBtnId(id);

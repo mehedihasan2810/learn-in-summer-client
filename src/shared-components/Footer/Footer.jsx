@@ -43,12 +43,6 @@ const Footer = () => {
                 <FaLinkedin />
                 <FaTwitter />
               </div>
-              {/* <span>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti
-              minus dolore tempora beatae modi sequi eligendi delectus, ea sed
-              voluptate itaque similique quos doloremque quam aut numquam
-              maxime. Officiis, atque.
-            </span> */}
             </div>
           </div>
           <div className="bottom">
@@ -59,9 +53,6 @@ const Footer = () => {
                 Copyright 2023. All Rights Reserved
               </span>
             </div>
-            {/* <div className="right">
-        <img src="./images/payment-gateway.png" alt="payment gateway" />
-      </div> */}
           </div>
         </div>
       </motion.div>

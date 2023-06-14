@@ -10,7 +10,6 @@ const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { toggleSignInSignUpModal, currentUser, logOut, user_data } =
     useAuthContext();
-  console.log(currentUser);
 
   const handleSignOut = () => {
     logOut()
@@ -24,7 +23,6 @@ const Navbar = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
         Toast.fire({
           icon: "error",
           title: "Error ocurred! Try Again",

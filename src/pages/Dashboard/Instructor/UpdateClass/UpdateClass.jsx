@@ -20,7 +20,6 @@ const UpdateClass = () => {
 
   const [axiosSecure] = useAxiosSecure();
   const params = useParams();
-  console.log(params);
 
   const queryClient = useQueryClient();
 
@@ -67,7 +66,6 @@ const UpdateClass = () => {
       date: new Date(),
     };
 
-    console.log(finalClassInfo);
 
     mutation.mutate(finalClassInfo);
     setIsApiLoading(false);
@@ -114,9 +112,7 @@ const UpdateClass = () => {
                 required
               />
             </div>
-            {/* <div className="control">
-            <input type="file" name="image" required />
-          </div> */}
+           
           </div>
           <div className="row">
             <div className="control">
@@ -205,7 +201,6 @@ const UpdateClass = () => {
             className="btn-primary"
             type="submit"
           >
-            {/* Add The Class */}
             {isApiLoading ? (
               <CircularProgress size={30} sx={{ color: "#fff" }} />
             ) : (

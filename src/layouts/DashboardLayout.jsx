@@ -47,23 +47,9 @@ export default function DashboardLayout(props) {
 
   useTitlePerPage("Dashboard");
 
-  // const [axiosSecure] = useAxiosSecure();
-  // const { currentUser, isAuthLoading, toggleSignInSignUpModal } =
-  //   useAuthContext();
+ 
 
-  // const { data } = useQuery({
-  //   queryKey: ["user", currentUser?.email],
-  //   enabled: !isAuthLoading,
-  //   queryFn: async () => {
-  //     const res = await axiosSecure.get(`/getUser?email=${currentUser?.email}`);
-  //     return res.data;
-  //   },
-  // });
-
-  // console.log(data);
-
-  const { currentUser, user_data, dashboardTitle } = useAuthContext();
-  console.log(user_data);
+  const {  user_data, dashboardTitle } = useAuthContext();
   let user = user_data?.role;
 
   let navItem;
@@ -160,18 +146,7 @@ export default function DashboardLayout(props) {
           >
             {user_data?.role}
           </p>
-          {/* <Button 
-          size="small"
-            color={
-              user.role === "admin"
-                ? "secondary"
-                : user.role === "instructor"
-                ? "success"
-                : "primary"
-            }
-          >
-            {user_data?.role}
-          </Button> */}
+        
         </Typography>
       </Toolbar>
       <Divider />
@@ -237,7 +212,7 @@ export default function DashboardLayout(props) {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+       
         <Drawer
           container={container}
           variant="temporary"

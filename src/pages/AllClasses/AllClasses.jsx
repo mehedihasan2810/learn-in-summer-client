@@ -32,7 +32,6 @@ const AllClasses = () => {
       return res.data;
     },
   });
-  console.log(SelectedClassIds?.selectedClassIds);
 
   const mutation = useMutation({
     mutationFn: async (id) => {
@@ -43,7 +42,6 @@ const AllClasses = () => {
       return res;
     },
     onSuccess: () => {
-      // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["SelectedClassIds"] });
     },
   });
