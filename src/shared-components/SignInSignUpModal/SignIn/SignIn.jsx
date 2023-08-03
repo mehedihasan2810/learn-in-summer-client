@@ -20,11 +20,7 @@ import { Toast } from "../../../Toast/Toast";
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignInLoading, setIsSignInLoading] = useState(false);
-  const {
-    googleSignIn,
-    signIn,
-    toggleSignInSignUpModal,
-  } = useAuthContext();
+  const { googleSignIn, signIn, toggleSignInSignUpModal } = useAuthContext();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -143,6 +139,28 @@ const SignIn = () => {
             <FormHelperText>{errors.password?.message}</FormHelperText>
           )}
         </FormControl>
+      </div>
+
+      <div style={{ marginTop: "1rem", fontSize: "0.9rem" }}>
+        <div>
+          <strong>Admin:-</strong>
+        </div>
+        <div>
+          <strong>Email:</strong> mehedimiah47@gmail.com
+        </div>
+        <div>
+          <strong>Pass:</strong> 123456A@
+        </div>
+        <Divider style={{ marginBlock: "8px" }} />
+        <div>
+          <strong>Instructor:-</strong>
+        </div>
+        <div>
+          <strong>Email:</strong> test@gmail.com
+        </div>
+        <div>
+          <strong>Pass:</strong> 123456A@
+        </div>
       </div>
 
       <Divider
