@@ -3,10 +3,14 @@ import logo from "/assets/logo2-removebg-preview.png";
 import "./Navbar.css";
 import { Button } from "@mui/material";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Toast } from "../../Toast/Toast";
 import { motion } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 const Navbar = () => {
+  const headerRef = useRef();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { toggleSignInSignUpModal, currentUser, logOut, user_data } =
     useAuthContext();
@@ -22,7 +26,7 @@ const Navbar = () => {
           });
         }
       })
-      .catch((error) => {
+      .catch(() => {
         Toast.fire({
           icon: "error",
           title: "Error ocurred! Try Again",
@@ -33,8 +37,25 @@ const Navbar = () => {
   const handleToggleNav = () => {
     setIsNavOpen(!isNavOpen);
   };
+
+  useEffect(() => {
+    function handleScroll(e) {
+      e.stopPropagation();
+      const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 100) {
+        headerRef.current.style.transform = "translate3d(0, -100%, 0)";
+      } else {
+        headerRef.current.style.transform = "translate3d(0, 0, 0)";
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll, false);
+
+    return () => window.removeEventListener("scroll", handleScroll, false);
+  }, []);
   return (
-    <header>
+    <header ref={headerRef}>
       <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
         <div className="center-container flex-center">
           <div className="logo-container flex-center">

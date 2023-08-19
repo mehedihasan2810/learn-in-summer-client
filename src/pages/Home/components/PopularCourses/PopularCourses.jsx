@@ -1,26 +1,28 @@
 import { useRef, useState } from "react";
-import { FaRegClock, FaGraduationCap } from "react-icons/fa";
 import "./PopularCourses.css";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
-import { Box, Button, Skeleton } from "@mui/material";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import { motion } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Link } from "react-router-dom";
+import ClassSkeletons from "../../../../skeletons/ClassSkeletons";
+import ClassesCard from "../../../../shared-components/ui/ClassesCard/ClassesCard";
+gsap.registerPlugin(ScrollTrigger);
 
-const tabs = ["Popular", "Trending", "New", "Rated"];
+const tabs = ["Drum", "Violin", "Guiter", "Piano"];
 
 const PopularCourses = () => {
-  const [activeTab, setActiveTab] = useState("Popular");
+  const [activeTab, setActiveTab] = useState("Drum");
+  const classesContainerRef = useRef(null);
   const underRef = useRef(null);
+
   const [axiosSecure] = useAxiosSecure();
   const { currentUser, toggleSignInSignUpModal, user_data } = useAuthContext();
   const queryClient = useQueryClient();
 
-  const handleTab = (e, index, tab) => {
-    underRef.current.style.left = `calc(calc(100% / 4) * ${index})`;
-    setActiveTab(tab);
-  };
-
+  // fetch all classes
   const {
     isLoading,
     error,
@@ -29,8 +31,9 @@ const PopularCourses = () => {
     const res = await axiosSecure.get("/allClasses");
     return res.data;
   });
+  // ------------------------------
 
-
+  // fetch selected classes
   const { data: SelectedClassIds = [] } = useQuery({
     queryKey: ["SelectedClassIds", currentUser?.email],
     enabled: Boolean(currentUser),
@@ -41,7 +44,9 @@ const PopularCourses = () => {
       return res.data;
     },
   });
+  // ------------------------------------
 
+  // add the selected classes
   const mutation = useMutation({
     mutationFn: async (id) => {
       const res = await axiosSecure.post(`/addSelectedClass`, {
@@ -55,7 +60,10 @@ const PopularCourses = () => {
       queryClient.invalidateQueries({ queryKey: ["SelectedClassIds"] });
     },
   });
+  // ------------------------------------------
 
+  // open the signin modal if the user is not signed in after clicking
+  // on the select button
   const handleSelectClass = (id) => {
     if (!currentUser) {
       toggleSignInSignUpModal();
@@ -63,12 +71,25 @@ const PopularCourses = () => {
     }
     mutation.mutate(id);
   };
+  // ------------------------------------------------
+
+  // calculate tab buttom position
+  const handleTab = (e, index, tab) => {
+    underRef.current.style.left = `calc(calc(100% / 4) * ${index})`;
+    setActiveTab(tab);
+  };
+  // --------------------------------------------
 
   return (
-    <div className="center-container">
+    <div ref={classesContainerRef} className="center-container">
       <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
         <section className="popular-classes-container">
-          <h2 className="section-title">Popular Classes</h2>
+          <div className="top-classes-header">
+            <h2 className="section-title">Top Classes</h2>
+            <button className="button-secondary">
+              <Link to="#">Find Your Favorite Class</Link>
+            </button>
+          </div>
           <div className="tab-overflow">
             <div className="tab-container">
               {tabs.map((tab, index) => (
@@ -77,7 +98,7 @@ const PopularCourses = () => {
                   key={index}
                   onClick={(e) => handleTab(e, index, tab)}
                 >
-                  {tab} Classes
+                  {tab} Class
                 </button>
               ))}
 
@@ -86,73 +107,39 @@ const PopularCourses = () => {
           </div>
           <div className="card-container">
             {error && <h2>Error ocurred {error.message}</h2>}
-            {isLoading ? (
-              <div>
-                <Box sx={{ width: 210, marginRight: 0.5 }}>
-                  <Skeleton variant="rectangular" width={300} height={200} />
-                  <Skeleton />
-                  <Skeleton width="60%" />
-                </Box>
-              </div>
-            ) : (
-              allClasses.map((classes, index) => {
-                if (index > 5) {
-                  return;
-                }
+            {isLoading
+              ? Array.from({ length: 4 }).map((_, index) => (
+                  <ClassSkeletons key={index} />
+                ))
+              : // <div>
+                //   <Box sx={{ width: 210, marginRight: 0.5 }}>
+                //     <Skeleton variant="rectangular" width={300} height={200} />
+                //     <Skeleton />
+                //     <Skeleton width="60%" />
+                //   </Box>
+                // </div>
+                allClasses.map((classes) => {
+                  // if (index > 5) {
+                  //   return;
+                  // }
+                  if (
+                    classes.class_name
+                      .toLowerCase()
+                      .startsWith(activeTab.toLowerCase())
+                  ) {
+                    return (
+                      <ClassesCard
+                        key={classes._id} 
+                        resetAnimKey={activeTab}
+                        classes={classes}
+                        handleSelectClass={handleSelectClass}
+                        SelectedClassIds={SelectedClassIds}
+                        user_data={user_data}
+                      />
+                    );
 
-                return (
-                  <div
-                    key={classes._id}
-                    className={
-                      classes.available_seats == 0 ? "card no-seats" : "card"
-                    }
-                  >
-                    <img src={classes.image} alt="" />
-                    <div className="price-category">
-                      <span className="category">{classes.class_name}</span>
-                      <span>${classes.price}</span>
-                    </div>
-                    <h4>{classes.title}</h4>
-                    <h6>{classes.instructor_name}</h6>
-                    <div className="hrs-learners">
-                      <p>
-                        {" "}
-                        <FaRegClock /> {classes.duration} hrs
-                      </p>
-                      <p>
-                        {" "}
-                        <FaGraduationCap /> {classes.available_seats} seats
-                        available
-                      </p>
-                    </div>
-                    <div className="btns">
-                      <Button variant="outlined" size="large">
-                        More Info
-                      </Button>
-                      <Button
-                        disabled={
-                          SelectedClassIds?.selectedClassIds?.includes(
-                            classes._id
-                          ) ||
-                          classes.available_seats == 0 ||
-                          user_data?.role === "admin" ||
-                          user_data?.role === "instructor"
-                        }
-                        onClick={() => handleSelectClass(classes._id)}
-                        variant="contained"
-                        size="large"
-                      >
-                        {SelectedClassIds?.selectedClassIds?.includes(
-                          classes._id
-                        )
-                          ? "Selected"
-                          : "Select"}
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })
-            )}
+                  }
+                })}
           </div>
         </section>
       </motion.div>

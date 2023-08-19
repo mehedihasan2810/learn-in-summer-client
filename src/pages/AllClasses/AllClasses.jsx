@@ -1,18 +1,22 @@
-import { FaGraduationCap, FaRegClock } from "react-icons/fa";
 import "./AllClasses.css";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { Box, Button, Skeleton } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useTitlePerPage } from "../../hooks/useTitlePerPage";
 import { motion } from "framer-motion";
+import ClassSkeletons from "../../skeletons/ClassSkeletons";
+import { useState } from "react";
+import ClassesCard from "../../shared-components/ui/ClassesCard/ClassesCard";
 const AllClasses = () => {
+  const [category, setCategory] = useState("all");
   const [axiosSecure] = useAxiosSecure();
   const { currentUser, toggleSignInSignUpModal, user_data } = useAuthContext();
   const queryClient = useQueryClient();
 
   useTitlePerPage("AllClasses");
 
+  // fetch all the classes
   const {
     isLoading,
     error,
@@ -21,7 +25,9 @@ const AllClasses = () => {
     const res = await axiosSecure.get("/allClasses");
     return res.data;
   });
+  // -------------------------------------
 
+  // fetch selected classes
   const { data: SelectedClassIds = [] } = useQuery({
     queryKey: ["SelectedClassIds", currentUser?.email],
     enabled: Boolean(currentUser),
@@ -32,7 +38,9 @@ const AllClasses = () => {
       return res.data;
     },
   });
+  // ----------------------------------------
 
+  // add selected class
   const mutation = useMutation({
     mutationFn: async (id) => {
       const res = await axiosSecure.post(`/addSelectedClass`, {
@@ -45,7 +53,10 @@ const AllClasses = () => {
       queryClient.invalidateQueries({ queryKey: ["SelectedClassIds"] });
     },
   });
+  // --------------------------------------------
 
+  // open the signin/signup modal if the user is not signed in
+  // when user clicks on the select button
   const handleSelectClass = (id) => {
     if (!currentUser) {
       toggleSignInSignUpModal();
@@ -53,80 +64,88 @@ const AllClasses = () => {
     }
     mutation.mutate(id);
   };
+  // -----------------------------------------
+
+  // set the changes class category
+  const handleChange = (event) => {
+    setCategory(event.target.value);
+  };
+  // ---------------------------
 
   return (
     <div className="center-container">
       <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
         <div className="all-classes-container">
-          <h2 className="section-title">All Classes</h2>
+          <div className="all-classes-section-title-wrapper">
+            <h2 className="all-classes-section-title">
+              All Classes <span>({isLoading || allClasses.length})</span>
+            </h2>
+
+            <Box sx={{ width: 150 }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Filter Class
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={category}
+                  label="category_class"
+                  onChange={handleChange}
+                >
+                  <MenuItem value="all">All Class</MenuItem>
+                  <MenuItem value="drum">Drum Class</MenuItem>
+                  <MenuItem value="guiter">Guiter Class</MenuItem>
+                  <MenuItem value="piano">Piano Class</MenuItem>
+                  <MenuItem value="violin">Violin Class</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </div>
 
           <div className="all-classes">
             {error && <h2>Error ocurred {error.message}</h2>}
-            {isLoading ? (
-              <Box sx={{ width: 210, marginRight: 0.5 }}>
-                <Skeleton variant="rectangular" width={300} height={200} />
-                <Skeleton />
-                <Skeleton width="60%" />
-              </Box>
-            ) : (
-              allClasses.map((classes) => {
-                if (classes.status !== "approved") {
-                  return;
-                }
+            {isLoading
+              ? Array.from({ length: 4 }).map((_, index) => (
+                  <ClassSkeletons key={index} />
+                ))
+              : // (category === "all"
+                //     ? allClasses
+                //     : allClasses.filter((item) =>
+                //         item.class_name.toLowerCase().startsWith(category)
+                //       )
+                //   )
 
-                return (
-                  <div
-                    key={classes._id}
-                    className={
-                      classes.available_seats == 0 ? "card no-seats" : "card"
-                    }
-                  >
-                    <img src={classes.image} alt="" />
-                    <div className="price-category">
-                      <span className="category">{classes.class_name}</span>
-                      <span>${classes.price}</span>
-                    </div>
-                    <h4>{classes.title}</h4>
-                    <h6>{classes.instructor_name}</h6>
-                    <div className="hrs-learners">
-                      <p>
-                        {" "}
-                        <FaRegClock /> {classes.duration} hrs
-                      </p>
-                      <p>
-                        {" "}
-                        <FaGraduationCap /> {classes.available_seats} seats
-                        available
-                      </p>
-                    </div>
-                    <div className="btns">
-                      <Button variant="outlined" size="large">
-                        More Info
-                      </Button>
-                      <Button
-                        disabled={
-                          SelectedClassIds?.selectedClassIds?.includes(
-                            classes._id
-                          ) ||
-                          classes.available_seats == 0 ||
-                          user_data?.role === "admin" ||
-                          user_data?.role === "instructor"
-                        }
-                        onClick={() => handleSelectClass(classes._id)}
-                        variant="contained"
-                        size="large"
-                      >
-                        {SelectedClassIds?.selectedClassIds?.includes(
-                          classes._id
-                        )
-                          ? "Selected"
-                          : "Select"}
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })
-            )}
+                allClasses.map((classes) => {
+                  if (classes.status !== "approved") {
+                    return;
+                  }
+
+                  if (category === "all") {
+                    return (
+                      <ClassesCard
+                        key={classes._id}
+                        classes={classes}
+                        handleSelectClass={handleSelectClass}
+                        SelectedClassIds={SelectedClassIds}
+                        user_data={user_data}
+                      />
+                    );
+                  }
+
+                  if (classes.class_name.toLowerCase().startsWith(category)) {
+                    return (
+                      <ClassesCard
+                        key={classes._id}
+                        resetAnimKey={category}
+                        classes={classes}
+                        handleSelectClass={handleSelectClass}
+                        SelectedClassIds={SelectedClassIds}
+                        user_data={user_data}
+                      />
+                    );
+                  }
+                })}
           </div>
         </div>
       </motion.div>

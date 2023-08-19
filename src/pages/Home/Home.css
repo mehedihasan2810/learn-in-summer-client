@@ -1,0 +1,16 @@
+.home-top-right-gradient,
+.home-bottom-left-gradient{
+  position: fixed;
+  width: 100vw;
+  height: 55vh;
+  z-index: -10;
+  transform: translate3d(0, -50%, 0) rotate(-30deg);
+}
+
+.home-bottom-left-gradient{
+    left: -0vh;
+    bottom: -0vh;
+    background: var(--gradient-pink-to-cyan);
+    filter: blur(64px);
+    opacity: 0.1;
+}

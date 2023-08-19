@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import Swal from "sweetalert2";
 import RootLayout from "../layouts/RootLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import InstructorRoute from "./InstructorRoute";
@@ -8,7 +7,7 @@ import AdminRoute from "./AdminRoute";
 import PrivateRoute from "./PrivateRoute";
 import Home from "../pages/Home/Home";
 import Instructors from "../pages/Instructors/Instructors";
-import AllClasses from "../pages/AllClasses/AllClasses";
+// import AllClasses from "../pages/AllClasses/AllClasses";
 import UpdateClass from "../pages/Dashboard/Instructor/UpdateClass/UpdateClass";
 import AddClass from "../pages/Dashboard/Instructor/AddClass/AddClass";
 import MyClasses from "../pages/Dashboard/Instructor/MyClasses/MyClasses";
@@ -19,6 +18,9 @@ import Payment from "../pages/Dashboard/Student/Payment/Payment";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers/ManageUsers";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import PaymentDetails from "../pages/Dashboard/Student/PaymentDetails/PaymentDetails";
+import { Suspense, lazy } from "react";
+
+const AllClasses = lazy(() => import("../pages/AllClasses/AllClasses"));
 
 export const router = createBrowserRouter([
   {
@@ -36,7 +38,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/all-classes",
-        element: <AllClasses />,
+        element: (
+          <Suspense fallback={<div>loading.............</div>}>
+            <AllClasses />
+          </Suspense>
+        ),
       },
       {
         path: "/signin",
@@ -131,5 +137,3 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
-
-

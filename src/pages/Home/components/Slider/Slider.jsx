@@ -32,7 +32,7 @@ const Slider = () => {
               alt=""
             />
             <div className="content">
-              <h1>Learn Piano Like Bohemian Rapsody</h1>
+              <h1>Learn Guiter In The Easiest Way Possible</h1>
               <p>
                 This one is one of our top rated course. You can check what our
                 previous learner says in the review section.
@@ -47,7 +47,7 @@ const Slider = () => {
               alt=""
             />
             <div className="content">
-              <h1>Learn Violin From The Master Himself.</h1>
+              <h1>Get Upto 50% Off On Our Violin Class</h1>
               <p>
                 Violin is the finest musical instrument ever human created and
                 it is the most demandable instument as well.
@@ -61,7 +61,7 @@ const Slider = () => {
               alt=""
             />
             <div className="content">
-              <h1>Learn Piano Effectively</h1>
+              <h1>Learn Piano From The Best</h1>
               <p>
                 We have one of the best piano master who is ready to help you.
               </p>

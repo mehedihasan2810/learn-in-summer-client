@@ -1,0 +1,55 @@
+.classes-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.classes-card .price-category {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.classes-card .price-category span {
+  color: var(--color-dark-gray);
+  margin: 8px 0;
+  font-size: 1rem;
+}
+
+.classes-card .price-category span:last-child {
+  color: #000;
+  font-weight: bold;
+}
+
+.classes-card h4 {
+  color: #465159;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+.classes-card h6 {
+  color: var(--color-dark-gray);
+  margin-bottom: 1.3rem;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.classes-card .hrs-learners {
+  color: var(--color-dark-gray);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.hrs-learners p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.classes-card .btns {
+  display: flex;
+  justify-content: space-between;
+}

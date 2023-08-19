@@ -1,16 +1,18 @@
-import { FaGraduationCap, FaEnvelope } from "react-icons/fa";
 import "./Instructors.css";
 import { useTitlePerPage } from "../../hooks/useTitlePerPage";
-import { useAuthContext } from "../../hooks/useAuthContext";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { Box, Skeleton } from "@mui/material";
-import { motion } from "framer-motion";
+import InstructorCard from "../../shared-components/ui/InstructorCard/InstructorCard";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { useState } from "react";
 const Instructors = () => {
+  const [instructorType, setInstructorType] = useState("all");
   useTitlePerPage("Instructors");
 
   const [axiosSecure] = useAxiosSecure();
-  const { currentUser } = useAuthContext();
+  // const { currentUser } = useAuthContext();
 
   const { data: users, isLoading } = useQuery({
     queryKey: ["manageUsers"],
@@ -21,52 +23,73 @@ const Instructors = () => {
     },
   });
 
-
-  if (isLoading) {
-    return (
-      <Box sx={{ width: 210, marginLeft: 5, mt: 5 }}>
-        <Skeleton variant="rectangular" width={300} height={200} />
-        <Skeleton />
-        <Skeleton width="60%" />
-      </Box>
-    );
-  }
+  const handleChange = (event) => {
+    setInstructorType(event.target.value);
+  };
 
   return (
     <div className="center-container">
-      <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-        <div className="instructors-container">
-          <h2 className="section-title">Instructors</h2>
+      <div className="instructors-container">
+        <div className="instructors-title-wrapper">
+          <h2 className="instructors-section-title">
+            Instructors{" "}
+            <span>
+              (
+              {users
+                ? users.filter(
+                    (user) => user.role === "instructor"
+                  ).length
+                : "0"}
+              )
+            </span>
+          </h2>
 
-          <div className="instructors">
-            {users?.map((user) => {
-              if (user.role !== "instructor") {
-                return;
-              }
-              return (
-                <div key={user._id} className="instructor">
-                  <img
-                    src="https://images.unsplash.com/photo-1467493330285-2fe6a9f97483?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-                    alt=""
-                  />
-
-                  <div className="body">
-                    <h3>{user.name}</h3>
-                    <span>
-                      <FaGraduationCap /> 6400 Enrolled
-                    </span>
-                    <span className="email">
-                      {" "}
-                      <FaEnvelope /> {user.email}
-                    </span>
-                    <button className="btn">watch class</button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <Box sx={{ width: 180 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Filter Instructors
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={instructorType}
+                label="instructor_type"
+                onChange={handleChange}
+              >
+                <MenuItem value="all">All Instructors</MenuItem>
+                <MenuItem value="drum">Drum Instructors</MenuItem>
+                <MenuItem value="guiter">Guiter Instructors</MenuItem>
+                <MenuItem value="piano">Piano Instructors</MenuItem>
+                <MenuItem value="violin">Violin Instructors</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         </div>
-      </motion.div>
+
+        <div className="instructors">
+          {isLoading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  style={{ maxWidth: "320px", height: "470px" }}
+                />
+              ))
+            : users?.map((user) => {
+                if (user.role !== "instructor") {
+                  return;
+                }
+
+                if (instructorType === "all") {
+                  return <InstructorCard key={user._id} user={user} />;
+                }
+
+                if (instructorType === user.type) {
+                  console.log(user.type)
+                  return <InstructorCard key={user._id} user={user} />;
+                }
+              })}
+        </div>
+      </div>
     </div>
   );
 };

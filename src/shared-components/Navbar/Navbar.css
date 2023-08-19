@@ -1,8 +1,15 @@
 header {
   padding: 0.9rem 0;
-  background: #0b2441;
-  /* background-color: #126ed7c9; */
   color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  width: 100%;
+  transform: translate3d(0, 0, 0);
+  transition: transform 400ms ease-in-out;
+  background: rgb(0, 0, 0); 
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .logo-container {

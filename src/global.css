@@ -1,3 +1,24 @@
+:root {
+  --fs-sm: 0.9rem;
+  --fs-normal: 1.1rem;
+  --fs-lg: 4rem;
+  --color-gray: #d1d5db;
+  --color-dark-gray: #6b7280;
+  --gradient-pink-to-cyan: linear-gradient(
+    180deg,
+    hsl(329deg 86% 70%) 0%,
+    hsl(312deg 67% 70%) 19%,
+    hsl(286deg 66% 73%) 34%,
+    hsl(258deg 88% 79%) 46%,
+    hsl(232deg 100% 80%) 56%,
+    hsl(214deg 100% 74%) 65%,
+    hsl(203deg 100% 67%) 73%,
+    hsl(196deg 100% 59%) 82%,
+    hsl(192deg 96% 52%) 90%,
+    hsl(188deg 86% 53%) 100%
+  );
+}
+
 *,
 *::after,
 *::before {
@@ -5,6 +26,28 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* lenis recommended */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+/*  */
 
 ul {
   list-style: none;
@@ -35,9 +78,8 @@ button {
 .section-title {
   text-align: center;
   font-size: 3rem;
-  margin-bottom: 3rem;
-  font-weight: 900;
-  color: #0b2441;
+  font-weight: 700;
+  line-height: 1;
 }
 
 @media (max-width: 768px) {
@@ -99,4 +141,33 @@ button {
   border: 1px solid #0e63c5e6;
   color: #126ed7;
   transform: scale(0.98);
+}
+
+.button-secondary {
+  background-color: transparent;
+  border: none;
+  margin-block-start: 0.8rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  position: relative;
+  isolation: isolate;
+  transition: color 300ms;
+}
+
+.button-secondary::before {
+  content: "";
+  position: absolute;
+  bottom: 0%;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 5px;
+  background-color: #1e79d3;
+  transition: height 300ms;
+}
+
+.button-secondary:hover,
+.button-secondary:hover::before {
+  height: 100%;
+  color: #fff;
 }

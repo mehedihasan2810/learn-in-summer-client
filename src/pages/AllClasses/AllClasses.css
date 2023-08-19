@@ -1,16 +1,26 @@
 .all-classes-container {
-  margin: 40px 0 120px 0;
+  margin: 150px 0 120px 0;
 }
 
-.all-classes-container .section-title {
+.all-classes-section-title-wrapper{
+  display: flex;
+  justify-content: space-between;
+}
+ .all-classes-section-title {
   text-align: start;
   margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.all-classes-section-title > span{
+  font-size: 1rem;
 }
 
 .all-classes-container .all-classes {
   margin-top: 0.5rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 320px));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
 }
 
