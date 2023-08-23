@@ -7,12 +7,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "./ManageUsers.css";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Skeleton } from "@mui/material";
+import { Button } from "@mui/material";
 import moment from "moment/moment";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import { useEffect, useState } from "react";
 import { Toast } from "../../../../Toast/Toast";
+import Skeleton from "react-loading-skeleton";
 
 const ManageUsers = () => {
   const [RoleBtnId, setRoleBtnId] = useState("");
@@ -76,8 +77,11 @@ const ManageUsers = () => {
   }, []);
 
   if (isLoading) {
-    return Array.from({ length: 4 }).map((_, index) => (
-      <Skeleton width={1200} height={100} variant="text" key={index} />
+    return Array.from({ length: 10 }).map((_, index) => (
+      <Skeleton style={{
+         height: '5rem',
+         marginBlockEnd: '0.2rem'
+      }} key={index} />
     ));
   }
 

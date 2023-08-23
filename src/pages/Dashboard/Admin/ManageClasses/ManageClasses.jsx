@@ -8,13 +8,14 @@ import Paper from "@mui/material/Paper";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Skeleton } from "@mui/material";
+import { Button } from "@mui/material";
 import moment from "moment/moment";
 import "./ManageClasses.css";
 import { useEffect } from "react";
 import { LoadingButton } from "@mui/lab";
 import Swal from "sweetalert2";
 import { Toast } from "../../../../Toast/Toast";
+import Skeleton from "react-loading-skeleton";
 
 const ManageClasses = () => {
   const { addDashBoardTitle } = useAuthContext();
@@ -114,8 +115,11 @@ const ManageClasses = () => {
   }, []);
 
   if (isLoading) {
-    return Array.from({ length: 4 }).map((_, index) => (
-      <Skeleton width={1200} height={100} variant="text" key={index} />
+    return Array.from({ length: 10 }).map((_, index) => (
+      <Skeleton style={{
+         height: '5rem',
+         marginBlockEnd: '0.2rem'
+      }} key={index} />
     ));
   }
 

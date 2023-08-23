@@ -8,7 +8,8 @@ import "./Home.css";
 
 const Home = () => {
   useTitlePerPage("Home");
-
+  console.clear()
+console.log(import.meta.env.DEV)
   return (
     <div>
       <div className="home-bottom-left-gradient"></div>

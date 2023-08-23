@@ -1,3 +1,3 @@
 export const useTitlePerPage = (title) => {
-    document.title = `LearnInSummer | ${title}`
+    document.title = `${title} | LearnInSummer`
    }

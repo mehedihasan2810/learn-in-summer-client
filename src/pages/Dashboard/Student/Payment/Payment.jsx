@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import { useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
 
 const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_GATEWAY_PK);
 
@@ -14,8 +15,6 @@ const Payment = () => {
   const params = useParams();
   const [axiosSecure] = useAxiosSecure();
   const { addDashBoardTitle } = useAuthContext();
-
-  
 
   const {
     isLoading,
@@ -31,10 +30,25 @@ const Payment = () => {
 
   useEffect(() => {
     addDashBoardTitle("Payment");
-  }, [])
+  }, []);
 
-
-  if (isLoading) return <h2>Loading...</h2>;
+  if (isLoading)
+    return (
+      <div
+        style={{
+          maxInlineSize: "500px",
+          marginBlock: "80px",
+          marginInline: "auto",
+        }}
+      >
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Skeleton
+            key={index}
+            style={{ blockSize: "40px", marginBlockStart: "1rem" }}
+          />
+        ))}
+      </div>
+    );
   if (error) return <h2>Error Ocurred {error.message}</h2>;
 
   return (

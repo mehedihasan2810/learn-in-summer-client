@@ -1,11 +1,9 @@
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 import logo from "/assets/logo2-removebg-preview.png";
-import { motion } from "framer-motion";
 import "./Footer.css";
 const Footer = () => {
   return (
     <footer className="footer">
-      <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
         <div className="center-container">
           <div className="top">
             <div className="item">
@@ -55,7 +53,6 @@ const Footer = () => {
             </div>
           </div>
         </div>
-      </motion.div>
     </footer>
   );
 };

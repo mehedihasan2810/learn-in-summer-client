@@ -8,13 +8,14 @@ import Paper from "@mui/material/Paper";
 import "./MyClasses.css";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, ButtonGroup, Skeleton } from "@mui/material";
+import { Button, ButtonGroup } from "@mui/material";
 import moment from "moment/moment";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import { Toast } from "../../../../Toast/Toast";
 import Swal from "sweetalert2";
 import { useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
 
 export default function MyClasses() {
   const [axiosSecure] = useAxiosSecure();
@@ -44,7 +45,6 @@ export default function MyClasses() {
   });
 
   const handleDeleteClass = (id) => {
-
     mutation.mutate(id);
 
     Toast.fire({
@@ -58,8 +58,14 @@ export default function MyClasses() {
   }, []);
 
   if (isLoading) {
-    return Array.from({ length: 4 }).map((_, index) => (
-      <Skeleton width={1200} height={100} variant="text" key={index} />
+    return Array.from({ length: 10 }).map((_, index) => (
+      <Skeleton
+        style={{
+          height: "5rem",
+          marginBlockEnd: "0.2rem",
+        }}
+        key={index}
+      />
     ));
   }
 

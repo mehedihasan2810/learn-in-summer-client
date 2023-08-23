@@ -1,0 +1,39 @@
+.dashboard-link,
+.dashboard-link-icon {
+  color: #000;
+}
+
+.dashboard-link {
+  margin-block-end: 0.2rem;
+}
+
+.dashboard-bar {
+  background-color: #fff;
+  color: #000;
+  box-shadow: none;
+}
+
+.dashboard-link:hover .dashboard-link-icon,
+.dashboard-link:hover {
+  color: #1976d3;
+}
+
+
+
+.d-active :is(.dashboard-link, .dashboard-link-icon) {
+  color: #1976d3;
+}
+
+.d-active .dashboard-link,
+.dashboard-link:hover {
+  background-color: #1976d31a;
+}
+
+.desktop-drawer > div {
+  border-right: 0;
+}
+
+.dashboard-content {
+  min-block-size: 100vh;
+  background-color: #f1f5f9;
+}

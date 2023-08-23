@@ -3,7 +3,6 @@ import "./PopularCourses.css";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
-import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Link } from "react-router-dom";
@@ -82,67 +81,66 @@ const PopularCourses = () => {
 
   return (
     <div ref={classesContainerRef} className="center-container">
-      <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-        <section className="popular-classes-container">
-          <div className="top-classes-header">
-            <h2 className="section-title">Top Classes</h2>
-            <button className="button-secondary">
-              <Link to="#">Find Your Favorite Class</Link>
-            </button>
-          </div>
-          <div className="tab-overflow">
-            <div className="tab-container">
-              {tabs.map((tab, index) => (
-                <button
-                  className={activeTab === tab ? "active" : ""}
-                  key={index}
-                  onClick={(e) => handleTab(e, index, tab)}
-                >
-                  {tab} Class
-                </button>
-              ))}
+      <section className="popular-classes-container">
+        <div className="top-classes-header">
+          <h2 className="section-title">Top Classes</h2>
+          <button className="button-secondary">
+            <Link to="/all-classes" preventScrollReset={false}>
+              Find Your Favorite Class
+            </Link>
+          </button>
+        </div>
+        <div className="tab-overflow">
+          <div className="tab-container">
+            {tabs.map((tab, index) => (
+              <button
+                className={activeTab === tab ? "active" : ""}
+                key={index}
+                onClick={(e) => handleTab(e, index, tab)}
+              >
+                {tab} Class
+              </button>
+            ))}
 
-              <span ref={underRef} className="under"></span>
-            </div>
+            <span ref={underRef} className="under"></span>
           </div>
-          <div className="card-container">
-            {error && <h2>Error ocurred {error.message}</h2>}
-            {isLoading
-              ? Array.from({ length: 4 }).map((_, index) => (
-                  <ClassSkeletons key={index} />
-                ))
-              : // <div>
-                //   <Box sx={{ width: 210, marginRight: 0.5 }}>
-                //     <Skeleton variant="rectangular" width={300} height={200} />
-                //     <Skeleton />
-                //     <Skeleton width="60%" />
-                //   </Box>
-                // </div>
-                allClasses.map((classes) => {
-                  // if (index > 5) {
-                  //   return;
-                  // }
-                  if (
-                    classes.class_name
-                      .toLowerCase()
-                      .startsWith(activeTab.toLowerCase())
-                  ) {
-                    return (
-                      <ClassesCard
-                        key={classes._id} 
-                        resetAnimKey={activeTab}
-                        classes={classes}
-                        handleSelectClass={handleSelectClass}
-                        SelectedClassIds={SelectedClassIds}
-                        user_data={user_data}
-                      />
-                    );
-
-                  }
-                })}
-          </div>
-        </section>
-      </motion.div>
+        </div>
+        <div className="card-container">
+          {error && <h2>Error ocurred {error.message}</h2>}
+          {isLoading
+            ? Array.from({ length: 4 }).map((_, index) => (
+                <ClassSkeletons key={index} />
+              ))
+            : // <div>
+              //   <Box sx={{ width: 210, marginRight: 0.5 }}>
+              //     <Skeleton variant="rectangular" width={300} height={200} />
+              //     <Skeleton />
+              //     <Skeleton width="60%" />
+              //   </Box>
+              // </div>
+              allClasses.map((classes) => {
+                // if (index > 5) {
+                //   return;
+                // }
+                if (
+                  classes.class_name
+                    .toLowerCase()
+                    .startsWith(activeTab.toLowerCase())
+                ) {
+                  return (
+                    <ClassesCard
+                      key={classes._id}
+                      resetAnimKey={activeTab}
+                      classes={classes}
+                      handleSelectClass={handleSelectClass}
+                      SelectedClassIds={SelectedClassIds}
+                      user_data={user_data}
+                    />
+                  );
+                }
+              })}
+        </div>
+      </section>
     </div>
   );
 };

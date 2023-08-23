@@ -28,7 +28,13 @@ function SignInSignUpModal() {
           : "modal-container"
       }
     >
-      <div className="form-container">
+      <div
+        className={
+          isSignInSignUpModalOpen
+            ? "form-container form-open"
+            : "form-container"
+        }
+      >
         <div className="tab-container">
           {tabs.map((tab, index) => (
             <button

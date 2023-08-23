@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -19,27 +19,21 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ClassIcon from "@mui/icons-material/Class";
 import AddIcon from "@mui/icons-material/Add";
 import LibraryAddCheckIcon from "@mui/icons-material/LibraryAddCheck";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import UpcomingIcon from "@mui/icons-material/Upcoming";
 import SchoolIcon from "@mui/icons-material/School";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useTitlePerPage } from "../hooks/useTitlePerPage";
-import { Button } from "@mui/material";
+import { FaStackOverflow } from "react-icons/fa";
 
+import "./DashboardLayout.css";
+import { TextField } from "@mui/material";
 const drawerWidth = 240;
-
-// interface Props {
-//   /**
-//    * Injected by the documentation to work in an iframe.
-//    * You won't need it on your project.
-//    */
-//   window?: () => Window;
-// }
 
 export default function DashboardLayout(props) {
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -47,9 +41,7 @@ export default function DashboardLayout(props) {
 
   useTitlePerPage("Dashboard");
 
- 
-
-  const {  user_data, dashboardTitle } = useAuthContext();
+  const { user_data } = useAuthContext();
   let user = user_data?.role;
 
   let navItem;
@@ -75,6 +67,11 @@ export default function DashboardLayout(props) {
   }
   if (user === "admin") {
     navItem = [
+      {
+        text: "Statistics",
+        path: "statistics",
+        icon: <FaStackOverflow size={24} />,
+      },
       {
         text: "Manage Classes",
         path: "manage-classes",
@@ -129,46 +126,41 @@ export default function DashboardLayout(props) {
     <div>
       <Toolbar>
         <Typography variant="h6" noWrap component="div">
-          {user_data?.name}
-          <p style={{ fontSize: "14px" }}>{user_data?.email}</p>
-          <p
-            style={{
-              fontSize: "12px",
-              textTransform: "uppercase",
-              color: `${
-                user_data?.role === "admin"
-                  ? "#9c27b0"
-                  : user_data?.role === "#2e7d32"
-                  ? "success"
-                  : "#1976d2"
-              }`,
-            }}
-          >
-            {user_data?.role}
-          </p>
-        
+          <Link to="/">LearnInSummer</Link>
         </Typography>
       </Toolbar>
-      <Divider />
-      <List>
+
+      <List sx={{ marginBlockStart: "1rem" }}>
+        <ListItem disablePadding></ListItem>
         {navItem?.map((item, index) => (
-          <Link key={index} to={`/dashboard/${item.path}`}>
+          <NavLink
+            className={({ isActive, isPending }) =>
+              isPending ? "d-pending" : isActive ? "d-active" : ""
+            }
+            key={index}
+            to={`/dashboard/${item.path}`}
+          >
             <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemButton className="dashboard-link">
+                <ListItemIcon className="dashboard-link-icon">
+                  {item.icon}
+                </ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItemButton>
             </ListItem>
-          </Link>
+          </NavLink>
         ))}
       </List>
-      <Divider />
+      <Divider sx={{ width: "90%", marginInline: "auto" }} />
+
       <List>
         {publicNavItems.map((item, index) => (
           <Link key={index} to={item.path}>
             <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemButton className="dashboard-link">
+                <ListItemIcon className="dashboard-link-icon">
+                  {item.icon}
+                </ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItemButton>
             </ListItem>
@@ -182,81 +174,123 @@ export default function DashboardLayout(props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          p: 0,
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {dashboardTitle}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-       
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Toolbar />
+    <>
+      {/* todo */}
+      {/* <UserProfile /> */}
+      {/* ------------------ */}
 
-        <Outlet />
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar
+          className="dashboard-bar"
+          position="fixed"
+          sx={{
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            p: 0,
+          }}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              style={{ width: "100%" }}
+              variant="h6"
+              noWrap
+              component="div"
+            >
+              <div
+                style={{
+                  paddingBlock: "0.8rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <TextField
+                  sx={{ width: "300px" }}
+                  id="standard-search"
+                  label="Search"
+                  type="search"
+                  variant="standard"
+                />
+
+                {/* todo------------------------------------------------- */}
+                <img
+                  style={{
+                    width: "60px",
+                    height: "60px",
+                    objectFit: "cover",
+                    borderRadius: "50%",
+                    marginInlineStart: "1rem",
+                  }}
+                  src={`${user_data?.photoUrl}`}
+                  alt="author image"
+                />
+
+                {/* todo -------------------------------------- */}
+              </div>
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          aria-label="mailbox folders"
+        >
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+          >
+            {drawer}
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            className="desktop-drawer"
+            sx={{
+              display: { xs: "none", sm: "block" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Box>
+        <Box
+          className="dashboard-content"
+          component="main"
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+          }}
+        >
+          <Toolbar />
+
+          <Outlet />
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 }

@@ -12,16 +12,18 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import GoogleButton from "react-google-button";
 import "./SignUp.css";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Toast } from "../../../Toast/Toast";
+import { gsap } from "gsap";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [isSignUpLoading, setIsSignUpLoading] = useState(false);
+  const signUpFormRef = useRef();
 
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
@@ -31,7 +33,6 @@ const SignUp = () => {
     googleSignIn,
     updateUserProfile,
     completeProfileUpdate,
-    currentUser,
     toggleSignInSignUpModal,
   } = useAuthContext();
 
@@ -114,9 +115,7 @@ const SignUp = () => {
 
   const handleGoogleSignIn = () => {
     googleSignIn()
-      .then((userCredential) => {
-        const loggedUser = userCredential.user;
-
+      .then(() => {
         Toast.fire({
           icon: "success",
           title: "Succesfully Signed In",
@@ -136,8 +135,20 @@ const SignUp = () => {
     event.preventDefault();
   };
 
+// signUp form y and opacity animation on toggle between signin and signup 
+// form with gsap
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(signUpFormRef.current, {opacity: 0, y: 10}, {opacity: 1, y: 0})
+    }, signUpFormRef.current)
+
+
+   return () => ctx.revert();
+  }, [])
+  // -----------------------------------
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="signup-form">
+    <form onSubmit={handleSubmit(onSubmit)} ref={signUpFormRef} className="signup-form">
       <div className="control">
         <TextField
           {...register("name", { required: "This field is required" })}
@@ -257,7 +268,19 @@ const SignUp = () => {
           helperText={errors.photoUrl?.message}
         />
       </div>
-
+      <LoadingButton
+        type="submit"
+        loading={isSignUpLoading}
+        variant="contained"
+        size="large"
+        sx={{
+          width: "100%",
+          mt: "1.2rem",
+          p: "0.8rem 0",
+        }}
+      >
+        Sign Up
+      </LoadingButton>
       <Divider
         sx={{
           m: "1.2rem 0",
@@ -272,20 +295,6 @@ const SignUp = () => {
         }}
         onClick={handleGoogleSignIn}
       />
-
-      <LoadingButton
-        type="submit"
-        loading={isSignUpLoading}
-        variant="contained"
-        size="large"
-        sx={{
-          width: "100%",
-          mt: "1.2rem",
-          p: "0.8rem 0",
-        }}
-      >
-        Sign Up
-      </LoadingButton>
     </form>
   );
 };

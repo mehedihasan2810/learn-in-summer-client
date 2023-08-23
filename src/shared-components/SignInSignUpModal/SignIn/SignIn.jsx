@@ -12,15 +12,17 @@ import { useForm } from "react-hook-form";
 import GoogleButton from "react-google-button";
 import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import "./SignIn.css";
 import { Toast } from "../../../Toast/Toast";
+import { gsap } from "gsap";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignInLoading, setIsSignInLoading] = useState(false);
   const { googleSignIn, signIn, toggleSignInSignUpModal } = useAuthContext();
+  const signInFormRef = useRef();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -40,9 +42,7 @@ const SignIn = () => {
 
     setIsSignInLoading(true);
     signIn(email, password)
-      .then((userCredential) => {
-        const loggedUser = userCredential.user;
-
+      .then(() => {
         // *show toast
         Toast.fire({
           icon: "success",
@@ -68,9 +68,7 @@ const SignIn = () => {
 
   const handleGoogleSignIn = () => {
     googleSignIn()
-      .then((userCredential) => {
-        const loggedUser = userCredential.user;
-
+      .then(() => {
         Toast.fire({
           icon: "success",
           title: "Succesfully Signed In",
@@ -84,8 +82,27 @@ const SignIn = () => {
       });
   };
 
+  // signIn form y and opacity animation on toggle between signin and signup
+  // with gsap
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        signInFormRef.current,
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0 }
+      );
+    }, signInFormRef.current);
+
+    return () => ctx.revert();
+  }, []);
+  // -----------------------------------
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="signin-form">
+    <form
+      ref={signInFormRef}
+      onSubmit={handleSubmit(onSubmit)}
+      className="signin-form"
+    >
       <div className="control">
         <TextField
           {...register("email", {
@@ -163,6 +180,19 @@ const SignIn = () => {
         </div>
       </div>
 
+      <LoadingButton
+        loading={isSignInLoading}
+        type="submit"
+        variant="contained"
+        size="large"
+        sx={{
+          width: "100%",
+          mt: "1.2rem",
+          p: "0.8rem 0",
+        }}
+      >
+        Sign In
+      </LoadingButton>
       <Divider
         sx={{
           m: "1.2rem 0",
@@ -177,20 +207,6 @@ const SignIn = () => {
         }}
         onClick={handleGoogleSignIn}
       />
-
-      <LoadingButton
-        loading={isSignInLoading}
-        type="submit"
-        variant="contained"
-        size="large"
-        sx={{
-          width: "100%",
-          mt: "1.2rem",
-          p: "0.8rem 0",
-        }}
-      >
-        Sign In
-      </LoadingButton>
     </form>
   );
 };

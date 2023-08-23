@@ -7,11 +7,12 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 import { useAuthContext } from "../../../../hooks/useAuthContext";
-import { Button, Skeleton } from "@mui/material";
+import { Button } from "@mui/material";
 import { useEffect } from "react";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import moment from "moment/moment";
+import Skeleton from "react-loading-skeleton";
 
 const PaymentDetails = () => {
   const { addDashBoardTitle, user_data } = useAuthContext();
@@ -34,7 +35,7 @@ const PaymentDetails = () => {
 
   if (isPaymentLoading) {
     return Array.from({ length: 4 }).map((_, index) => (
-      <Skeleton width={1200} height={100} variant="text" key={index} />
+      <Skeleton style={{maxInlineSize: '1200px', blockSize: '80px'}} key={index} />
     ));
   }
 

@@ -9,7 +9,9 @@
 
 .add-title {
   text-align: start !important;
-  margin-bottom: 1rem !important;
+  margin-block-start: 2rem !important;
+  margin-block-end: 1rem !important;
+  font-size: 2rem !important;
 }
 .add-class-container .control {
   display: flex;

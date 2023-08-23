@@ -1,0 +1,27 @@
+.all-calsses-fallback{
+ 
+    margin-block-start: 150px;
+    margin-block-end: 120px;
+}
+
+.all-calsses-fallback .all-classes{
+    margin-top: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.all-calsses-fallback .all-classes-section-title-wrapper{
+    display: flex;
+    justify-content: space-between;
+  }
+  .all-calsses-fallback .all-classes-section-title {
+    text-align: start;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: 500;
+  }
+  
+  .all-calsses-fallback .all-classes-section-title > span{
+    font-size: 1rem;
+  }

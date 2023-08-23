@@ -1,4 +1,4 @@
-import { Button, Divider, Skeleton } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import "./SelectedClasses.css";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -7,6 +7,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import { DeleteOutline } from "@mui/icons-material";
 import { useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
 
 const SelectedClasses = () => {
   const [axiosSecure] = useAxiosSecure();
@@ -28,7 +29,6 @@ const SelectedClasses = () => {
       return res.data;
     },
   });
-
 
   const mutation = useMutation({
     mutationFn: async (id) => {
@@ -54,7 +54,15 @@ const SelectedClasses = () => {
   }, []);
 
   if (isLoading) {
-    return <Skeleton width={1200} height={100} variant="text" />;
+    return (
+      <Skeleton
+        style={{
+          blockSize: "8rem",
+          maxInlineSize: "800px",
+          marginBlockStart: "3rem",
+        }}
+      />
+    );
   }
   if (error) return <h2>Error Ocurred {error.message}</h2>;
 

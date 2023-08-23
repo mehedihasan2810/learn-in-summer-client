@@ -1,5 +1,4 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { motion } from "framer-motion";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -61,44 +60,45 @@ const PopularInstructors = () => {
   return (
     <section className="home-instructor-container">
       <div className="center-container">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-          <div className="home-instructor-header">
-            <h2 className="section-title">Top Instructors</h2>
-            <button className="button-secondary">
-              <Link to="#">Find Your Favorite Instructor</Link>
-            </button>
-          </div>
+        <div className="home-instructor-header">
+          <h2 className="section-title">Top Instructors</h2>
+          <button className="button-secondary">
+            <Link to="/instructors" preventScrollReset={false}>
+              Find Your Favorite Instructor
+            </Link>
+          </button>
+        </div>
 
-          <Swiper
-            slidesPerView={perView}
-            spaceBetween={20}
-            pagination={{
-              clickable: true,
-            }}
-            navigation={true}
-            modules={[Navigation, Pagination]}
-            className="mySwiper"
-          >
-            {isLoading
-              ? Array.from({ length: 6 }).map((_, index) => (
-                  <SwiperSlide key={index}>
-                    <Skeleton
-                      key={index}
-                      style={{ maxWidth: "320px", height: "470px" }}
-                    />
+        <Swiper
+          slidesPerView={perView}
+          spaceBetween={20}
+          pagination={{
+            clickable: true,
+          }}
+          navigation={true}
+          modules={[Navigation, Pagination]}
+          className="mySwiper"
+        >
+          {isLoading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <SwiperSlide key={index}>
+                  <Skeleton
+                    key={index}
+                    style={{ maxWidth: "320px", height: "470px" }}
+                  />
+                </SwiperSlide>
+              ))
+            : users.map((user) => {
+                if (user.role !== "instructor") {
+                  return;
+                }
+                return (
+                  <SwiperSlide key={user._id}>
+                    <InstructorCard user={user} />
                   </SwiperSlide>
-                ))
-              : users.map((user) => {
-                  if (user.role !== "instructor") {
-                    return;
-                  }
-                  return (
-                    <SwiperSlide key={user._id}>
-                      <InstructorCard user={user} />
-                    </SwiperSlide>
-                  );
-                })}
-            {/* <SwiperSlide>
+                );
+              })}
+          {/* <SwiperSlide>
               <div className="instructor-card">
                 <img
                   src="https://images.pexels.com/photos/4038347/pexels-photo-4038347.jpeg?auto=compress&cs=tinysrgb&w=1600"
@@ -220,8 +220,7 @@ const PopularInstructors = () => {
                 </div>
               </div>
             </SwiperSlide> */}
-          </Swiper>
-        </motion.div>
+        </Swiper>
       </div>
     </section>
   );

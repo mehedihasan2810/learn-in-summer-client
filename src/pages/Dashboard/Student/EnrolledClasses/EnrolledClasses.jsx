@@ -1,10 +1,11 @@
-import { Button, Divider, Skeleton } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import "./EnrolledClasses.css";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import moment from "moment";
 import { useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
 
 const EnrolledClasses = () => {
   const [axiosSecure] = useAxiosSecure();
@@ -34,7 +35,7 @@ useEffect(() => {
 
 
   if (isLoading) {
-    return <Skeleton width={1200} height={100} variant="text" />;
+    return <Skeleton style={{blockSize: '8rem', maxInlineSize: '800px', marginBlockStart: '3rem'}} />;
   }
   if (error) return <h2>Error Ocurred {error.message}</h2>;
 

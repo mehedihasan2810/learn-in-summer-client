@@ -6,7 +6,7 @@ import ManageClasses from "../pages/Dashboard/Admin/ManageClasses/ManageClasses"
 import AdminRoute from "./AdminRoute";
 import PrivateRoute from "./PrivateRoute";
 import Home from "../pages/Home/Home";
-import Instructors from "../pages/Instructors/Instructors";
+// import Instructors from "../pages/Instructors/Instructors";
 // import AllClasses from "../pages/AllClasses/AllClasses";
 import UpdateClass from "../pages/Dashboard/Instructor/UpdateClass/UpdateClass";
 import AddClass from "../pages/Dashboard/Instructor/AddClass/AddClass";
@@ -18,9 +18,12 @@ import Payment from "../pages/Dashboard/Student/Payment/Payment";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers/ManageUsers";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import PaymentDetails from "../pages/Dashboard/Student/PaymentDetails/PaymentDetails";
-import { Suspense, lazy } from "react";
-
-const AllClasses = lazy(() => import("../pages/AllClasses/AllClasses"));
+import { Suspense } from "react";
+import { AllClasses } from "../lazy-components/AllClasses/AllClasses";
+import AllClassesFallback from "../lazy-components/AllClasses/fallback";
+import { Instructors } from "../lazy-components/Instructors/Instructors";
+import InstructorsFallback from "../lazy-components/Instructors/fallback";
+import Overview from "../pages/Dashboard/Admin/Overview/Overview";
 
 export const router = createBrowserRouter([
   {
@@ -34,12 +37,16 @@ export const router = createBrowserRouter([
       },
       {
         path: "/instructors",
-        element: <Instructors />,
+        element: (
+          <Suspense fallback={<InstructorsFallback />}>
+            <Instructors />
+          </Suspense>
+        ),
       },
       {
         path: "/all-classes",
         element: (
-          <Suspense fallback={<div>loading.............</div>}>
+          <Suspense fallback={<AllClassesFallback />}>
             <AllClasses />
           </Suspense>
         ),
@@ -61,6 +68,7 @@ export const router = createBrowserRouter([
         <DashboardLayout />
       </PrivateRoute>
     ),
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/dashboard/add-class",
@@ -116,6 +124,14 @@ export const router = createBrowserRouter([
           <PrivateRoute>
             <PaymentDetails />
           </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/statistics",
+        element: (
+          <AdminRoute>
+            <Overview />
+          </AdminRoute>
         ),
       },
       {

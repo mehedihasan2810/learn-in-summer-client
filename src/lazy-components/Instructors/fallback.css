@@ -1,0 +1,32 @@
+.instructors-fallback-container {
+  margin: 150px 0 120px 0;
+}
+
+.instructors-fallback-container .instructors-title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: 1rem;
+  margin-inline-end: 4rem;
+}
+
+.instructors-fallback-container .instructors-section-title {
+  text-align: start;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.instructors-fallback-container .instructors-section-title > span {
+  font-size: 1rem;
+}
+
+.instructors-fallback-container .instructors-container .section-title {
+  text-align: start;
+  margin-bottom: 20px;
+}
+
+.instructors-fallback-container .instructors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 320px));
+  gap: 1rem;
+}

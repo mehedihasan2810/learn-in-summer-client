@@ -25,8 +25,7 @@ const AuthProvider = ({ children }) => {
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
 
-  const completeProfileUpdate = () => {
-  };
+  const completeProfileUpdate = () => {};
 
   const toggleSignInSignUpModal = () => {
     setIsSignInSignUpModalOpen(!isSignInSignUpModalOpen);
@@ -68,10 +67,6 @@ const AuthProvider = ({ children }) => {
     },
   });
 
-
-  
-
-
   const mutation = useMutation({
     mutationFn: async (newData) => {
       const res = await axiosSecure.post(`/addUser`, newData);
@@ -82,12 +77,15 @@ const AuthProvider = ({ children }) => {
     },
   });
 
-  
-
   useEffect(() => {
+    // if(isSignInSignUpModalOpen){
+    //   document.body.style.overflowY = 'hidden';
+    // }else{
+    //   document.body.style.overflowY = 'visible';
+    // }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
-
 
       if (user) {
         const userInfo = {

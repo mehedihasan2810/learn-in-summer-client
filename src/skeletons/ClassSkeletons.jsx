@@ -5,15 +5,17 @@ const ClassSkeletons = () => {
   return (
     <div className="class-skeleton-wrapper">
       <Skeleton style={{ height: "200px" }} />
-      <div className="skeleton-price-category">
+      {/* <div className="skeleton-price-category">
         <Skeleton style={{ height: "20px", width: "80px" }} />
         <Skeleton style={{ height: "20px", width: "80px" }} />
-      </div>
+      </div> */}
       <Skeleton style={{ height: "20px", width: "100%" }} />
-      <div className="skeleton-seat-time">
+      <Skeleton style={{ height: "20px", width: "100%" }} />
+      <Skeleton style={{ height: "20px", width: "100%" }} />
+      {/* <div className="skeleton-seat-time">
         <Skeleton style={{ height: "20px", width: "80px" }} />
         <Skeleton style={{ height: "20px", width: "80px" }} />
-      </div>
+      </div> */}
       <div className="skeleton-btns">
         <Skeleton style={{ height: "50px", width: "100px" }} />
         <Skeleton style={{ height: "50px", width: "100px" }} />

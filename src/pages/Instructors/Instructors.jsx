@@ -36,9 +36,7 @@ const Instructors = () => {
             <span>
               (
               {users
-                ? users.filter(
-                    (user) => user.role === "instructor"
-                  ).length
+                ? users.filter((user) => user.role === "instructor").length
                 : "0"}
               )
             </span>
@@ -80,12 +78,23 @@ const Instructors = () => {
                 }
 
                 if (instructorType === "all") {
-                  return <InstructorCard key={user._id} user={user} />;
+                  return (
+                    <InstructorCard
+                      key={user._id}
+                      user={user}
+                      resetAnimKey={instructorType}
+                    />
+                  );
                 }
 
                 if (instructorType === user.type) {
-                  console.log(user.type)
-                  return <InstructorCard key={user._id} user={user} />;
+                  return (
+                    <InstructorCard
+                      key={user._id}
+                      user={user}
+                      resetAnimKey={instructorType}
+                    />
+                  );
                 }
               })}
         </div>
