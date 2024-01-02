@@ -6,18 +6,26 @@ import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
+// Array representing the tabs
 const tabs = ["Sign In", "Sign Up"];
 
 function SignInSignUpModal() {
+  // State to track the current active tab
   const [currentTab, setCurrentTab] = useState(0);
 
+  // Ref for the underline element
   const underRef = useRef(null);
 
+  // Function to handle tab switch
   const handleTab = (index) => {
+    // Move the underline element based on the selected tab
     underRef.current.style.left = `calc(calc(100% / 2) * ${index})`;
+
+    // Set the current active tab
     setCurrentTab(index);
   };
 
+  // Auth context for accessing authentication actions and modal state
   const { toggleSignInSignUpModal, isSignInSignUpModalOpen } = useAuthContext();
 
   return (

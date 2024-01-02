@@ -18,10 +18,12 @@ import { Toast } from "../../../../Toast/Toast";
 import Skeleton from "react-loading-skeleton";
 
 const ManageClasses = () => {
+  // Accessing the context and hooks
   const { addDashBoardTitle } = useAuthContext();
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
 
+  // Query to get the classes
   const {
     isLoading,
     error,
@@ -31,6 +33,7 @@ const ManageClasses = () => {
     return res.data;
   });
 
+  // Mutation to deny class
   const denyMutation = useMutation({
     mutationFn: async (id) => {
       const res = await axiosSecure.put(`/updateDenyStatus/${id}`);
@@ -42,6 +45,7 @@ const ManageClasses = () => {
     },
   });
 
+  // Function to handle denying a class
   const handleDenyClass = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -58,6 +62,7 @@ const ManageClasses = () => {
     });
   };
 
+  // Mutation to approve class
   const approveMutation = useMutation({
     mutationFn: async (id) => {
       const res = await axiosSecure.put(`/updateApproveStatus/${id}`);
@@ -69,6 +74,7 @@ const ManageClasses = () => {
     },
   });
 
+  // Function to handle approving a class
   const handleApproveClass = (id) => {
     approveMutation.mutate(id);
     Toast.fire({
@@ -77,6 +83,7 @@ const ManageClasses = () => {
     });
   };
 
+  // Mutation to send feedback
   const feedbackMutation = useMutation({
     mutationFn: async (data) => {
       const res = await axiosSecure.put(`/updateFeedback/${data.id}`, {
@@ -90,6 +97,7 @@ const ManageClasses = () => {
     },
   });
 
+  // Function to handle updating feedback
   const handleUpdateFeedback = async (id) => {
     const { value: message } = await Swal.fire({
       input: "textarea",
@@ -110,25 +118,33 @@ const ManageClasses = () => {
     // feedbackMutation.mutate(id, message)
   };
 
+  // Effect hook to set dashboard title
   useEffect(() => {
     addDashBoardTitle("Manage Classes");
   }, []);
 
+  // Loading skeleton while data is being fetched
   if (isLoading) {
     return Array.from({ length: 10 }).map((_, index) => (
-      <Skeleton style={{
-         height: '5rem',
-         marginBlockEnd: '0.2rem'
-      }} key={index} />
+      <Skeleton
+        style={{
+          height: "5rem",
+          marginBlockEnd: "0.2rem",
+        }}
+        key={index}
+      />
     ));
   }
 
+  // Displaying error if there's an issue with fetching data
   if (error) return "An error has occurred: " + error.message;
 
   return (
     <div className="my-classes-container">
+      {/* Table for displaying class information */}
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
+          {/* Table header */}
           <TableHead>
             <TableRow sx={{ bgcolor: "#126ed715" }}>
               <TableCell>Image</TableCell>
@@ -144,13 +160,17 @@ const ManageClasses = () => {
               <TableCell align="left">Send Feedback</TableCell>
             </TableRow>
           </TableHead>
+
+          {/* Table body */}
           <TableBody>
+            {/* Mapping through classes and displaying each row */}
             {myClasses.map((classes) => (
               <TableRow
                 key={classes._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
+                  {/* Image of the class */}
                   <img className="my-classes-img" src={classes.image} alt="" />
                 </TableCell>
                 <TableCell align="left">{classes.class_name}</TableCell>
@@ -159,6 +179,7 @@ const ManageClasses = () => {
                 <TableCell align="left">{classes.available_seats}</TableCell>
                 <TableCell align="left">${classes.price}</TableCell>
                 <TableCell align="left">
+                  {/* Status of the class */}
                   <Button
                     color={
                       classes.status === "approved"
@@ -172,9 +193,11 @@ const ManageClasses = () => {
                   </Button>
                 </TableCell>
                 <TableCell align="left">
+                  {/* Last updated date of the class */}
                   {moment(classes.date).format("MMMM Do YYYY")}
                 </TableCell>
                 <TableCell align="left">
+                  {/* Button for approving a class */}
                   <LoadingButton
                     onClick={() => handleApproveClass(classes._id)}
                     variant="outlined"
@@ -189,6 +212,7 @@ const ManageClasses = () => {
                   </LoadingButton>
                 </TableCell>
                 <TableCell align="left">
+                  {/* Button for denying a class */}
                   <LoadingButton
                     onClick={() => handleDenyClass(classes._id)}
                     variant="outlined"
@@ -204,6 +228,7 @@ const ManageClasses = () => {
                   </LoadingButton>
                 </TableCell>
                 <TableCell align="left">
+                  {/* Button for sending feedback */}
                   <LoadingButton
                     onClick={() => handleUpdateFeedback(classes._id)}
                     sx={{

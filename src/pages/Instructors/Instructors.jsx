@@ -8,12 +8,15 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useState } from "react";
 const Instructors = () => {
+  // State to manage the selected instructor type
   const [instructorType, setInstructorType] = useState("all");
+
+  // Custom hook to set the page title
   useTitlePerPage("Instructors");
 
   const [axiosSecure] = useAxiosSecure();
-  // const { currentUser } = useAuthContext();
 
+  // Fetch user data including instructors using React Query
   const { data: users, isLoading } = useQuery({
     queryKey: ["manageUsers"],
     // enabled: Boolean(currentUser),
@@ -23,6 +26,7 @@ const Instructors = () => {
     },
   });
 
+  // Event handler to update the selected instructor type
   const handleChange = (event) => {
     setInstructorType(event.target.value);
   };
@@ -31,6 +35,7 @@ const Instructors = () => {
     <div className="center-container">
       <div className="instructors-container">
         <div className="instructors-title-wrapper">
+          {/* Title with the count of instructors */}
           <h2 className="instructors-section-title">
             Instructors{" "}
             <span>
@@ -42,6 +47,7 @@ const Instructors = () => {
             </span>
           </h2>
 
+          {/* Dropdown to filter instructors by type */}
           <Box sx={{ width: 180 }}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
@@ -64,6 +70,7 @@ const Instructors = () => {
           </Box>
         </div>
 
+        {/* Section to display instructor cards */}
         <div className="instructors">
           {isLoading
             ? Array.from({ length: 6 }).map((_, index) => (

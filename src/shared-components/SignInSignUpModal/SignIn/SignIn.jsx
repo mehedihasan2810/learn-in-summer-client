@@ -19,17 +19,26 @@ import { Toast } from "../../../Toast/Toast";
 import { gsap } from "gsap";
 
 const SignIn = () => {
+   // State for toggling password visibility
   const [showPassword, setShowPassword] = useState(false);
+
+  // State for tracking sign-in loading state
   const [isSignInLoading, setIsSignInLoading] = useState(false);
+
+  // Auth context for authentication actions
   const { googleSignIn, signIn, toggleSignInSignUpModal } = useAuthContext();
+
+  // Ref for the sign-in form element
   const signInFormRef = useRef();
 
+   // Handlers for toggling password visibility
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
+  // React Hook Form configuration
   const {
     register,
     handleSubmit,
@@ -37,44 +46,54 @@ const SignIn = () => {
     formState: { errors },
   } = useForm();
 
+  // Function to handle form submission
   const onSubmit = (data) => {
     const { email, password } = data;
 
+     // Start loading state
     setIsSignInLoading(true);
     signIn(email, password)
       .then(() => {
-        // *show toast
+         // Show success toast
         Toast.fire({
           icon: "success",
           title: "Succesfully Signed In",
         });
 
+         // Reset form and stop loading state
         reset();
         setIsSignInLoading(false);
 
         // const from = location.state?.from?.pathname || "/";
         // navigate(from, { replace: true });
+
+        // Close the sign-in/sign-up modal
         toggleSignInSignUpModal();
       })
       .catch((error) => {
-        // *show toast
+        // Show error toast
         Toast.fire({
           icon: "error",
           title: `${error.message} Try Again`,
         });
+
+        // Stop loading state
         setIsSignInLoading(false);
       });
   };
 
+  // Function to handle Google sign-in
   const handleGoogleSignIn = () => {
     googleSignIn()
       .then(() => {
+        // Show success toast for Google sign-in
         Toast.fire({
           icon: "success",
           title: "Succesfully Signed In",
         });
       })
       .catch((error) => {
+        // Show error toast for Google sign-in
         Toast.fire({
           icon: "error",
           title: `${error.message} Try Again`,

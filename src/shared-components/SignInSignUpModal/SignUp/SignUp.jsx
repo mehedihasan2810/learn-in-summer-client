@@ -20,14 +20,25 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Toast } from "../../../Toast/Toast";
 import { gsap } from "gsap";
 const SignUp = () => {
+  // State for toggling password visibility
   const [showPassword, setShowPassword] = useState(false);
+
+  // State for storing the password
   const [password, setPassword] = useState("");
+
+  // State for tracking sign-up loading state
   const [isSignUpLoading, setIsSignUpLoading] = useState(false);
+
+  // Ref for the sign-up form element
   const signUpFormRef = useRef();
 
+  // Custom hook for secure axios instance
   const [axiosSecure] = useAxiosSecure();
+
+  // Query client for managing React Query
   const queryClient = useQueryClient();
 
+  // Auth context for authentication actions
   const {
     signUp,
     googleSignIn,
@@ -36,17 +47,19 @@ const SignUp = () => {
     toggleSignInSignUpModal,
   } = useAuthContext();
 
+  // React Query mutation for adding a new user
   const mutation = useMutation({
     mutationFn: async (newData) => {
       const res = await axiosSecure.post(`/addUser`, newData);
       return res;
     },
     onSuccess: () => {
-      // Invalidate and refetch
+      // Invalidate and refetch the manageUsers query
       queryClient.invalidateQueries({ queryKey: ["manageUsers"] });
     },
   });
 
+  // React Hook Form configuration
   const {
     register,
     handleSubmit,
@@ -54,29 +67,34 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
+  // Function to handle form submission
   const onSubmit = (data) => {
     const { name, email, password, photoUrl } = data;
 
+    // Start loading state
     setIsSignUpLoading(true);
+
     signUp(email, password)
       .then((userCredential) => {
         const createdUser = userCredential.user;
 
-        // * update user profile
+        // Update user profile information
         updateUserProfile(createdUser, name, photoUrl)
           .then(() => {
             completeProfileUpdate();
           })
           .catch((error) => {
-            // *show toast
+            // Show error toast
             Toast.fire({
               icon: "error",
               title: `${error.message} Try Again`,
             });
 
+            // Stop loading state
             setIsSignUpLoading(false);
           });
 
+        // Create user info object
         const userInfo = {
           name: name,
           email: email,
@@ -85,9 +103,10 @@ const SignUp = () => {
           date: Date.now(),
         };
 
+        // Trigger the mutation to add the new user
         mutation.mutate(userInfo);
 
-        // *show toast
+        // Show success toast
         Toast.fire({
           icon: "success",
           title: "Succesfully Signed Up",
@@ -99,29 +118,37 @@ const SignUp = () => {
         // *redirect user
         // const from = location.state?.from?.pathname || "/";
         // navigate(from, { replace: true });
+
+        // Reset the form and stop loading state
         reset();
+
+        // Close the sign-in/sign-up modal
         toggleSignInSignUpModal();
       })
       .catch((error) => {
-        // *show toast
+        // Show error toast
         Toast.fire({
           icon: "error",
           title: `${error.message} Try Again`,
         });
 
+        // Stop loading state
         setIsSignUpLoading(false);
       });
   };
 
+  // Function to handle Google sign-in
   const handleGoogleSignIn = () => {
     googleSignIn()
       .then(() => {
+        // Show success toast for Google sign-in
         Toast.fire({
           icon: "success",
           title: "Succesfully Signed In",
         });
       })
       .catch((error) => {
+        // Show error toast for Google sign-in
         Toast.fire({
           icon: "error",
           title: `${error.message} Try Again`,
@@ -129,26 +156,33 @@ const SignUp = () => {
       });
   };
 
+  // Function to toggle password visibility
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
-// signUp form y and opacity animation on toggle between signin and signup 
-// form with gsap
+  // Sign-up form animation using gsap on toggle between sign-in and sign-up
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(signUpFormRef.current, {opacity: 0, y: 10}, {opacity: 1, y: 0})
-    }, signUpFormRef.current)
+      gsap.fromTo(
+        signUpFormRef.current,
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0 }
+      );
+    }, signUpFormRef.current);
 
-
-   return () => ctx.revert();
-  }, [])
+    return () => ctx.revert();
+  }, []);
   // -----------------------------------
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} ref={signUpFormRef} className="signup-form">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      ref={signUpFormRef}
+      className="signup-form"
+    >
       <div className="control">
         <TextField
           {...register("name", { required: "This field is required" })}

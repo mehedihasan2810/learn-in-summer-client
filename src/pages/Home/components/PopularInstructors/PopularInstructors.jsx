@@ -13,11 +13,13 @@ import { useQuery } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
 
 const PopularInstructors = () => {
+  // State to manage the number of slides per view
   const [perView, setPerView] = useState(4);
 
   const [axiosSecure] = useAxiosSecure();
   // const { currentUser } = useAuthContext();
 
+  // Fetch user data including instructors using React Query
   const { data: users, isLoading } = useQuery({
     queryKey: ["manageUsers"],
     // enabled: Boolean(currentUser),
@@ -27,6 +29,7 @@ const PopularInstructors = () => {
     },
   });
 
+  // Adjust the number of slides per view based on screen width
   useEffect(() => {
     const mediaQuery2 = window.matchMedia("(max-width: 1024px)");
     const mediaQuery1 = window.matchMedia("(max-width: 768px)");
@@ -51,6 +54,7 @@ const PopularInstructors = () => {
 
     mediaQuery1.addEventListener("change", handleChange1);
 
+    // Cleanup event listeners
     return () => {
       mediaQuery1.removeEventListener("change", handleChange1);
       mediaQuery2.removeEventListener("change", handleChange2);

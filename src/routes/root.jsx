@@ -25,6 +25,7 @@ import { Instructors } from "../lazy-components/Instructors/Instructors";
 import InstructorsFallback from "../lazy-components/Instructors/fallback";
 import Overview from "../pages/Dashboard/Admin/Overview/Overview";
 
+// Define the application routes using react-router-dom's createBrowserRouter
 export const router = createBrowserRouter([
   {
     path: "/",

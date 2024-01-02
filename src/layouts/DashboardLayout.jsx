@@ -31,14 +31,17 @@ import "./DashboardLayout.css";
 import { TextField } from "@mui/material";
 const drawerWidth = 240;
 
+// Component for the Dashboard Layout
 export default function DashboardLayout(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Function to handle mobile drawer toggle
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  // Set the page title
   useTitlePerPage("Dashboard");
 
   const { user_data } = useAuthContext();
@@ -46,6 +49,7 @@ export default function DashboardLayout(props) {
 
   let navItem;
 
+  // Define navigation items based on user role
   if (user === "student") {
     navItem = [
       {
@@ -99,6 +103,7 @@ export default function DashboardLayout(props) {
     ];
   }
 
+  // Define public navigation items
   const publicNavItems = [
     {
       text: "Home",
@@ -122,6 +127,7 @@ export default function DashboardLayout(props) {
     },
   ];
 
+  // Create the drawer content
   const drawer = (
     <div>
       <Toolbar>
@@ -130,6 +136,7 @@ export default function DashboardLayout(props) {
         </Typography>
       </Toolbar>
 
+      {/* User-specific navigation items */}
       <List sx={{ marginBlockStart: "1rem" }}>
         <ListItem disablePadding></ListItem>
         {navItem?.map((item, index) => (
@@ -153,6 +160,7 @@ export default function DashboardLayout(props) {
       </List>
       <Divider sx={{ width: "90%", marginInline: "auto" }} />
 
+      {/* Public navigation items */}
       <List>
         {publicNavItems.map((item, index) => (
           <Link key={index} to={item.path}>
@@ -191,6 +199,7 @@ export default function DashboardLayout(props) {
           }}
         >
           <Toolbar>
+            {/* Mobile drawer toggle button */}
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -200,6 +209,8 @@ export default function DashboardLayout(props) {
             >
               <MenuIcon />
             </IconButton>
+
+            {/* Title and search bar */}
             <Typography
               style={{ width: "100%" }}
               variant="h6"
@@ -221,6 +232,7 @@ export default function DashboardLayout(props) {
                   variant="standard"
                 />
 
+                {/* User profile image */}
                 {/* todo------------------------------------------------- */}
                 <img
                   style={{
@@ -239,11 +251,14 @@ export default function DashboardLayout(props) {
             </Typography>
           </Toolbar>
         </AppBar>
+
+        {/* Drawer */}
         <Box
           component="nav"
           sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
           aria-label="mailbox folders"
         >
+          {/* Mobile Drawer */}
           <Drawer
             container={container}
             variant="temporary"
@@ -262,6 +277,8 @@ export default function DashboardLayout(props) {
           >
             {drawer}
           </Drawer>
+
+          {/* Desktop Drawer */}
           <Drawer
             variant="permanent"
             className="desktop-drawer"
@@ -277,6 +294,8 @@ export default function DashboardLayout(props) {
             {drawer}
           </Drawer>
         </Box>
+
+        {/* Main Content */}
         <Box
           className="dashboard-content"
           component="main"
@@ -288,6 +307,7 @@ export default function DashboardLayout(props) {
         >
           <Toolbar />
 
+          {/* Outlet for rendering child components */}
           <Outlet />
         </Box>
       </Box>

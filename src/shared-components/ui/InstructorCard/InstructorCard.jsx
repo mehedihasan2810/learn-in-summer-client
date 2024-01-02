@@ -3,9 +3,11 @@ import "./InstructorCard.css";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 const InstructorCard = ({ user, resetAnimKey }) => {
+  // Reference to store instructor card elements for animation
   const instructorCardRef = useRef([]);
+
+  // Effect to run GSAP animation when resetAnimKey changes
   useEffect(() => {
-    //  gsap animaition
     const ctx = gsap.context(() => {
       instructorCardRef.current.forEach((element) => {
         gsap.fromTo(
@@ -16,10 +18,14 @@ const InstructorCard = ({ user, resetAnimKey }) => {
       });
     }, instructorCardRef.current);
 
+    // Cleanup the animation context on component unmount
     return () => ctx.revert();
   }, [resetAnimKey]);
   return (
-    <div  ref={(el) => instructorCardRef.current.push(el)} className="instructor-card">
+    <div
+      ref={(el) => instructorCardRef.current.push(el)}
+      className="instructor-card"
+    >
       <img src={user.photoUrl} alt="" />
 
       <div className="body">

@@ -10,11 +10,14 @@ import { useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 
 const SelectedClasses = () => {
+  // Initialize Axios instance for secure API requests
   const [axiosSecure] = useAxiosSecure();
   const queryClient = useQueryClient();
 
+  // Access user data and dashboard title from authentication context
   const { currentUser, addDashBoardTitle } = useAuthContext();
 
+  // Fetch selected classes data using React Query
   const {
     isLoading,
     error,
@@ -30,6 +33,7 @@ const SelectedClasses = () => {
     },
   });
 
+  // Define mutation for deleting selected class
   const mutation = useMutation({
     mutationFn: async (id) => {
       const res = await axiosSecure.delete(
@@ -38,21 +42,24 @@ const SelectedClasses = () => {
       return res;
     },
     onSuccess: () => {
-      // Invalidate and refetch
+      // Invalidate and refetch the selected classes query
       queryClient.invalidateQueries({
         queryKey: ["mySelectedClasses", currentUser?.email],
       });
     },
   });
 
+  // Handle the delete action
   const handleDelete = (id) => {
     mutation.mutate(id);
   };
 
+  // Set dashboard title on component mount
   useEffect(() => {
     addDashBoardTitle("My Selected Class");
   }, []);
 
+  // Loading state: Display skeleton while data is being fetched
   if (isLoading) {
     return (
       <Skeleton
@@ -64,6 +71,8 @@ const SelectedClasses = () => {
       />
     );
   }
+
+  // Error state: Display error message if there's an issue with data fetching
   if (error) return <h2>Error Ocurred {error.message}</h2>;
 
   return (

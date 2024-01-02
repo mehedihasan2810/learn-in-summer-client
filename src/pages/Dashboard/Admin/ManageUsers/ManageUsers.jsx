@@ -21,6 +21,7 @@ const ManageUsers = () => {
   const queryClient = useQueryClient();
   const { currentUser, addDashBoardTitle } = useAuthContext();
 
+  // Fetching user data using react-query
   const {
     data: users,
     isLoading,
@@ -34,9 +35,7 @@ const ManageUsers = () => {
     },
   });
 
-
- 
-
+  // Mutation for updating user role
   const updateUserRoleMutation = useMutation({
     mutationFn: async (data) => {
       const res = await axiosSecure.put(`/updateUserRole/${data.id}`, {
@@ -50,8 +49,8 @@ const ManageUsers = () => {
     },
   });
 
+  // Handling make admin action
   const handleMakeAdmin = (id) => {
-
     updateUserRoleMutation.mutate({ id, role: "admin" });
     setRoleBtnId(id);
 
@@ -61,8 +60,8 @@ const ManageUsers = () => {
     });
   };
 
+  // Handling make instructor action
   const handleMakeInstructor = (id) => {
-
     updateUserRoleMutation.mutate({ id, role: "instructor" });
     setRoleBtnId(id);
 
@@ -72,25 +71,33 @@ const ManageUsers = () => {
     });
   };
 
+  // Setting the dashboard title on component mount
   useEffect(() => {
     addDashBoardTitle("Manage Users");
   }, []);
 
+  // Loading skeleton while data is being fetched
   if (isLoading) {
     return Array.from({ length: 10 }).map((_, index) => (
-      <Skeleton style={{
-         height: '5rem',
-         marginBlockEnd: '0.2rem'
-      }} key={index} />
+      <Skeleton
+        style={{
+          height: "5rem",
+          marginBlockEnd: "0.2rem",
+        }}
+        key={index}
+      />
     ));
   }
 
+  // Displaying error if there's an issue with fetching data
   if (error) return "An error has occurred: " + error.message;
 
   return (
     <div className="my-classes-container">
+      {/* Table for displaying user information */}
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
+          {/* Table header */}
           <TableHead>
             <TableRow sx={{ bgcolor: "#126ed715" }}>
               <TableCell>Image</TableCell>
@@ -102,13 +109,17 @@ const ManageUsers = () => {
               <TableCell align="left">Make Admin</TableCell>
             </TableRow>
           </TableHead>
+
+          {/* Table body */}
           <TableBody>
+            {/* Mapping through users and displaying each row */}
             {users.map((user) => (
               <TableRow
                 key={user._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
+                  {/* Image of the user */}
                   <img
                     style={{
                       width: "80px",
@@ -124,6 +135,7 @@ const ManageUsers = () => {
                 <TableCell align="left">{user.name}</TableCell>
                 <TableCell align="left">{user.email}</TableCell>
                 <TableCell align="left">
+                  {/* Button for displaying user role */}
                   <Button
                     color={
                       user.role === "admin"
@@ -139,28 +151,37 @@ const ManageUsers = () => {
                   </Button>
                 </TableCell>
                 <TableCell align="left">
+                  {/* Joined date of the user */}
                   {moment(user.date).format("MMMM Do YYYY")}
                 </TableCell>
                 <TableCell align="left">
+                  {/* Button for making a user instructor */}
                   <Button
                     onClick={() => handleMakeInstructor(user._id)}
                     sx={{
                       width: "max-content",
                     }}
                     variant="outlined"
-                    disabled={RoleBtnId === user._id || currentUser?.email === user.email}
+                    disabled={
+                      RoleBtnId === user._id ||
+                      currentUser?.email === user.email
+                    }
                   >
                     Make Instructor
                   </Button>
                 </TableCell>
                 <TableCell align="left">
+                  {/* Button for making a user admin */}
                   <Button
                     onClick={() => handleMakeAdmin(user._id)}
                     sx={{
                       width: "max-content",
                     }}
                     variant="outlined"
-                    disabled={RoleBtnId === user._id || currentUser?.email === user.email}
+                    disabled={
+                      RoleBtnId === user._id ||
+                      currentUser?.email === user.email
+                    }
                   >
                     Make Admin
                   </Button>

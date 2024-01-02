@@ -9,20 +9,26 @@ import { Toast } from "../../../../Toast/Toast";
 const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 
 const UpdateClass = () => {
+  // State variables for form validation and API loading
   const [isValid, setIsValid] = useState(true);
   const [isApiLoading, setIsApiLoading] = useState(false);
 
+  // React Router hook for navigation
   const navigate = useNavigate();
   const { addDashBoardTitle } = useAuthContext();
-  
 
+  // URL for imgbb image hosting
   const img_hosting_url = `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`;
 
+  // Custom Axios hook for secure requests
   const [axiosSecure] = useAxiosSecure();
+
+  // React Router hook for accessing route parameters
   const params = useParams();
 
   const queryClient = useQueryClient();
 
+  // React Query hook for fetching class details
   const {
     isLoading,
     error,
@@ -32,32 +38,39 @@ const UpdateClass = () => {
     return res.data;
   });
 
+  // React Query mutation for updating a class
   const mutation = useMutation({
     mutationFn: async (newData) => {
       const res = await axiosSecure.put(`/updateClass/${params.id}`, newData);
       return res;
     },
     onSuccess: () => {
-      // Invalidate and refetch
+      // Invalidate and refetch query for "myClasses" after successful update
       queryClient.invalidateQueries({ queryKey: ["myClasses"] });
     },
   });
 
+  // Function to handle class update
   const handleUpdateClass = async (e) => {
     e.preventDefault();
     setIsApiLoading(true);
+
+    // Extracting form data and converting it to an object
     const form_data = new FormData(e.target);
     const classInfo = Object.fromEntries(form_data);
 
+    // Creating FormData for image upload
     const imgFormData = new FormData();
     imgFormData.append("image", classInfo.image);
 
+    // Uploading image to imgbb and getting the result
     const imgUploadRes = await fetch(img_hosting_url, {
       method: "POST",
       body: imgFormData,
     });
     const imgUploadResult = await imgUploadRes.json();
 
+    // Creating final class information object
     const finalClassInfo = {
       ...classInfo,
       image: imgUploadResult.success
@@ -66,24 +79,29 @@ const UpdateClass = () => {
       date: new Date(),
     };
 
-
+    // Triggering the mutation
     mutation.mutate(finalClassInfo);
     setIsApiLoading(false);
 
+    // Navigating back to the classes list
     navigate("/dashboard/my-classes");
 
+    // Displaying success message
     Toast.fire({
       icon: "success",
       title: "Updated successfully",
     });
   };
 
+  // Effect hook to set dashboard title when the component mounts
   useEffect(() => {
     addDashBoardTitle("Update Class");
-  }, [])
+  }, []);
 
+  // Loading message while data is being fetched
   if (isLoading) return "Loading...";
 
+  // Displaying error message if there's an error fetching data
   if (error) return "An error has occurred: " + error.message;
 
   return (
@@ -112,7 +130,6 @@ const UpdateClass = () => {
                 required
               />
             </div>
-           
           </div>
           <div className="row">
             <div className="control">

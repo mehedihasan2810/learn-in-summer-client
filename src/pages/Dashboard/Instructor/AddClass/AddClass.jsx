@@ -5,48 +5,62 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import { Toast } from "../../../../Toast/Toast";
+
+// API key for imgbb image hosting
 const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 
 const AddClass = () => {
+  // State variables for form validation and API loading
   const [isValid, setIsValid] = useState(true);
   const [isApiLoading, setIsApiLoading] = useState(false);
+
+  // URL for imgbb image hosting
   const img_hosting_url = `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`;
+
+  // Custom Axios hook
   const [axiosSecure] = useAxiosSecure();
 
+  // Query client for React Query
   const queryClient = useQueryClient();
 
+  // User data and function for updating dashboard title from Auth context
   const { user_data, addDashBoardTitle } = useAuthContext();
-  
 
+  // React Query mutation for adding a new class
   const mutation = useMutation({
     mutationFn: async (newData) => {
       const res = await axiosSecure.post(`/addClass`, newData);
       return res;
     },
     onSuccess: () => {
-      // Invalidate and refetch
+      // Invalidate and refetch query for "myClasses" after successful mutation
       queryClient.invalidateQueries({ queryKey: ["myClasses"] });
     },
   });
 
+  // Function to handle form submission
   const handleAddClass = async (e) => {
     e.preventDefault();
 
     try {
       setIsApiLoading(true);
 
+      // Extracting form data and converting it to an object
       const form_data = new FormData(e.target);
       const classInfo = Object.fromEntries(form_data);
 
+      // Creating FormData for image upload
       const imgFormData = new FormData();
       imgFormData.append("image", classInfo.image);
 
+      // Uploading image to imgbb and getting the result
       const imgUploadRes = await fetch(img_hosting_url, {
         method: "POST",
         body: imgFormData,
       });
       const imgUploadResult = await imgUploadRes.json();
 
+      // Creating final class information object
       const finalClassInfo = {
         ...classInfo,
         price: +classInfo.price,
@@ -60,10 +74,12 @@ const AddClass = () => {
         status: "pending",
       };
 
+      // Triggering the mutation
       mutation.mutate(finalClassInfo);
 
       setIsApiLoading(false);
 
+      // Displaying success message
       Toast.fire({
         icon: "success",
         title: "Added successfully",
@@ -77,9 +93,10 @@ const AddClass = () => {
     }
   };
 
+  // Effect hook to set dashboard title when the component mounts
   useEffect(() => {
     addDashBoardTitle("Add Class");
-  }, [])
+  }, []);
 
   return (
     <div className="center-container">
@@ -105,7 +122,6 @@ const AddClass = () => {
                 required
               />
             </div>
-           
           </div>
           <div className="row">
             <div className="control">

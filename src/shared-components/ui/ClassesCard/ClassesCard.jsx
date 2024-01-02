@@ -10,9 +10,12 @@ const ClassesCard = ({
   user_data,
   resetAnimKey,
 }) => {
+
+   // Reference to store class card elements for animation
   const classCardRef = useRef([]);
+
+  // Effect to run GSAP animation when resetAnimKey changes
   useEffect(() => {
-    //  gsap animaition
     const ctx = gsap.context(() => {
       classCardRef.current.forEach((element) => {
         gsap.fromTo(
@@ -23,6 +26,7 @@ const ClassesCard = ({
       });
     }, classCardRef.current);
 
+     // Cleanup the animation context on component unmount
     return () => ctx.revert();
   }, [resetAnimKey]);
   return (

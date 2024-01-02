@@ -9,13 +9,16 @@ import { useAuthContext } from "../../../../hooks/useAuthContext";
 import { useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 
+// Load the Stripe public key from environment variables
 const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_GATEWAY_PK);
 
 const Payment = () => {
+  // Get route parameters
   const params = useParams();
   const [axiosSecure] = useAxiosSecure();
   const { addDashBoardTitle } = useAuthContext();
 
+  // Fetch data for the selected class using React Query
   const {
     isLoading,
     error,
@@ -23,15 +26,18 @@ const Payment = () => {
   } = useQuery({
     queryKey: ["myClasses", params?.id],
     queryFn: async () => {
+      // Fetch data for a single class using Axios
       const res = await axiosSecure.get(`/getSingleClass/${params?.id}`);
       return res.data;
     },
   });
 
+  // Set dashboard title on component mount
   useEffect(() => {
     addDashBoardTitle("Payment");
   }, []);
 
+  // Loading state: Display skeleton while data is being fetched
   if (isLoading)
     return (
       <div
@@ -49,11 +55,15 @@ const Payment = () => {
         ))}
       </div>
     );
+
+  // Error state: Display error message if there's an issue with fetching data
   if (error) return <h2>Error Ocurred {error.message}</h2>;
 
   return (
     <div className="payment-container">
+      {/* Stripe Elements wrapper for the CheckoutForm */}
       <Elements stripe={stripePromise}>
+        {/* Pass relevant data to the CheckoutForm */}
         <CheckoutForm
           price={singleClass?.price}
           classId={singleClass?._id}

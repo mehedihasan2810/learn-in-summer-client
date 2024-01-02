@@ -1,4 +1,3 @@
-import React from 'react'
 import { auth } from '../configs/firebase/firebase';
 import { signOut } from 'firebase/auth';
 

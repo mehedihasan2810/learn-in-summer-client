@@ -10,18 +10,21 @@ import ClassSkeletons from "../../../../skeletons/ClassSkeletons";
 import ClassesCard from "../../../../shared-components/ui/ClassesCard/ClassesCard";
 gsap.registerPlugin(ScrollTrigger);
 
+// Define class categories for tabs
 const tabs = ["Drum", "Violin", "Guiter", "Piano"];
 
 const PopularCourses = () => {
+  // State to manage the active tab
   const [activeTab, setActiveTab] = useState("Drum");
   const classesContainerRef = useRef(null);
   const underRef = useRef(null);
 
+  // Initialize Axios instance for secure API requests
   const [axiosSecure] = useAxiosSecure();
   const { currentUser, toggleSignInSignUpModal, user_data } = useAuthContext();
   const queryClient = useQueryClient();
 
-  // fetch all classes
+  // Fetch all classes using React Query
   const {
     isLoading,
     error,
@@ -32,7 +35,7 @@ const PopularCourses = () => {
   });
   // ------------------------------
 
-  // fetch selected classes
+  // Fetch selected class IDs using React Query
   const { data: SelectedClassIds = [] } = useQuery({
     queryKey: ["SelectedClassIds", currentUser?.email],
     enabled: Boolean(currentUser),
@@ -45,7 +48,7 @@ const PopularCourses = () => {
   });
   // ------------------------------------
 
-  // add the selected classes
+  // Define mutation for adding selected classes
   const mutation = useMutation({
     mutationFn: async (id) => {
       const res = await axiosSecure.post(`/addSelectedClass`, {
@@ -55,7 +58,7 @@ const PopularCourses = () => {
       return res;
     },
     onSuccess: () => {
-      // Invalidate and refetch
+      // Invalidate and refetch selected class IDs query
       queryClient.invalidateQueries({ queryKey: ["SelectedClassIds"] });
     },
   });
@@ -72,7 +75,7 @@ const PopularCourses = () => {
   };
   // ------------------------------------------------
 
-  // calculate tab buttom position
+  // Calculate tab button position and set active tab
   const handleTab = (e, index, tab) => {
     underRef.current.style.left = `calc(calc(100% / 4) * ${index})`;
     setActiveTab(tab);

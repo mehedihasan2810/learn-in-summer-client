@@ -12,6 +12,7 @@ const useAxiosSecure = () => {
   const logOut = useLogOut();
 
   useEffect(() => {
+    // Add access token to request headers
     axiosSecure.interceptors.request.use((config) => {
       const token = localStorage.getItem("access-token");
       if (token) {
@@ -20,6 +21,7 @@ const useAxiosSecure = () => {
       return config;
     });
 
+    // Handle unauthorized or forbidden responses
     axiosSecure.interceptors.response.use(
       (response) => response,
       async (error) => {

@@ -11,15 +11,21 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 const Navbar = () => {
+  // Ref to the header element
   const headerRef = useRef();
+
+  // State for managing the mobile navigation menu
   const [isNavOpen, setIsNavOpen] = useState(false);
+
+  // Auth context for handling authentication actions
   const { toggleSignInSignUpModal, currentUser, logOut, user_data } =
     useAuthContext();
 
+  // Function to handle user sign-out
   const handleSignOut = () => {
     logOut()
       .then(() => {
-        // *show toast
+        // Show success toast if user was signed out successfully
         if (currentUser) {
           Toast.fire({
             icon: "success",
@@ -28,6 +34,7 @@ const Navbar = () => {
         }
       })
       .catch(() => {
+        // Show error toast if an error occurred during sign-out
         Toast.fire({
           icon: "error",
           title: "Error ocurred! Try Again",
@@ -35,6 +42,7 @@ const Navbar = () => {
       });
   };
 
+  // Function to toggle the mobile navigation menu
   const handleToggleNav = () => {
     setIsNavOpen(!isNavOpen);
   };
@@ -44,6 +52,8 @@ const Navbar = () => {
       e.stopPropagation();
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
+
+      // Apply header animation based on scroll position
       if (scrollTop > 100) {
         headerRef.current.style.transform = "translate3d(0, -100%, 0)";
       } else {
@@ -51,8 +61,10 @@ const Navbar = () => {
       }
     }
 
+    // Add scroll event listener
     window.addEventListener("scroll", handleScroll, false);
 
+    // Remove scroll event listener on component unmount
     return () => window.removeEventListener("scroll", handleScroll, false);
   }, []);
   return (

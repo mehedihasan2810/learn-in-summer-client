@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 
+// Constants for styling the CardElement
 const CARD_OPTIONS = {
   iconStyle: "solid",
   style: {

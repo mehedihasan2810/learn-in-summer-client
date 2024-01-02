@@ -15,9 +15,11 @@ import moment from "moment/moment";
 import Skeleton from "react-loading-skeleton";
 
 const PaymentDetails = () => {
+  // Access authentication context for user data and dashboard title
   const { addDashBoardTitle, user_data } = useAuthContext();
   const [axiosSecure] = useAxiosSecure();
 
+  // Fetch payment details using React Query
   const { data: paymentDetails, isLoading: isPaymentLoading } = useQuery({
     queryKey: ["payment", user_data?.email],
     queryFn: async () => {
@@ -28,14 +30,18 @@ const PaymentDetails = () => {
     },
   });
 
-
+  // Set dashboard title on component mount
   useEffect(() => {
     addDashBoardTitle("Payment Details");
   }, []);
 
+  // Loading state: Display skeleton while data is being fetched
   if (isPaymentLoading) {
     return Array.from({ length: 4 }).map((_, index) => (
-      <Skeleton style={{maxInlineSize: '1200px', blockSize: '80px'}} key={index} />
+      <Skeleton
+        style={{ maxInlineSize: "1200px", blockSize: "80px" }}
+        key={index}
+      />
     ));
   }
 
