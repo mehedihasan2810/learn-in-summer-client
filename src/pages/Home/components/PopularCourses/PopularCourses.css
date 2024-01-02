@@ -45,8 +45,9 @@
 }
 
 .popular-classes-container .tab-container button.active {
-  background: #126ed722;
-  color: #1976D3;
+  /* background: #126ed722; */
+  background: #e4f0ff;
+  color: #1976d3;
 }
 
 .popular-classes-container .card-container {
@@ -55,67 +56,6 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
 }
-
-/* .popular-classes-container .card.no-seats {
-  background: rgba(241, 6, 6, 0.168);
-} */
-
-/* .popular-classes-container .card img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-}
-
-.popular-classes-container .price-category {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.popular-classes-container .price-category span {
-  color: #747c82;
-  margin: 8px 0;
-  font-size: 16px;
-}
-
-.popular-classes-container .price-category span:last-child {
-  color: #000;
-  font-weight: bold;
-}
-
-.popular-classes-container .card h4 {
-  color: #465159;
-  margin-bottom: 8px;
-  font-size: 1.1rem;
-}
-
-.popular-classes-container .card h6 {
-  color: #747c82;
-  margin-bottom: 1.3rem;
-  font-size: 0.9rem;
-  font-weight: normal;
-}
-
-.popular-classes-container .card .hrs-learners {
-  color: #747c82;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.hrs-learners p {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
-.popular-classes-container .card .btns {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-} */
 
 @media (max-width: 768px) {
   .popular-classes-container .tab-overflow {

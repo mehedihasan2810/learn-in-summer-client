@@ -42,8 +42,8 @@ const ClassesCard = ({
         <span className="category">{classes.class_name}</span>
         <span>${classes.price}</span>
       </div>
-      <h4>{classes.title}</h4>
-      <h6>{classes.instructor_name}</h6>
+      <p className="title">{classes.title}</p>
+      <p>{classes.instructor_name}</p>
       <div className="hrs-learners">
         <p>
           {" "}

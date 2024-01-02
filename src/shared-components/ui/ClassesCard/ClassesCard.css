@@ -22,13 +22,14 @@
   font-weight: bold;
 }
 
-.classes-card h4 {
+.classes-card .title {
   color: #465159;
   margin-bottom: 8px;
   font-size: 1.1rem;
+  font-weight: 500;
 }
 
-.classes-card h6 {
+.classes-card p {
   color: var(--color-dark-gray);
   margin-bottom: 1.3rem;
   font-size: 1rem;
